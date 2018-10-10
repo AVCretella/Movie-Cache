@@ -1,5 +1,5 @@
 {
-  "name": "MovieBoi",
+  "name": "Movie-Cache",
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
@@ -9,6 +9,6 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "electron": "^3.0.2"
+    "electron": "^3.0.3"
   }
 }

@@ -1,16 +1,11 @@
-// const express = require('express');
-// const app = express();
-// const electron = require('electron');
-// const { app, BrowserWindow } = require('electron')
-//   function createWindow () {
-//     // Create the browser window.
-//     win = new BrowserWindow({ width: 800, height: 600 })
-//     // and load the index.html of the app.
-//     win.loadFile('index.html')
-//   }
-//   app.on('ready', createWindow)
-// app.get('/', (req, res) => res.send('Hello World!'))
-// app.listen(8000, () => console.log('Example app listening on port 8000!'))
+// var electron = require('electron')
+// var BrowserWindow = electron.BrowserWindow;
+// var app = electron.app;
+// app.on('ready', function(){
+//   var appWindow;
+//   appWindow = new BrowserWindow();
+//   appWindow.loadURL('www.humblebundle.com')
+// })
 
 
 // Modules to control application life and create native browser window
@@ -18,13 +13,14 @@ const {app, BrowserWindow} = require('electron')
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
-let mainWindow
+let mainWindow, infoWindow;
 
 function createWindow(){
   // Create the browser window.
   mainWindow = new BrowserWindow({width: 800, height: 600})
-  mainWindow.loadFile('index.html') //load index.html of the app
-
+  infoWindow = new BrowserWindow({width: 400, height: 300, transparent:true, frame:true})
+  infoWindow.loadFile('info.html') //load index.html of the app
+  mainWindow.loadURL('https://humblebundle.com') //can load an external url in here
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()
 
