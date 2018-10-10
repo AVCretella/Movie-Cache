@@ -8,8 +8,14 @@
 // })
 
 
-// Modules to control application life and create native browser window
-const {app, BrowserWindow} = require('electron')
+// // Modules to control application life and create native browser window
+// const {app, BrowserWindow} = require('electron')
+// var ipc = app.ipcMain;
+
+let electron = require('electron')
+let BrowserWindow = electron.BrowserWindow;
+let app = electron.app;
+let ipc = electron.ipcMain
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -17,10 +23,38 @@ let mainWindow, infoWindow;
 
 function createWindow(){
   // Create the browser window.
-  mainWindow = new BrowserWindow({width: 800, height: 600})
-  infoWindow = new BrowserWindow({width: 400, height: 300, transparent:true, frame:true})
+  mainWindow = new BrowserWindow({
+    show:false, 
+    width: 800, 
+    height: 600
+  })
+  infoWindow = new BrowserWindow({
+    width: 400, 
+    height: 300, 
+    // transparent:true,
+    show: false, 
+    frame:true
+  }) //mainWindow
+
   infoWindow.loadFile('info.html') //load index.html of the app
   mainWindow.loadURL('https://humblebundle.com') //can load an external url in here
+  mainWindow.once('ready-to-show', function(){
+    mainWindow.show();
+    setTimeout(function(){
+      infoWindow.show();
+      // setTimeout(function(){
+      //   infoWindow.hide();
+      // }, 3000)
+    }, 1000)
+  }) //infoWindow
+
+  ipc.on('closeInfoWindow', function(event, arg){
+    event.returnValue = '';
+    infoWindow.hide();
+  }) //closeinfowindow event
+
+
+  
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()
 

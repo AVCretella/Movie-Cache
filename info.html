@@ -18,9 +18,19 @@
     <p>
       Welcome to the Wisdom Pet App.<br>
       <strong>Version 1.0.0</strong><br>
+      <!-- if you were to just have a href="link" it would open in electron -->
       <small>Built with love by <a href="#" onclick="shell.openExternal('http://raybo.org')">Ray Villalobos</a></small>
     </p>
-    <p><a href="#" onclick="ipc.sendSync('closeInfoWindow')">close window</a></p>
+    <!-- this will send a notification to the main process that an event has happened -->
+    <!-- 'closeInfoWindow' will be sent to main -->
+    <p>
+      <a href="#" onclick="ipc.sendSync('closeInfoWindow')">close window</a>
+    </p>
   </main>
 </body>
 </html>
+
+<script>
+  var electron = require('electron');
+  var shell = electron.shell;
+</script>
