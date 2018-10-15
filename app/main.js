@@ -1,21 +1,8 @@
-// var electron = require('electron')
-// var BrowserWindow = electron.BrowserWindow;
-// var app = electron.app;
-// app.on('ready', function(){
-//   var appWindow;
-//   appWindow = new BrowserWindow();
-//   appWindow.loadURL('www.humblebundle.com')
-// })
-
-
 // // Modules to control application life and create native browser window
-// const {app, BrowserWindow} = require('electron')
-// var ipc = app.ipcMain;
-
-let electron = require('electron')
-let BrowserWindow = electron.BrowserWindow;
-let app = electron.app;
-let ipc = electron.ipcMain
+var electron = require('electron')
+var BrowserWindow = electron.BrowserWindow;
+var app = electron.app;
+var ipc = electron.ipcMain
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -36,27 +23,23 @@ function createWindow(){
     frame:true
   }) //mainWindow
 
-  infoWindow.loadFile('info.html') //load index.html of the app
-  mainWindow.loadURL('https://humblebundle.com') //can load an external url in here
+  mainWindow.loadURL('file://' + __dirname + '/index.html'); //load index.html of the app
+  // mainWindow.loadURL('https://humblebundle.com') //can load an external url in here
   mainWindow.once('ready-to-show', function(){
     mainWindow.show();
-    setTimeout(function(){
-      infoWindow.show();
-      // setTimeout(function(){
-      //   infoWindow.hide();
-      // }, 3000)
-    }, 1000)
+    // setTimeout(function(){
+    //   infoWindow.show();
+    //   // setTimeout(function(){
+    //   //   infoWindow.hide();
+    //   // }, 3000)
+    // }, 1000)
   }) //infoWindow
 
+  //closeInfoWindow event
   ipc.on('closeInfoWindow', function(event, arg){
     event.returnValue = '';
     infoWindow.hide();
-  }) //closeinfowindow event
-
-
-  
-  // Open the DevTools.
-  // mainWindow.webContents.openDevTools()
+  })
 
   mainWindow.on('closed', function(){ // Emitted when the window is closed.
     /* Dereference the window object, usually you would store windows
@@ -73,16 +56,14 @@ app.on('ready', createWindow)
 
 // Quit when all windows are closed.
 app.on('window-all-closed', function(){
-  // On OS X it is common for applications and their menu bar
-  // to stay active until the user quits explicitly with Cmd + Q
+  // On OS X it is common for applications and their menu bar to stay active until the user quits explicitly with Cmd + Q
   if(process.platform !== 'darwin'){
     app.quit()
   }
 })
 
 app.on('activate', function(){
-  // On OS X it's common to re-create a window in the app when the
-  // dock icon is clicked and there are no other windows open.
+  // On OS X it's common to re-create a window in the app when the dock icon is clicked and there are no other windows open.
   if (mainWindow === null){
     createWindow()
   }

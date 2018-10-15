@@ -4,7 +4,7 @@
   "scripts": {
     "pack": "electron-packager . 'Wisdom Pet' --out ~/Desktop/WisdomPet --overwrite --icon ./icons/icon"
   },
-  "main": "app/app.js",
+  "main": "app/main.js",
   "scripts": {
     "start": "electron ."
   },
