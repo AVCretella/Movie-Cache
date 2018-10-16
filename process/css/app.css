@@ -1,4 +1,4 @@
-@import url('../../node_modules/bootstrap/dist/css/bootstrap.css'); 
+@import url('../../node_modules/bootstrap/dist/css/bootstrap.css');
 
 *, *:before, *:after {
   box-sizing: inherit;
@@ -128,11 +128,11 @@ h1, h2, h3, h4, h5, h6 {
   user-select: none;          /* Likely future */
 }
 
-.appointments {
+.movies {
   margin-top: 15px;
 }
 
-.appointments .appointments-headline {
+.movies .movies-headline {
   margin-bottom: 10px;
   color: #174152;
 }
@@ -149,38 +149,38 @@ h1, h2, h3, h4, h5, h6 {
   margin-top: 0;
 }
 
-.item-list .pet-item {
+.item-list .movie-item {
   padding: 10px;
 }
 
-.item-list .pet-item:nth-child(2n) {
+.item-list .movie-item:nth-child(2n) {
     background: rgba(255,255,255,.5);
     border-radius: 5px;
 }
 
-.item-list .pet-item:last-child {
+.item-list .movie-item:last-child {
   border-bottom: none;
 }
 
-.item-list .pet-item .pet-delete {
+.item-list .movie-item .movie-delete {
   display: none;
   opacity: 0;
   transition: all 1s;
 }
 
 
-.item-list  .pet-item:hover .pet-delete {
+.item-list  .movie-item:hover .movie-delete {
   display: block;
   opacity: 1;
 }
 
 
-.item-list .pet-name {
+.item-list .movie-name {
   font-weight: bold;
   color: #296B73;
   font-size: 1.3em;
 }
-.item-list .apt-notes {
+.item-list .movie-notes {
   font-style: italic;
 }
 
@@ -190,7 +190,7 @@ h1, h2, h3, h4, h5, h6 {
   padding-right: 10px;
 }
 
-.item-list .apt-date {
+.item-list .movie-release {
   font-style: italic;
 }
 

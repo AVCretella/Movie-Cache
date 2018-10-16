@@ -15,11 +15,14 @@
       </div>
     </div>
   </div>
- <!--  <script type="text/javascript">
-    var eRequire = require;
-    var dirName = __dirname;
+  <script type="text/javascript">
+    //we dont want the gulp and Node.js commands to conflict, so we use these variables to differentiate
+    var eRequire = require; //used for Node.js require command
+    var dirName = __dirname; //used for Node.js __dirname command
+
+    //this allows for cross-platform directory references since OS X and windows have different path standards
     var dataLocation = require('path').resolve(__dirname, '..', 'data', 'data.json');
-  </script> -->
+  </script>
   <script src="js/renderer.js"></script>
 </body>
 </html>
