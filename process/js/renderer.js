@@ -21,6 +21,14 @@ var MainInterface = React.createClass({
       myMovies: loadMovies
     } //return
   },
+  componentDidUpdate: function(){
+    fs.writeFile(dataLocation, JSON.stringify(this.state.myMovies), 'utf8', function(err){
+      if(err){
+        console.log(err);
+      }
+  }); //will go to the file location that our data is at and componentDidUpdate
+
+  },
   deleteMovie: function(item){
     var allMovies = this.state.myMovies;
     var newMovies = _.without(allMovies, item); //return array without the one movie passed
