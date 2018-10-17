@@ -1,5 +1,6 @@
 //copy and paste libraries here
 var $ = jQuery = require('jquery');
+var _ = require('lodash');
 var bootstrap = require('bootstrap');
 
 //eRequire to show that we are working with node now
@@ -20,9 +21,24 @@ var MainInterface = React.createClass({
       myMovies: loadMovies
     } //return
   },
+  deleteMovie: function(item){
+    var allMovies = this.state.myMovies;
+    var newMovies = _.without(allMovies, item); //return array without the one movie passed
+    this.setState({
+      myMovies: newMovies
+    });
+  },
   render: function(){
-    //save that object to a variable that we can refer to and manipulate
-    var userMovies = this.state.myMovies;
+    var myMovies = this.state.myMovies; //save that object to a variable that we can refer to and manipulate
+    myMovies = myMovies.map(function(item, index){ //send this data to MovieList to create a series of those tags
+      return(
+        <MovieList key = {index} //each index of the data.json file
+          singleItem = {item} //each item at that index
+          whichItem = {item}
+          onDelete = {this.deleteMovie}
+        />
+      ) //return
+    }.bind(this));
     return(
       //a basic way to show one of the movies in that dataset, will turn into a list
       <div className="application">
@@ -30,21 +46,7 @@ var MainInterface = React.createClass({
          <div className="row">
            <div className="movies col-sm-12">
              <h2 className="movies-headline">Watched Movies</h2>
-             <ul className="item-list media-list">
-
-               <li className="movie-item media">
-                 <div className="movie-info media-body">
-                   <div className="movie-head">
-                     <span className="movie-name">{userMovies[0].movieName}</span>
-                     <span className="release-date pull-right">{userMovies[0].releaseDate}</span>
-                   </div>
-                   <div className="director-name"><span className="label-item">Directed By:</span>
-                   {userMovies[0].directorName}</div>
-                   <div className="movie-notes">{userMovies[0].Summary}</div>
-                 </div>
-               </li>
-
-             </ul>
+             <ul className="item-list media-list">{myMovies}</ul>
            </div>{/* col-sm-12 */}
          </div>{/* row */}
         </div>{/* container */}
