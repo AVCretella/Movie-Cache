@@ -17,7 +17,7 @@
   </div>
   <script type="text/javascript">
     //we dont want the gulp and Node.js commands to conflict, so we use these variables to differentiate
-    var eRequire = require; //used for Node.js require command
+    var eRequire = require; //used for Node.js require command because browserify will take all of the require
     var dirName = __dirname; //used for Node.js __dirname command
 
     //this allows for cross-platform directory references since OS X and windows have different path standards

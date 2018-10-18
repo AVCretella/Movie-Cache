@@ -3,16 +3,16 @@ var $ = jQuery = require('jquery');
 var _ = require('lodash');
 var bootstrap = require('bootstrap');
 
-//eRequire to show that we are working with node now
-var fs = eRequire('fs');
-//Will go to the dataLocation defined in index.html and create a proper data file from the file there
-var loadMovies = JSON.parse(fs.readFileSync(dataLocation));
+var fs = eRequire('fs');//eRequire to show that we are working with node now
+var loadMovies = JSON.parse(fs.readFileSync(dataLocation));//Will go to the dataLocation defined in index.html and create a proper data file from the file there
 
-
+var electron = eRequire('electron');
+var ipc = electron.ipcRenderer;
 
 var React = require('react');
 var ReactDOM = require('react-dom');
-var MovieList = require('./MovieList')
+var MovieList = require('./MovieList');
+var Toolbar = require('./Toolbar');
 //The main react component
 var MainInterface = React.createClass({
   //this will load the retrieved data into an object for this component
@@ -26,8 +26,7 @@ var MainInterface = React.createClass({
       if(err){
         console.log(err);
       }
-  }); //will go to the file location that our data is at and componentDidUpdate
-
+    }); //will go to the file location that our data is at and componentDidUpdate
   },
   deleteMovie: function(item){
     var allMovies = this.state.myMovies;
@@ -35,6 +34,9 @@ var MainInterface = React.createClass({
     this.setState({
       myMovies: newMovies
     });
+  },
+  showAbout: function(){ //we want to display the show about on the toolbar
+    ipc.sendSync('openInfoWindow');
   },
   render: function(){
     var myMovies = this.state.myMovies; //save that object to a variable that we can refer to and manipulate
@@ -50,14 +52,19 @@ var MainInterface = React.createClass({
     return(
       //a basic way to show one of the movies in that dataset, will turn into a list
       <div className="application">
-        <div className="container">
-         <div className="row">
-           <div className="movies col-sm-12">
-             <h2 className="movies-headline">Watched Movies</h2>
-             <ul className="item-list media-list">{myMovies}</ul>
-           </div>{/* col-sm-12 */}
-         </div>{/* row */}
-        </div>{/* container */}
+        <div className="interface">
+          <Toolbar
+            handleAbout = {this.showAbout}
+          />
+          <div className="container">
+           <div className="row">
+             <div className="movies col-sm-12">
+               <h2 className="movies-headline">Watched Movies</h2>
+               <ul className="item-list media-list">{myMovies}</ul>
+             </div>{/* col-sm-12 */}
+           </div>{/* row */}
+          </div>{/* container */}
+        </div>{/* interface */}
       </div>
     );
   }
