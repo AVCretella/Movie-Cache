@@ -13,14 +13,18 @@ var React = require('react');
 var ReactDOM = require('react-dom');
 var MovieList = require('./MovieList');
 var Toolbar = require('./Toolbar');
+var AddMovie = require('./AddMovie');
+
 //The main react component
 var MainInterface = React.createClass({
   //this will load the retrieved data into an object for this component
   getInitialState: function(){
     return {
+      movieBodyVisible: false,
       myMovies: loadMovies
     } //return
   },
+
   componentDidUpdate: function(){
     fs.writeFile(dataLocation, JSON.stringify(this.state.myMovies), 'utf8', function(err){
       if(err){
@@ -28,6 +32,7 @@ var MainInterface = React.createClass({
       }
     }); //will go to the file location that our data is at and componentDidUpdate
   },
+
   deleteMovie: function(item){
     var allMovies = this.state.myMovies;
     var newMovies = _.without(allMovies, item); //return array without the one movie passed
@@ -35,11 +40,27 @@ var MainInterface = React.createClass({
       myMovies: newMovies
     });
   },
+
+  toggleMovieDisplay: function(){ //this will allow us to add a movie to a list
+    var tempVisibility = !this.state.movieBodyVisible;
+    this.setState({
+      movieBodyVisible: tempVisibility
+    }); //setState
+  }, //toggleMovieDisplay
+
   showAbout: function(){ //we want to display the show about on the toolbar
     ipc.sendSync('openInfoWindow');
   },
+
   render: function(){
     var myMovies = this.state.myMovies; //save that object to a variable that we can refer to and manipulate
+
+    if(this.state.movieBodyVisible === true){
+      $('#addMovie').modal('show');
+    } else {
+      $('#addMovie').modal('hide');
+    } //handles showing the modal for adding a movie
+
     myMovies = myMovies.map(function(item, index){ //send this data to MovieList to create a series of those tags
       return(
         <MovieList key = {index} //each index of the data.json file
@@ -55,6 +76,10 @@ var MainInterface = React.createClass({
         <div className="interface">
           <Toolbar
             handleAbout = {this.showAbout}
+            handleToggle = {this.toggleMovieDisplay}
+          />
+          <AddMovie
+            handleToggle = {this.toggleMovieDisplay}
           />
           <div className="container">
            <div className="row">
@@ -66,9 +91,9 @@ var MainInterface = React.createClass({
           </div>{/* container */}
         </div>{/* interface */}
       </div>
-    );
-  }
-});
+    );//return
+  } //render
+}); //main interface
 
 //inject the component into the div with ID = movieInfo
 ReactDOM.render(

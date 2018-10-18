@@ -3,8 +3,9 @@ var BrowserWindow = electron.BrowserWindow;
 var app = electron.app;
 var ipc = electron.ipcMain;
 
-app.on('ready', function() {
-  var appWindow, infoWindow;
+var appWindow, infoWindow;
+
+app.on('ready', function(){
 
   appWindow = new BrowserWindow({
     show: false,
@@ -22,7 +23,7 @@ app.on('ready', function() {
   }); //infoWindow
   infoWindow.loadURL('file://' + __dirname + '/info.html'); //load info.html into a smaller window
 
-  appWindow.once('ready-to-show', function() {
+  appWindow.once('ready-to-show', function(){
     appWindow.show();
   }); //ready-to-show
 
@@ -37,5 +38,14 @@ app.on('ready', function() {
   }); //closeInfoWindow
 
 }); //app is ready
+
+//TODO will have to reimplement for later
+// app.on('activate', function(){
+//   // On OS X it's common to re-create a window in the app when the
+//   // dock icon is clicked and there are no other windows open.
+//   if (appWindow === null){
+//     createWindow()
+//   }
+// });
 
 //will want the functionality to click to reopen

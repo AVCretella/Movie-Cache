@@ -2,28 +2,28 @@
   {
     "movieName": "Avatar",
     "directorName": "James Cameron",
-    "releaseDate": "2016-06-20 15:30",
+    "releaseDate": "18 Dec 2009",
     "Summary": "Tan people want to be blue people in magical forest",
     "viewCount":"0"
   },
   {
     "movieName": "Blood Diamond",
     "directorName": "Edward Zwick",
-    "releaseDate": "2016-06-24 08:30",
-    "Summary": "White man whats to make money with diamonds",
+    "releaseDate": "08 Dec 2006",
+    "Summary": "White man wants to make money with diamonds",
     "viewCount":"0"
   },
   {
     "movieName": "The Prestige",
     "directorName": "Christopher Nolan",
-    "releaseDate": "2016-06-22 15:50",
-    "Summary": "Two boys wanna be the best magician",
+    "releaseDate": "20 Oct 2006",
+    "Summary": "Two bois wanna be the best magic man",
     "viewCount":"0"
   },
   {
     "movieName": "Inception",
     "directorName": "Christopher Nolan",
-    "releaseDate": "2016-06-21 9:15",
+    "releaseDate": "16 Jul 2010",
     "Summary": "Getting in someone's head in their head's head",
     "viewCount":"0"
   }
