@@ -4,6 +4,7 @@
     "directorName": "James Cameron",
     "releaseDate": "18 Dec 2009",
     "Summary": "Tan people want to be blue people in magical forest",
+    "duration": "162",
     "viewCount":"0"
   },
   {
@@ -11,6 +12,7 @@
     "directorName": "Edward Zwick",
     "releaseDate": "08 Dec 2006",
     "Summary": "White man wants to make money with diamonds",
+    "duration": "143",
     "viewCount":"0"
   },
   {
@@ -18,6 +20,7 @@
     "directorName": "Christopher Nolan",
     "releaseDate": "20 Oct 2006",
     "Summary": "Two bois wanna be the best magic man",
+    "duration": "130",
     "viewCount":"0"
   },
   {
@@ -25,6 +28,16 @@
     "directorName": "Christopher Nolan",
     "releaseDate": "16 Jul 2010",
     "Summary": "Getting in someone's head in their head's head",
+    "duration": "148",
     "viewCount":"0"
+  },
+  {
+    "movieName": "Shark Tale",
+    "directorName": "Bibo Bergeron",
+    "releaseDate": "2004-10-01",
+    "Summary": "A brutal tale of a fish slaying a shark and paying the ultimate price",
+    "duration": "90",
+    "viewCount": "1"
+
   }
 ]

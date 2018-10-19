@@ -7,6 +7,20 @@ var AddMovie = React.createClass({
   toggleMovieDisplay: function(){
     this.props.handleToggle();
   },
+  handleAdd: function(submitEvent){ //pass the fact that the submitEvent has happened from the form
+    submitEvent.preventDefault(); //this is to prevent the page from reloading, we will handle manually with React
+    var tempItem = { //temporary store the info that we want to add
+      movieName: this.inputMovieName.value,
+      directorName: this.inputMovieDirector.value,
+      releaseDate: this.inputMovieReleaseDate.value,
+      Summary: this.inputMovieSummary.value,
+      duration: this.inputMovieDuration.value,
+      viewCount: this.inputMovieViewCount.value
+    } //temp items
+
+    this.props.addMovie(tempItem); //pass the object to the function in the renderer process
+
+  },
   render: function(){ //using bootstrap modal for the movie creation form. All proof of concept
     return(
       <div className="modal fade" id="addMovie" tabIndex="-1" role="dialog">
@@ -17,20 +31,20 @@ var AddMovie = React.createClass({
               <h4 className="modal-title">Add a Movie</h4>
             </div>
 
-            <form className="modal-body add-movie form-horizontal">
+            <form className="modal-body add-movie form-horizontal" onSubmit={this.handleAdd}>
               <div className="form-group">
                 <label className="col-sm-3 control-label" htmlFor="movieName">Movie Name</label>
                 <div className="col-sm-9">
                   <input type="text" className="form-control"
-                    id="movieName" placeholder="Movie's Name" />
+                    id="movieName" ref={(ref) => this.inputMovieName = ref} placeholder="Movie's Name" />
                 </div>
               </div>
 
               <div className="form-group">
-                <label className="col-sm-3 control-label" htmlFor="director">Pet Owner</label>
+                <label className="col-sm-3 control-label" htmlFor="director">Director</label>
                 <div className="col-sm-9">
                   <input type="text" className="form-control"
-                    id="director" placeholder="Director's Name" />
+                    id="director" ref={(ref) => this.inputMovieDirector = ref} placeholder="Director's Name" />
                 </div>
               </div>
 
@@ -38,15 +52,15 @@ var AddMovie = React.createClass({
                 <label className="col-sm-3 control-label" htmlFor="releaseDate">Release Date</label>
                 <div className="col-sm-9">
                   <input type="date" className="form-control"
-                    id="releaseDate" />
+                    id="releaseDate" ref={(ref) => this.inputMovieReleaseDate = ref} />
                 </div>
               </div>
 
               <div className="form-group">
                 <label className="col-sm-3 control-label" htmlFor="duration">Duration</label>
                 <div className="col-sm-9">
-                  <input type="time" className="form-control"
-                    id="duration"/>
+                  <input type="number" min="0" className="form-control"
+                    id="duration" ref={(ref) => this.inputMovieDuration = ref}/>
                 </div>
               </div>
 
@@ -54,7 +68,15 @@ var AddMovie = React.createClass({
                 <label className="col-sm-3 control-label" htmlFor="Summary">Summary</label>
                 <div className="col-sm-9">
                   <textarea className="form-control" rows="4" cols="50"
-                    id="Summary" placeholder="Movie Summary"></textarea>
+                    id="Summary" ref={(ref) => this.inputMovieSummary = ref} placeholder="Movie Summary"></textarea>
+                </div>
+              </div>
+
+              <div className="form-group">
+                <label className="col-sm-3 control-label" htmlFor="duration">How Many Times Have You Seen This Movie?</label>
+                <div className="col-sm-9">
+                  <input type="number" min="0" className="form-control" default="1"
+                    id="viewCount" ref={(ref) => this.inputMovieViewCount = ref}/>
                 </div>
               </div>
 

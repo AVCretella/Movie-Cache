@@ -48,6 +48,15 @@ var MainInterface = React.createClass({
     }); //setState
   }, //toggleMovieDisplay
 
+  addMovieObject: function(tempItem){ //receives object saves in form
+    var tempMovies = this.state.myMovies;
+    tempMovies.push(tempItem);
+    this.setState({
+      myMovies: tempMovies,
+      movieBodyVisible: false
+    })
+  },
+
   showAbout: function(){ //we want to display the show about on the toolbar
     ipc.sendSync('openInfoWindow');
   },
@@ -80,6 +89,7 @@ var MainInterface = React.createClass({
           />
           <AddMovie
             handleToggle = {this.toggleMovieDisplay}
+            addMovie = {this.addMovieObject}
           />
           <div className="container">
            <div className="row">
