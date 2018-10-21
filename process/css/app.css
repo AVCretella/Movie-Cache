@@ -14,7 +14,7 @@ h1, h2, h3, h4, h5, h6 {
 .navbar {
   margin-bottom: 0;
   border-radius: 0;
-  background-image: url("../images/wisdompetlogo.svg");
+  background-image: url("../images/goose.svg");
   background-repeat: no-repeat;
   background-size: 40px;
   background-position: 10px;
@@ -36,7 +36,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .navbar-default {
-  background-color: #194759;
+  background-color: #5D2E79;
   border: none;
 }
 
@@ -103,7 +103,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .toolbar-item:hover {
-  background-color: #133748;
+  background-color: #7715AD;
 }
 
 .toolbar-item-button {

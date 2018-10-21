@@ -1,5 +1,27 @@
 var React = require('react');
 
+
+var defaultDate = new Date();
+defaultDate.setDate(defaultDate.getDate()); //this will give us today's date possibly to use for when the movie was added
+                                            //INCOMP we will just use it for the 'releaseDate' for now, change later
+
+function formatDate(date, divider) { //divider is what will separate the days
+  var someday = new Date(date);
+  var month = someday.getUTCMonth() + 1;
+  var day = someday.getUTCDate();
+  var year = someday.getUTCFullYear();
+
+  //if num <= 9, prepend a 0 for correct formatting
+  if(month <= 9){
+    month = '0' + month;
+  }
+  if(day <= 9){
+    day = '0' + day;
+  }
+  return ('' + year + divider + month + divider + day);
+}
+
+
 /* INCOMP Will probably just end up turning this into a SearchMovie.js where there is one field
     to search for a movie and get the JSON back, we'll see, but this was an interesting look
     at using bootstrap modals, could have used this over the summer for sure */
@@ -19,6 +41,14 @@ var AddMovie = React.createClass({
     } //temp items
 
     this.props.addMovie(tempItem); //pass the object to the function in the renderer process
+
+    //all of this will reset the form after it has been submitted to the renderer process
+    this.inputMovieName.value = '';
+    this.inputMovieDirector.value = '';
+    this.inputMovieReleaseDate.value = formatDate(defaultDate, '-');
+    this.inputMovieSummary.value = '';
+    this.inputMovieDuration.value = '180';
+    this.inputMovieViewCount.value = '1';
 
   },
   render: function(){ //using bootstrap modal for the movie creation form. All proof of concept
@@ -52,15 +82,15 @@ var AddMovie = React.createClass({
                 <label className="col-sm-3 control-label" htmlFor="releaseDate">Release Date</label>
                 <div className="col-sm-9">
                   <input type="date" className="form-control"
-                    id="releaseDate" ref={(ref) => this.inputMovieReleaseDate = ref} />
+                    id="releaseDate" ref={(ref) => this.inputMovieReleaseDate = ref} defaultValue={formatDate(defaultDate, '-')}/>
                 </div>
               </div>
 
               <div className="form-group">
-                <label className="col-sm-3 control-label" htmlFor="duration">Duration</label>
+                <label className="col-sm-3 control-label" htmlFor="duration">Duration (in minutes)</label>
                 <div className="col-sm-9">
                   <input type="number" min="0" className="form-control"
-                    id="duration" ref={(ref) => this.inputMovieDuration = ref}/>
+                    id="duration" ref={(ref) => this.inputMovieDuration = ref} defaultValue = {'120'}/>
                 </div>
               </div>
 
@@ -75,7 +105,7 @@ var AddMovie = React.createClass({
               <div className="form-group">
                 <label className="col-sm-3 control-label" htmlFor="duration">How Many Times Have You Seen This Movie?</label>
                 <div className="col-sm-9">
-                  <input type="number" min="0" className="form-control" default="1"
+                  <input type="number" min="0" className="form-control" defaultValue={'1'}
                     id="viewCount" ref={(ref) => this.inputMovieViewCount = ref}/>
                 </div>
               </div>

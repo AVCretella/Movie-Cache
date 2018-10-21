@@ -13,6 +13,7 @@ var React = require('react');
 var ReactDOM = require('react-dom');
 var MovieList = require('./MovieList');
 var Toolbar = require('./Toolbar');
+var HeaderNav = require('./HeaderNav');
 var AddMovie = require('./AddMovie');
 
 //The main react component
@@ -21,6 +22,7 @@ var MainInterface = React.createClass({
   getInitialState: function(){
     return {
       movieBodyVisible: false,
+      queryText: '',
       myMovies: loadMovies
     } //return
   },
@@ -54,7 +56,13 @@ var MainInterface = React.createClass({
     this.setState({
       myMovies: tempMovies,
       movieBodyVisible: false
-    })
+    });
+  },
+
+  searchMovies: function(query){ //query is what user typed into search bar
+    this.setState({
+      queryText: query
+    });
   },
 
   showAbout: function(){ //we want to display the show about on the toolbar
@@ -63,6 +71,8 @@ var MainInterface = React.createClass({
 
   render: function(){
     var myMovies = this.state.myMovies; //save that object to a variable that we can refer to and manipulate
+    var queryText = this.state.queryText;
+    var filteredMovies = [];
 
     if(this.state.movieBodyVisible === true){
       $('#addMovie').modal('show');
@@ -70,7 +80,17 @@ var MainInterface = React.createClass({
       $('#addMovie').modal('hide');
     } //handles showing the modal for adding a movie
 
-    myMovies = myMovies.map(function(item, index){ //send this data to MovieList to create a series of those tags
+    for(var i = 0; i < myMovies.length; i++){ //filtering our movie list
+      //we check if what they are typing matches anything in any of the movies, if it does, return that movie
+      if((myMovies[i].movieName.toLowerCase().indexOf(queryText) != -1) ||
+        (myMovies[i].directorName.toLowerCase().indexOf(queryText) != -1) ||
+        (myMovies[i].releaseDate.toLowerCase().indexOf(queryText) != -1) ||
+        (myMovies[i].Summary.toLowerCase().indexOf(queryText) != -1)){
+          filteredMovies.push(myMovies[i]);
+      }
+    }
+
+    filteredMovies = filteredMovies.map(function(item, index){ //send this data to MovieList to create a series of those tags
       return(
         <MovieList key = {index} //each index of the data.json file
           singleItem = {item} //each item at that index
@@ -82,6 +102,9 @@ var MainInterface = React.createClass({
     return(
       //a basic way to show one of the movies in that dataset, will turn into a list
       <div className="application">
+        <HeaderNav
+          onSearch = {this.searchMovies}
+        />
         <div className="interface">
           <Toolbar
             handleAbout = {this.showAbout}
@@ -95,7 +118,7 @@ var MainInterface = React.createClass({
            <div className="row">
              <div className="movies col-sm-12">
                <h2 className="movies-headline">Watched Movies</h2>
-               <ul className="item-list media-list">{myMovies}</ul>
+               <ul className="item-list media-list">{filteredMovies}</ul>
              </div>{/* col-sm-12 */}
            </div>{/* row */}
           </div>{/* container */}
