@@ -22,6 +22,8 @@ var MainInterface = React.createClass({
   getInitialState: function(){
     return {
       movieBodyVisible: false,
+      orderBy: 'movieName',
+      orderDir: 'desc',
       queryText: '',
       myMovies: loadMovies
     } //return
@@ -65,6 +67,13 @@ var MainInterface = React.createClass({
     });
   },
 
+  ReOrder: function(orderBy, orderDir){ //will be sent either what to order by or the direction ot display
+    this.setState({
+      orderBy: orderBy,
+      orderDir: orderDir
+    });
+  },
+
   showAbout: function(){ //we want to display the show about on the toolbar
     ipc.sendSync('openInfoWindow');
   },
@@ -72,6 +81,8 @@ var MainInterface = React.createClass({
   render: function(){
     var myMovies = this.state.myMovies; //save that object to a variable that we can refer to and manipulate
     var queryText = this.state.queryText;
+    var orderBy = this.state.orderBy;
+    var orderDir = this.state.orderDir;
     var filteredMovies = [];
 
     if(this.state.movieBodyVisible === true){
@@ -90,20 +101,29 @@ var MainInterface = React.createClass({
       }
     }
 
+    filteredMovies = _.orderBy(filteredMovies, function(item){
+      return item[orderBy].toLowerCase();
+    }, orderDir); //uses Lodash to order the movies in the way that we want
+
     filteredMovies = filteredMovies.map(function(item, index){ //send this data to MovieList to create a series of those tags
       return(
-        <MovieList key = {index} //each index of the data.json file
+        <MovieList
+          key = {index} //each index of the data.json file
           singleItem = {item} //each item at that index
           whichItem = {item}
           onDelete = {this.deleteMovie}
         />
       ) //return
     }.bind(this));
+
     return(
       //a basic way to show one of the movies in that dataset, will turn into a list
       <div className="application">
         <HeaderNav
+          orderBy = {this.state.orderBy}
+          orderDir = {this.state.orderDir}
           onSearch = {this.searchMovies}
+          onReOrder = {this.ReOrder}
         />
         <div className="interface">
           <Toolbar
