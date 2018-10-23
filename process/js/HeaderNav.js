@@ -22,7 +22,7 @@ var HeaderNav = React.createClass({
                 <input id="SearchMovies" onChange={this.handleSearch} placeholder="Search" autoFocus type="text" className="form-control" aria-label="Search Movies" />
                 <div className="input-group-btn">
                   <button type="button" className="btn btn-info dropdown-toggle"
-                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Sort by
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Sort by &nbsp;
                     <span className="caret"></span>
                   </button>
                     <ul className="dropdown-menu dropdown-menu-right">

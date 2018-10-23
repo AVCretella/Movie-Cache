@@ -1,9 +1,19 @@
 var electron = require('electron');
 var BrowserWindow = electron.BrowserWindow;
+var Menu = electron.Menu; //using electron's prebuilt menu
 var app = electron.app;
 var ipc = electron.ipcMain;
+var myAppMenu, menuTemplate;
 
 var appWindow, infoWindow;
+
+function toggleWindow(whichWindow){
+  if(whichWindow.isVisible()){
+    whichWindow.hide();
+  } else {
+    whichWindow.show();
+  }
+}
 
 app.on('ready', function(){
 
@@ -37,6 +47,71 @@ app.on('ready', function(){
     infoWindow.hide();
   }); //closeInfoWindow
 
+  menuTemplate = [
+    {label: 'Movie Cache',
+      submenu: [
+        {
+          label: 'About This App',
+          accelerator: process.platform === 'darwin' ? 'Command+I':'Ctrl+I',
+          click(item){ toggleWindow(infoWindow) }
+        },
+        {
+          label: 'Add Movie',
+          accelerator: process.platform === 'darwin' ? 'Command+N':'Ctrl+N', //this is determined by OS, 'darwin' is mac
+          click(item,focusedWindow){
+            if(focusedWindow){
+              focusedWindow.webContents.send('addMovie'); //sends event over to the renderer process
+            }
+          }
+        },
+        {
+          role: 'help',
+          label: 'Our Website',
+          click(){electron.shell.openExternal('https://humblebundle.com')}
+        },
+        {role: 'quit'},
+        {role: 'close'}
+      ]
+    },
+    {label: 'Edit',
+      submenu: [
+        {role: 'undo'},
+        {role: 'redo'},
+        {role: 'cut'},
+        {role: 'copy'},
+        {role: 'paste'},
+        {role: 'selectall'}
+
+      ]
+    },
+    {label: 'View',
+      submenu: [
+        {
+          label: 'Reload',
+          accelerator: 'CmdOrCtrl+R',
+          click (item, focusedWindow) {
+            if (focusedWindow) focusedWindow.reload()
+          }
+        },
+        {
+          label: 'Toggle Developer Tools',
+          accelerator: process.platform === 'darwin' ? 'Alt+Command+I' : 'Ctrl+Shift+I',
+          click (item, focusedWindow) {
+            if (focusedWindow) focusedWindow.webContents.toggleDevTools()
+          }
+        },
+        {type: 'separator'},
+        {role: 'resetzoom'},
+        {role: 'zoomin'},
+        {role: 'zoomout'},
+        {type: 'separator'},
+        {role: 'togglefullscreen'}
+      ]
+    }
+  ];
+
+  myAppMenu = Menu.buildFromTemplate(menuTemplate);
+  Menu.setApplicationMenu(myAppMenu);
 }); //app is ready
 
 //TODO will have to reimplement for later

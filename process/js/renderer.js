@@ -29,13 +29,26 @@ var MainInterface = React.createClass({
     } //return
   },
 
+  //componentDidMount and componentWillUnmount handle all of the menu operation that we define in main.js
+  componentDidMount: function(){
+    ipc.on('addMovie', function(event, message){
+      this.toggleMovieDisplay();
+    }.bind(this));
+  }, //componentDidMount
+
+  componentWillUnmount: function(){
+    ipc.removeListener('addMovie', function(event, message){
+      this.toggleMovieDisplay();
+    }.bind(this));
+  }, //componentDidMount
+
   componentDidUpdate: function(){
     fs.writeFile(dataLocation, JSON.stringify(this.state.myMovies), 'utf8', function(err){
       if(err){
         console.log(err);
       }
-    }); //will go to the file location that our data is at and componentDidUpdate
-  },
+    }); //will go to the file location that our data is at and change it
+  }, //componentDidUpdate
 
   deleteMovie: function(item){
     var allMovies = this.state.myMovies;
