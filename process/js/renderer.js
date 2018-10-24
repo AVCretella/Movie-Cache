@@ -129,6 +129,10 @@ var MainInterface = React.createClass({
       ) //return
     }.bind(this));
 
+//INCOMP Need to be able to talk with the other files in order to populate the correct window
+//want to be able to change the panel while keeping the search bar and toolbar.
+//also need to change what is on the searchbar depending on which tab we are on
+
     return(
       //a basic way to show one of the movies in that dataset, will turn into a list
       <div className="application">

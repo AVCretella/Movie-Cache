@@ -66,8 +66,8 @@ app.on('ready', function(){
         },
         {
           role: 'help',
-          label: 'Our Website',
-          click(){electron.shell.openExternal('https://humblebundle.com')}
+          label: 'Check out my good noodle boxes as of late',
+          click(){electron.shell.openExternal('https://github.com/AVCretella')} //open a website from the menus
         },
         {role: 'quit'},
         {role: 'close'}
@@ -100,7 +100,7 @@ app.on('ready', function(){
             if (focusedWindow) focusedWindow.webContents.toggleDevTools()
           }
         },
-        {type: 'separator'},
+        {type: 'separator'}, //this puts a horizontal line in the menu
         {role: 'resetzoom'},
         {role: 'zoomin'},
         {role: 'zoomout'},
