@@ -133,6 +133,10 @@ var MainInterface = React.createClass({
 //want to be able to change the panel while keeping the search bar and toolbar.
 //also need to change what is on the searchbar depending on which tab we are on
 
+//INCOMP will need global event system in order to do intercomponent communication
+  /* https://stackoverflow.com/questions/21285923/reactjs-two-components-communicating
+     https://reactjs.org/docs/components-and-props.html */
+    //Didn't have time today, but will look into it tomorrow
     return(
       //a basic way to show one of the movies in that dataset, will turn into a list
       <div className="application">
