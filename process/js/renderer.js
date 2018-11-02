@@ -16,6 +16,8 @@ var Toolbar = require('./Toolbar');
 var HeaderNav = require('./HeaderNav');
 var AddMovie = require('./AddMovie');
 
+//TODO functions to reload each piece of the page independently?
+
 //The main react component
 var MainInterface = React.createClass({
   //this will load the retrieved data into an object for this component
@@ -88,7 +90,7 @@ var MainInterface = React.createClass({
   },
 
   showAbout: function(){ //we want to display the show about on the toolbar
-    ipc.sendSync('openInfoWindow');
+    ipc.sendSync('openInfoWindow'); //sends event notification to main process
   },
 
   render: function(){
@@ -98,6 +100,7 @@ var MainInterface = React.createClass({
     var orderDir = this.state.orderDir;
     var filteredMovies = [];
 
+    //TODO fuck this, change it, react-bootstrap
     if(this.state.movieBodyVisible === true){
       $('#addMovie').modal('show');
     } else {
