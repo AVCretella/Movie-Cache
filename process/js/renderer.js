@@ -151,18 +151,18 @@ var MainInterface = React.createClass({
         />
         <div className="interface">
           <Toolbar
-            handleAbout = {this.showAbout}
-            handleToggle = {this.toggleMovieDisplay}
+            handleAbout = {this.showAbout} //display the 'about' window
+            handleToggle = {this.toggleMovieDisplay} //can pull down the modal
           />
-          <AddMovie
-            handleToggle = {this.toggleMovieDisplay}
-            addMovie = {this.addMovieObject}
+          <AddMovie //this is for the modal that will appear
+            handleToggle = {this.toggleMovieDisplay} //send an event to toggle the modal
+            addMovie = {this.addMovieObject} //when submitted, send event notification
           />
           <div className="container">
            <div className="row">
              <div className="movies col-sm-12">
                <h2 className="movies-headline">Watched Movies</h2>
-               <ul className="item-list media-list">{filteredMovies}</ul>
+               <ul className="item-list media-list">{filteredMovies}</ul> //TODO update filtered movies section in a more react way, re-render component for movielist
              </div>{/* col-sm-12 */}
            </div>{/* row */}
           </div>{/* container */}
@@ -178,6 +178,7 @@ ReactDOM.render(
   document.getElementById('movieInfo')
 );
 
+//stick a clock at the bottom for
 function Clock(props) {
   return (
     <div>
@@ -193,7 +194,6 @@ function tick() {
     document.getElementById('movieList')
   );
 }
-
 setInterval(tick, 1000);
 
 // $(function(){
