@@ -18,7 +18,49 @@ var AddMovie = require('./AddMovie');
 
 //TODO functions to reload each piece of the page independently?
 
-//TODO let's try to pull the toolbar out and see what happens how about that ya dickhead
+//TODO let's try to pull the searchbar out and see what happens how about that ya dickhead
+var HeaderInterface = React.createClass({
+  getInitialState: function(){
+    return {
+      // movieBodyVisible: false,
+      orderBy: 'movieName',
+      orderDir: 'desc',
+      queryText: '',
+      myMovies: loadMovies
+    } //return
+  },
+  searchMovies: function(query){ //query is what user typed into search bar
+    this.setState({
+      queryText: query
+    });
+  },
+
+  ReOrder: function(orderBy, orderDir){ //will be sent either what to order by or the direction ot display
+    this.setState({
+      orderBy: orderBy,
+      orderDir: orderDir
+    });
+  },
+
+  render: function(){
+    var myMovies = this.state.myMovies; //save that object to a variable that we can refer to and manipulate
+    var queryText = this.state.queryText;
+    var orderBy = this.state.orderBy;
+    var orderDir = this.state.orderDir;
+    var filteredMovies = [];
+
+    return(
+      <div className="application">
+        <HeaderNav
+          orderBy = {this.state.orderBy}
+          orderDir = {this.state.orderDir}
+          onSearch = {this.searchMovies}
+          onReOrder = {this.ReOrder}
+        />
+      </div>
+    );//return
+  } //render
+});
 
 //The main react component
 var MainInterface = React.createClass({
@@ -185,6 +227,25 @@ function renderMainInterface(){
 }
 
 renderMainInterface();
+
+
+
+
+
+// function renderHeaderNav(){
+//   ReactDOM.render(
+//     <HeaderInterface />
+//     document.getElementById('application')
+//   );
+// }
+//
+// renderHeaderNav();
+
+
+
+
+
+
 
 //===== Completely Separate Proof of Concept - stick a clock at the bottom, this is how I want to do things
 function Clock(props) {
