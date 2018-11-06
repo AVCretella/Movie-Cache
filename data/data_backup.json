@@ -5,7 +5,8 @@
     "releaseDate": "18 Dec 2009",
     "Summary": "Tan people want to be blue people in magical forest",
     "duration": "162",
-    "viewCount":"0"
+    "viewCount":"0",
+    "rank": "1"
   },
   {
     "movieName": "Blood Diamond",
@@ -13,7 +14,8 @@
     "releaseDate": "08 Dec 2006",
     "Summary": "White man wants to make money with diamonds",
     "duration": "143",
-    "viewCount":"0"
+    "viewCount":"0",
+    "rank": "4"
   },
   {
     "movieName": "The Prestige",
@@ -21,7 +23,8 @@
     "releaseDate": "20 Oct 2006",
     "Summary": "Two bois wanna be the best magic man",
     "duration": "130",
-    "viewCount":"0"
+    "viewCount":"0",
+    "rank": "2"
   },
   {
     "movieName": "Inception",
@@ -29,7 +32,8 @@
     "releaseDate": "16 Jul 2010",
     "Summary": "Getting in someone's head in their head's head",
     "duration": "148",
-    "viewCount":"0"
+    "viewCount":"0",
+    "rank": "3"
   },
   {
     "movieName": "Shark Tale",
@@ -37,7 +41,7 @@
     "releaseDate": "2004-10-01",
     "Summary": "A brutal tale of a fish slaying a shark and paying the ultimate price",
     "duration": "90",
-    "viewCount": "1"
-
+    "viewCount": "1",
+    "rank": "5"
   }
 ]

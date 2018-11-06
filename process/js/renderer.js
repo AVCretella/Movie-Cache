@@ -18,6 +18,8 @@ var AddMovie = require('./AddMovie');
 
 //TODO functions to reload each piece of the page independently?
 
+//TODO let's try to pull the toolbar out and see what happens how about that ya dickhead
+
 //The main react component
 var MainInterface = React.createClass({
   //this will load the retrieved data into an object for this component
@@ -136,10 +138,12 @@ var MainInterface = React.createClass({
 //want to be able to change the panel while keeping the search bar and toolbar.
 //also need to change what is on the searchbar depending on which tab we are on
 
-//INCOMP will need global event system in order to do intercomponent communication
+//TODO will need global event system in order to do intercomponent communication
   /* https://stackoverflow.com/questions/21285923/reactjs-two-components-communicating
      https://reactjs.org/docs/components-and-props.html */
     //Didn't have time today, but will look into it tomorrow
+    //TODO will have to break this down into several components that can be re-rendered independenlty
+    //TODO update filtered movies section in a more react way, re-render component for movielist
     return(
       //a basic way to show one of the movies in that dataset, will turn into a list
       <div className="application">
@@ -162,7 +166,7 @@ var MainInterface = React.createClass({
            <div className="row">
              <div className="movies col-sm-12">
                <h2 className="movies-headline">Watched Movies</h2>
-               <ul className="item-list media-list">{filteredMovies}</ul> //TODO update filtered movies section in a more react way, re-render component for movielist
+               <ul className="item-list media-list">{filteredMovies}</ul>
              </div>{/* col-sm-12 */}
            </div>{/* row */}
           </div>{/* container */}
@@ -173,16 +177,20 @@ var MainInterface = React.createClass({
 }); //main interface
 
 //inject the component into the div with ID = movieInfo
-ReactDOM.render(
-  <MainInterface />,
-  document.getElementById('movieInfo')
-);
+function renderMainInterface(){
+  ReactDOM.render(
+    <MainInterface />,
+    document.getElementById('movieInfo')
+  );
+}
 
-//stick a clock at the bottom for
+renderMainInterface();
+
+//===== Completely Separate Proof of Concept - stick a clock at the bottom, this is how I want to do things
 function Clock(props) {
   return (
     <div>
-      <h1>Hello, world!</h1>
+      <h1>Hello Alex, Do Your Work!</h1>
       <h2>It is {props.date.toLocaleTimeString()}.</h2>
     </div>
   );

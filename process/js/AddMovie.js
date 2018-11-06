@@ -37,7 +37,8 @@ var AddMovie = React.createClass({
       releaseDate: this.inputMovieReleaseDate.value,
       Summary: this.inputMovieSummary.value,
       duration: this.inputMovieDuration.value,
-      viewCount: this.inputMovieViewCount.value
+      viewCount: this.inputMovieViewCount.value,
+      rank: this.inputMovieViewRank.value
     } //temp items
 
     this.props.addMovie(tempItem); //pass the object to the function in the renderer process
@@ -49,6 +50,7 @@ var AddMovie = React.createClass({
     this.inputMovieSummary.value = '';
     this.inputMovieDuration.value = '180';
     this.inputMovieViewCount.value = '1';
+    this.inputMovieViewRank.value = '1';
 
   },
   render: function(){ //using bootstrap modal for the movie creation form. All proof of concept
@@ -107,6 +109,14 @@ var AddMovie = React.createClass({
                 <div className="col-sm-9">
                   <input type="number" min="0" className="form-control" defaultValue={'1'}
                     id="viewCount" ref={(ref) => this.inputMovieViewCount = ref}/>
+                </div>
+              </div>
+
+              <div className="form-group">
+                <label className="col-sm-3 control-label" htmlFor="rank">How Many Times Have You Seen This Movie?</label>
+                <div className="col-sm-9">
+                  <input type="number" min="0" className="form-control" defaultValue={'1'}
+                    id="rank" ref={(ref) => this.inputMovieViewRank = ref}/>
                 </div>
               </div>
 
