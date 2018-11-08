@@ -18,6 +18,10 @@ var AddMovie = require('./AddMovie');
 
 //TODO functions to reload each piece of the page independently?
 
+
+/*============
+Header Interface
+=============*/
 //TODO let's try to pull the searchbar out and see what happens how about that ya dickhead
 var HeaderInterface = React.createClass({
   getInitialState: function(){
@@ -62,7 +66,136 @@ var HeaderInterface = React.createClass({
   } //render
 });
 
-//The main react component
+
+/*============
+Toolbar Interface
+=============*/
+var ToolbarInterface = React.createClass({
+  getInitialState: function(){
+    return {
+      movieBodyVisible: false
+    } //return
+  },
+
+  //componentDidMount and componentWillUnmount handle all of the menu operation that we define in main.js
+  componentDidMount: function(){
+    ipc.on('addMovie', function(event, message){
+      this.toggleMovieDisplay();
+    }.bind(this));
+  }, //componentDidMount
+
+  componentWillUnmount: function(){
+    ipc.removeListener('addMovie', function(event, message){
+      this.toggleMovieDisplay();
+    }.bind(this));
+  }, //componentDidMount
+
+  toggleMovieDisplay: function(){ //this will allow us to add a movie to a list
+    var tempVisibility = !this.state.movieBodyVisible;
+    this.setState({
+      movieBodyVisible: tempVisibility
+    }); //setState
+  }, //toggleMovieDisplay
+
+  addMovieObject: function(tempItem){ //receives object saves in form
+    var tempMovies = this.state.myMovies;
+    tempMovies.push(tempItem);
+    this.setState({
+      myMovies: tempMovies,
+      movieBodyVisible: false
+    });
+  },
+
+  showAbout: function(){ //we want to display the show about on the toolbar
+    ipc.sendSync('openInfoWindow'); //sends event notification to main process
+  },
+
+  render: function(){
+    var myMovies = this.state.myMovies; //save that object to a variable that we can refer to and manipulate
+    var queryText = this.state.queryText;
+    var orderBy = this.state.orderBy;
+    var orderDir = this.state.orderDir;
+    var filteredMovies = [];
+
+    //TODO fuck this, change it, react-bootstrap
+    if(this.state.movieBodyVisible === true){
+      $('#addMovie').modal('show');
+    } else {
+      $('#addMovie').modal('hide');
+    } //handles showing the modal for adding a movie
+
+    for(var i = 0; i < myMovies.length; i++){ //filtering our movie list
+      //we check if what they are typing matches anything in any of the movies, if it does, return that movie
+      if((myMovies[i].movieName.toLowerCase().indexOf(queryText) != -1) ||
+        (myMovies[i].directorName.toLowerCase().indexOf(queryText) != -1) ||
+        (myMovies[i].releaseDate.toLowerCase().indexOf(queryText) != -1) ||
+        (myMovies[i].Summary.toLowerCase().indexOf(queryText) != -1)){
+          filteredMovies.push(myMovies[i]);
+      }
+    }
+
+    filteredMovies = _.orderBy(filteredMovies, function(item){
+      return item[orderBy].toLowerCase();
+    }, orderDir); //uses Lodash to order the movies in the way that we want
+
+    filteredMovies = filteredMovies.map(function(item, index){ //send this data to MovieList to create a series of those tags
+      return(
+        <MovieList
+          key = {index} //each index of the data.json file
+          singleItem = {item} //each item at that index
+          whichItem = {item}
+          onDelete = {this.deleteMovie}
+        />
+      ) //return
+    }.bind(this));
+
+//INCOMP Need to be able to talk with the other files in order to populate the correct window
+//want to be able to change the panel while keeping the search bar and toolbar.
+//also need to change what is on the searchbar depending on which tab we are on
+
+//TODO will need global event system in order to do intercomponent communication
+  /* https://stackoverflow.com/questions/21285923/reactjs-two-components-communicating
+     https://reactjs.org/docs/components-and-props.html */
+    //Didn't have time today, but will look into it tomorrow
+    //TODO will have to break this down into several components that can be re-rendered independenlty
+    //TODO update filtered movies section in a more react way, re-render component for movielist
+    return(
+      //a basic way to show one of the movies in that dataset, will turn into a list
+      <div className="application">
+        <HeaderNav
+          orderBy = {this.state.orderBy}
+          orderDir = {this.state.orderDir}
+          onSearch = {this.searchMovies}
+          onReOrder = {this.ReOrder}
+        />
+        <div className="interface">
+          <Toolbar
+            handleAbout = {this.showAbout} //display the 'about' window
+            handleToggle = {this.toggleMovieDisplay} //can pull down the modal
+          />
+          <AddMovie //this is for the modal that will appear
+            handleToggle = {this.toggleMovieDisplay} //send an event to toggle the modal
+            addMovie = {this.addMovieObject} //when submitted, send event notification
+          />
+          <div className="container">
+           <div className="row">
+             <div className="movies col-sm-12">
+               <h2 className="movies-headline">Watched Movies</h2>
+               <ul className="item-list media-list">{filteredMovies}</ul>
+             </div>{/* col-sm-12 */}
+           </div>{/* row */}
+          </div>{/* container */}
+        </div>{/* interface */}
+      </div>
+    );//return
+  } //render
+});
+
+
+//TODO will turn this into just the changing panel with lists of Movies
+/*============
+MAIN Interface
+=============*/
 var MainInterface = React.createClass({
   //this will load the retrieved data into an object for this component
   getInitialState: function(){
