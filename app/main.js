@@ -19,8 +19,8 @@ app.on('ready', function(){
 
   appWindow = new BrowserWindow({
     show: false,
-    width: 800,
-    height: 600
+    width: 1000,
+    height: 800
   }); //appWindow
   appWindow.loadURL('file://' + __dirname + '/index.html'); //load index.html into appWindow
 
@@ -112,6 +112,10 @@ app.on('ready', function(){
 
   myAppMenu = Menu.buildFromTemplate(menuTemplate);
   Menu.setApplicationMenu(myAppMenu);
+
+  appWindow.on('closed', function() {
+    appWindow = null;
+  });
 }); //app is ready
 
 //TODO will have to reimplement for later
