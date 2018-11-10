@@ -11,117 +11,107 @@ var ipc = electron.ipcRenderer;
 
 var React = require('react');
 var ReactDOM = require('react-dom');
+var HashRouter = require('react-router-dom');
+// import { HashRouter as Router, Route, Link } from "react-router-dom";
 var MovieList = require('./MovieList');
 var Toolbar = require('./Toolbar');
 var HeaderNav = require('./HeaderNav');
 var AddMovie = require('./AddMovie');
 
-/* TODO We want to break the Toolbar, HeaderNav, and MainPanel into separate components,
-    will be updating them independently; need Ed's help with this
-    But do they all need to know the same information in order to update it?
-*/
-/*==============================================================================
-                            Test Header Interface
-==============================================================================*/
-var TestHeaderInterface = React.createClass({
-  render: function(){
-    var myMovies = this.state.myMovies; //save that object to a variable that we can refer to and manipulate
-    var queryText = this.state.queryText;
-    var orderBy = this.state.orderBy;
-    var orderDir = this.state.orderDir;
-    var filteredMovies = [];
+// function BasicExample() {
+//   return (
+//     <Router>
+//       <div>
+//         <ul>
+//           <li>
+//             <Link to="/">Home</Link>
+//           </li>
+//           <li>
+//             <Link to="/about">About</Link>
+//           </li>
+//           <li>
+//             <Link to="/topics">Topics</Link>
+//           </li>
+//         </ul>
+//
+//         <hr />
+//
+//         <Route exact path="/" component={Home} />
+//         <Route path="/about" component={About} />
+//         <Route path="/topics" component={Topics} />
+//       </div>
+//     </Router>
+//   );
+// }
+//
+// function Home() {
+//   return (
+//     <div>
+//       <h2>Home</h2>
+//     </div>
+//   );
+// }
+//
+// function About() {
+//   return (
+//     <div>
+//       <h2>About</h2>
+//     </div>
+//   );
+// }
+//
+// function Topics({ match }) {
+//   return (
+//     <div>
+//       <h2>Topics</h2>
+//       <ul>
+//         <li>
+//           <Link to={`${match.url}/rendering`}>Rendering with React</Link>
+//         </li>
+//         <li>
+//           <Link to={`${match.url}/components`}>Components</Link>
+//         </li>
+//         <li>
+//           <Link to={`${match.url}/props-v-state`}>Props v. State</Link>
+//         </li>
+//       </ul>
+//
+//       <Route path={`${match.path}/:topicId`} component={Topic} />
+//       <Route
+//         exact
+//         path={match.path}
+//         render={() => <h3>Please select a topic.</h3>}
+//       />
+//     </div>
+//   );
+// }
+//
+// function Topic({ match }) {
+//   return (
+//     <div>
+//       <h3>{match.params.topicId}</h3>
+//     </div>
+//   );
+// }
+//
+// export default BasicExample;
 
-    return(
-      <div className="application">
-        <HeaderNav
-          orderBy = {this.state.orderBy}
-          orderDir = {this.state.orderDir}
-          onSearch = {this.searchMovies}
-          onReOrder = {this.ReOrder}
-        />
-      </div>
-    );//return
-  } //render
-});
 
-/*==============================================================================
-                            Header Interface
-==============================================================================*/
-// //TODO let's try to pull the navbar out and see what happens how about that ya dickhead
-// var HeaderInterface = React.createClass({
-//   //this will load the retrieved data into an object for this component
-//   getInitialState: function(){
-//     return {
-//       movieBodyVisible: false,
-//       orderBy: 'movieName',
-//       orderDir: 'desc',
-//       queryText: '',
-//       myMovies: loadMovies
-//     } //return
-//   },
+
+
+
+
+
+
 //
-//   //componentDidMount and componentWillUnmount handle all of the menu operation that we define in main.js
-//   componentDidMount: function(){
-//     ipc.on('addMovie', function(event, message){
-//       this.toggleMovieDisplay();
-//     }.bind(this));
-//   }, //componentDidMount
-//
-//   componentWillUnmount: function(){
-//     ipc.removeListener('addMovie', function(event, message){
-//       this.toggleMovieDisplay();
-//     }.bind(this));
-//   }, //componentDidMount
-//
-//   componentDidUpdate: function(){
-//     fs.writeFile(dataLocation, JSON.stringify(this.state.myMovies), 'utf8', function(err){
-//       if(err){
-//         console.log(err);
-//       }
-//     }); //will go to the file location that our data is at and change it
-//   }, //componentDidUpdate
-//
-//   deleteMovie: function(item){
-//     var allMovies = this.state.myMovies;
-//     var newMovies = _.without(allMovies, item); //return array without the one movie passed
-//     this.setState({
-//       myMovies: newMovies
-//     });
-//   },
-//
-//   toggleMovieDisplay: function(){ //this will allow us to add a movie to a list
-//     var tempVisibility = !this.state.movieBodyVisible;
-//     this.setState({
-//       movieBodyVisible: tempVisibility
-//     }); //setState
-//   }, //toggleMovieDisplay
-//
-//   addMovieObject: function(tempItem){ //receives object saves in form
-//     var tempMovies = this.state.myMovies;
-//     tempMovies.push(tempItem);
-//     this.setState({
-//       myMovies: tempMovies,
-//       movieBodyVisible: false
-//     });
-//   },
-//
-//   searchMovies: function(query){ //query is what user typed into search bar
-//     this.setState({
-//       queryText: query
-//     });
-//   },
-//
-//   ReOrder: function(orderBy, orderDir){ //will be sent either what to order by or the direction ot display
-//     this.setState({
-//       orderBy: orderBy,
-//       orderDir: orderDir
-//     });
-//   },
-//
-//   showAbout: function(){ //we want to display the show about on the toolbar
-//     ipc.sendSync('openInfoWindow'); //sends event notification to main process
-//   },
-//
+// /* TODO We want to break the Toolbar, HeaderNav, and MainPanel into separate components,
+//     will be updating them independently; need Ed's help with this
+//     But do they all need to know the same information in order to update it?
+// */
+// /*==============================================================================
+//                             Test Header Interface
+// ==============================================================================*/
+// var TestHeaderInterface = React.createClass({
 //   render: function(){
 //     var myMovies = this.state.myMovies; //save that object to a variable that we can refer to and manipulate
 //     var queryText = this.state.queryText;
@@ -129,40 +119,7 @@ var TestHeaderInterface = React.createClass({
 //     var orderDir = this.state.orderDir;
 //     var filteredMovies = [];
 //
-//     //TODO fuck this, change it, react-bootstrap
-//     if(this.state.movieBodyVisible === true){
-//       $('#addMovie').modal('show');
-//     } else {
-//       $('#addMovie').modal('hide');
-//     } //handles showing the modal for adding a movie
-//
-//     for(var i = 0; i < myMovies.length; i++){ //filtering our movie list
-//       //we check if what they are typing matches anything in any of the movies, if it does, return that movie
-//       if((myMovies[i].movieName.toLowerCase().indexOf(queryText) != -1) ||
-//         (myMovies[i].directorName.toLowerCase().indexOf(queryText) != -1) ||
-//         (myMovies[i].releaseDate.toLowerCase().indexOf(queryText) != -1) ||
-//         (myMovies[i].Summary.toLowerCase().indexOf(queryText) != -1)){
-//           filteredMovies.push(myMovies[i]);
-//       }
-//     }
-//
-//     filteredMovies = _.orderBy(filteredMovies, function(item){
-//       return item[orderBy].toLowerCase();
-//     }, orderDir); //uses Lodash to order the movies in the way that we want
-//
-//     filteredMovies = filteredMovies.map(function(item, index){ //send this data to MovieList to create a series of those tags
-//       return(
-//         <MovieList
-//           key = {index} //each index of the data.json file
-//           singleItem = {item} //each item at that index
-//           whichItem = {item}
-//           onDelete = {this.deleteMovie}
-//         />
-//       ) //return
-//     }.bind(this));
-//
 //     return(
-//       //a basic way to show one of the movies in that dataset, will turn into a list
 //       <div className="application">
 //         <HeaderNav
 //           orderBy = {this.state.orderBy}
@@ -173,120 +130,251 @@ var TestHeaderInterface = React.createClass({
 //       </div>
 //     );//return
 //   } //render
-// }); //main interface
-//
-//
-
-/*==============================================================================
-                            Toolbar Header Interface
-==============================================================================*/
-//Only needs to handle bringing up the Add Movie Modal, the about window, and sending out a message to load other panels
-
-// var ToolbarInterface = React.createClass({
-//   getInitialState: function(){
-//     return {
-//       movieBodyVisible: false
-//     } //return
-//   },
-//
-//   //componentDidMount and componentWillUnmount handle all of the menu operation that we define in main.js
-//   componentDidMount: function(){
-//     ipc.on('addMovie', function(event, message){
-//       this.toggleMovieDisplay();
-//     }.bind(this));
-//   }, //componentDidMount
-//
-//   componentWillUnmount: function(){
-//     ipc.removeListener('addMovie', function(event, message){
-//       this.toggleMovieDisplay();
-//     }.bind(this));
-//   }, //componentDidMount
-//
-//   toggleMovieDisplay: function(){ //this will allow us to add a movie to a list
-//     var tempVisibility = !this.state.movieBodyVisible;
-//     this.setState({
-//       movieBodyVisible: tempVisibility
-//     }); //setState
-//   }, //toggleMovieDisplay
-//
-//   addMovieObject: function(tempItem){ //receives object saves in form
-//     var tempMovies = this.state.myMovies;
-//     tempMovies.push(tempItem);
-//     this.setState({
-//       myMovies: tempMovies,
-//       movieBodyVisible: false
-//     });
-//   },
-//
-//   showAbout: function(){ //we want to display the show about on the toolbar
-//     ipc.sendSync('openInfoWindow'); //sends event notification to main process
-//   },
-//
-//   render: function(){
-//     var myMovies = this.state.myMovies; //save that object to a variable that we can refer to and manipulate
-//     var queryText = this.state.queryText;
-//     var orderBy = this.state.orderBy;
-//     var orderDir = this.state.orderDir;
-//     var filteredMovies = [];
-
-//     if(this.state.movieBodyVisible === true){
-//       $('#addMovie').modal('show');
-//     } else {
-//       $('#addMovie').modal('hide');
-//     } //handles showing the modal for adding a movie
-//
-//     for(var i = 0; i < myMovies.length; i++){ //filtering our movie list
-//       //we check if what they are typing matches anything in any of the movies, if it does, return that movie
-//       if((myMovies[i].movieName.toLowerCase().indexOf(queryText) != -1) ||
-//         (myMovies[i].directorName.toLowerCase().indexOf(queryText) != -1) ||
-//         (myMovies[i].releaseDate.toLowerCase().indexOf(queryText) != -1) ||
-//         (myMovies[i].Summary.toLowerCase().indexOf(queryText) != -1)){
-//           filteredMovies.push(myMovies[i]);
-//       }
-//     }
-//
-//     filteredMovies = _.orderBy(filteredMovies, function(item){
-//       return item[orderBy].toLowerCase();
-//     }, orderDir); //uses Lodash to order the movies in the way that we want
-//
-//     filteredMovies = filteredMovies.map(function(item, index){ //send this data to MovieList to create a series of those tags
-//       return(
-//         <MovieList
-//           key = {index} //each index of the data.json file
-//           singleItem = {item} //each item at that index
-//           whichItem = {item}
-//           onDelete = {this.deleteMovie}
-//         />
-//       ) //return
-//     }.bind(this));
-
-//     return(
-//       //a basic way to show one of the movies in that dataset, will turn into a list
-//       <div className="interface">
-//         <Toolbar
-//           handleAbout = {this.showAbout} //display the 'about' window
-//           handleToggle = {this.toggleMovieDisplay} //can pull down the modal
-//         />
-//         <AddMovie //this is for the modal that will appear
-//           handleToggle = {this.toggleMovieDisplay} //send an event to toggle the modal
-//           addMovie = {this.addMovieObject} //when submitted, send event notification
-//         />
-//         <div className="container">
-//          <div className="row">
-//            <div className="movies col-sm-12">
-//              <h2 className="movies-headline">Watched Movies</h2>
-//              <ul className="item-list media-list">{filteredMovies}</ul>
-//            </div>{/* col-sm-12 */}
-//          </div>{/* row */}
-//         </div>{/* container */}
-//       </div>{/* interface */}
-//     );//return
-//   } //render
 // });
-
-
-//TODO will turn this into just the changing panel with lists of Movies
-//TODO need to break this big component into smaller components
+//
+// /*==============================================================================
+//                             Header Interface
+// ==============================================================================*/
+// // //TODO let's try to pull the navbar out and see what happens how about that ya dickhead
+// // var HeaderInterface = React.createClass({
+// //   //this will load the retrieved data into an object for this component
+// //   getInitialState: function(){
+// //     return {
+// //       movieBodyVisible: false,
+// //       orderBy: 'movieName',
+// //       orderDir: 'desc',
+// //       queryText: '',
+// //       myMovies: loadMovies
+// //     } //return
+// //   },
+// //
+// //   //componentDidMount and componentWillUnmount handle all of the menu operation that we define in main.js
+// //   componentDidMount: function(){
+// //     ipc.on('addMovie', function(event, message){
+// //       this.toggleMovieDisplay();
+// //     }.bind(this));
+// //   }, //componentDidMount
+// //
+// //   componentWillUnmount: function(){
+// //     ipc.removeListener('addMovie', function(event, message){
+// //       this.toggleMovieDisplay();
+// //     }.bind(this));
+// //   }, //componentDidMount
+// //
+// //   componentDidUpdate: function(){
+// //     fs.writeFile(dataLocation, JSON.stringify(this.state.myMovies), 'utf8', function(err){
+// //       if(err){
+// //         console.log(err);
+// //       }
+// //     }); //will go to the file location that our data is at and change it
+// //   }, //componentDidUpdate
+// //
+// //   deleteMovie: function(item){
+// //     var allMovies = this.state.myMovies;
+// //     var newMovies = _.without(allMovies, item); //return array without the one movie passed
+// //     this.setState({
+// //       myMovies: newMovies
+// //     });
+// //   },
+// //
+// //   toggleMovieDisplay: function(){ //this will allow us to add a movie to a list
+// //     var tempVisibility = !this.state.movieBodyVisible;
+// //     this.setState({
+// //       movieBodyVisible: tempVisibility
+// //     }); //setState
+// //   }, //toggleMovieDisplay
+// //
+// //   addMovieObject: function(tempItem){ //receives object saves in form
+// //     var tempMovies = this.state.myMovies;
+// //     tempMovies.push(tempItem);
+// //     this.setState({
+// //       myMovies: tempMovies,
+// //       movieBodyVisible: false
+// //     });
+// //   },
+// //
+// //   searchMovies: function(query){ //query is what user typed into search bar
+// //     this.setState({
+// //       queryText: query
+// //     });
+// //   },
+// //
+// //   ReOrder: function(orderBy, orderDir){ //will be sent either what to order by or the direction ot display
+// //     this.setState({
+// //       orderBy: orderBy,
+// //       orderDir: orderDir
+// //     });
+// //   },
+// //
+// //   showAbout: function(){ //we want to display the show about on the toolbar
+// //     ipc.sendSync('openInfoWindow'); //sends event notification to main process
+// //   },
+// //
+// //   render: function(){
+// //     var myMovies = this.state.myMovies; //save that object to a variable that we can refer to and manipulate
+// //     var queryText = this.state.queryText;
+// //     var orderBy = this.state.orderBy;
+// //     var orderDir = this.state.orderDir;
+// //     var filteredMovies = [];
+// //
+// //     //TODO fuck this, change it, react-bootstrap
+// //     if(this.state.movieBodyVisible === true){
+// //       $('#addMovie').modal('show');
+// //     } else {
+// //       $('#addMovie').modal('hide');
+// //     } //handles showing the modal for adding a movie
+// //
+// //     for(var i = 0; i < myMovies.length; i++){ //filtering our movie list
+// //       //we check if what they are typing matches anything in any of the movies, if it does, return that movie
+// //       if((myMovies[i].movieName.toLowerCase().indexOf(queryText) != -1) ||
+// //         (myMovies[i].directorName.toLowerCase().indexOf(queryText) != -1) ||
+// //         (myMovies[i].releaseDate.toLowerCase().indexOf(queryText) != -1) ||
+// //         (myMovies[i].Summary.toLowerCase().indexOf(queryText) != -1)){
+// //           filteredMovies.push(myMovies[i]);
+// //       }
+// //     }
+// //
+// //     filteredMovies = _.orderBy(filteredMovies, function(item){
+// //       return item[orderBy].toLowerCase();
+// //     }, orderDir); //uses Lodash to order the movies in the way that we want
+// //
+// //     filteredMovies = filteredMovies.map(function(item, index){ //send this data to MovieList to create a series of those tags
+// //       return(
+// //         <MovieList
+// //           key = {index} //each index of the data.json file
+// //           singleItem = {item} //each item at that index
+// //           whichItem = {item}
+// //           onDelete = {this.deleteMovie}
+// //         />
+// //       ) //return
+// //     }.bind(this));
+// //
+// //     return(
+// //       //a basic way to show one of the movies in that dataset, will turn into a list
+// //       <div className="application">
+// //         <HeaderNav
+// //           orderBy = {this.state.orderBy}
+// //           orderDir = {this.state.orderDir}
+// //           onSearch = {this.searchMovies}
+// //           onReOrder = {this.ReOrder}
+// //         />
+// //       </div>
+// //     );//return
+// //   } //render
+// // }); //main interface
+// //
+// //
+//
+// /*==============================================================================
+//                             Toolbar Header Interface
+// ==============================================================================*/
+// //Only needs to handle bringing up the Add Movie Modal, the about window, and sending out a message to load other panels
+//
+// // var ToolbarInterface = React.createClass({
+// //   getInitialState: function(){
+// //     return {
+// //       movieBodyVisible: false
+// //     } //return
+// //   },
+// //
+// //   //componentDidMount and componentWillUnmount handle all of the menu operation that we define in main.js
+// //   componentDidMount: function(){
+// //     ipc.on('addMovie', function(event, message){
+// //       this.toggleMovieDisplay();
+// //     }.bind(this));
+// //   }, //componentDidMount
+// //
+// //   componentWillUnmount: function(){
+// //     ipc.removeListener('addMovie', function(event, message){
+// //       this.toggleMovieDisplay();
+// //     }.bind(this));
+// //   }, //componentDidMount
+// //
+// //   toggleMovieDisplay: function(){ //this will allow us to add a movie to a list
+// //     var tempVisibility = !this.state.movieBodyVisible;
+// //     this.setState({
+// //       movieBodyVisible: tempVisibility
+// //     }); //setState
+// //   }, //toggleMovieDisplay
+// //
+// //   addMovieObject: function(tempItem){ //receives object saves in form
+// //     var tempMovies = this.state.myMovies;
+// //     tempMovies.push(tempItem);
+// //     this.setState({
+// //       myMovies: tempMovies,
+// //       movieBodyVisible: false
+// //     });
+// //   },
+// //
+// //   showAbout: function(){ //we want to display the show about on the toolbar
+// //     ipc.sendSync('openInfoWindow'); //sends event notification to main process
+// //   },
+// //
+// //   render: function(){
+// //     var myMovies = this.state.myMovies; //save that object to a variable that we can refer to and manipulate
+// //     var queryText = this.state.queryText;
+// //     var orderBy = this.state.orderBy;
+// //     var orderDir = this.state.orderDir;
+// //     var filteredMovies = [];
+//
+// //     if(this.state.movieBodyVisible === true){
+// //       $('#addMovie').modal('show');
+// //     } else {
+// //       $('#addMovie').modal('hide');
+// //     } //handles showing the modal for adding a movie
+// //
+// //     for(var i = 0; i < myMovies.length; i++){ //filtering our movie list
+// //       //we check if what they are typing matches anything in any of the movies, if it does, return that movie
+// //       if((myMovies[i].movieName.toLowerCase().indexOf(queryText) != -1) ||
+// //         (myMovies[i].directorName.toLowerCase().indexOf(queryText) != -1) ||
+// //         (myMovies[i].releaseDate.toLowerCase().indexOf(queryText) != -1) ||
+// //         (myMovies[i].Summary.toLowerCase().indexOf(queryText) != -1)){
+// //           filteredMovies.push(myMovies[i]);
+// //       }
+// //     }
+// //
+// //     filteredMovies = _.orderBy(filteredMovies, function(item){
+// //       return item[orderBy].toLowerCase();
+// //     }, orderDir); //uses Lodash to order the movies in the way that we want
+// //
+// //     filteredMovies = filteredMovies.map(function(item, index){ //send this data to MovieList to create a series of those tags
+// //       return(
+// //         <MovieList
+// //           key = {index} //each index of the data.json file
+// //           singleItem = {item} //each item at that index
+// //           whichItem = {item}
+// //           onDelete = {this.deleteMovie}
+// //         />
+// //       ) //return
+// //     }.bind(this));
+//
+// //     return(
+// //       //a basic way to show one of the movies in that dataset, will turn into a list
+// //       <div className="interface">
+// //         <Toolbar
+// //           handleAbout = {this.showAbout} //display the 'about' window
+// //           handleToggle = {this.toggleMovieDisplay} //can pull down the modal
+// //         />
+// //         <AddMovie //this is for the modal that will appear
+// //           handleToggle = {this.toggleMovieDisplay} //send an event to toggle the modal
+// //           addMovie = {this.addMovieObject} //when submitted, send event notification
+// //         />
+// //         <div className="container">
+// //          <div className="row">
+// //            <div className="movies col-sm-12">
+// //              <h2 className="movies-headline">Watched Movies</h2>
+// //              <ul className="item-list media-list">{filteredMovies}</ul>
+// //            </div>{/* col-sm-12 */}
+// //          </div>{/* row */}
+// //         </div>{/* container */}
+// //       </div>{/* interface */}
+// //     );//return
+// //   } //render
+// // });
+//
+//
+// //TODO will turn this into just the changing panel with lists of Movies
+// //TODO need to break this big component into smaller components
 /*==============================================================================
                               Main Interface
 ==============================================================================*/
@@ -456,14 +544,14 @@ function renderMainInterface(){
 renderMainInterface();
 
 
-function renderHeaderNav(){
-  ReactDOM.render(
-    <TestHeaderInterface />
-    document.getElementById('headerNav')
-  );
-}
-
-renderHeaderNav();
+// function renderHeaderNav(){
+//   ReactDOM.render(
+//     <TestHeaderInterface />
+//     document.getElementById('headerNav')
+//   );
+// }
+//
+// renderHeaderNav();
 
 
 

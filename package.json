@@ -2,12 +2,9 @@
   "name": "Movie-Cache",
   "version": "1.0.0",
   "scripts": {
-    "pack": "electron-packager . 'Wisdom Pet' --out ~/Desktop/WisdomPet --overwrite --icon ./icons/icon"
-  },
-  "main": "app/main.js",
-  "scripts": {
     "start": "electron ."
   },
+  "main": "app/main.js",
   "devDependencies": {
     "electron": "^3.0.3",
     "electron-packager": "^8.0.0",
@@ -25,7 +22,8 @@
   "dependencies": {
     "bootstrap": "^3.3.7",
     "electron-reload": "^1.0.2",
+    "jquery": "^3.1.0",
     "lodash": "^4.13.1",
-    "jquery": "^3.1.0"
+    "react-router-dom": "^4.3.1"
   }
 }
