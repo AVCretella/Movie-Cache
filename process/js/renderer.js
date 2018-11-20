@@ -373,12 +373,16 @@ var AddMovie = require('./AddMovie');
 // // });
 //
 //
+
+
+
+
 // //TODO will turn this into just the changing panel with lists of Movies
 // //TODO need to break this big component into smaller components
 /*==============================================================================
                               Main Interface
 ==============================================================================*/
-var MainInterface = React.createClass({
+var MoviePanel = React.createClass({
   //this will load the retrieved data into an object for this component
   getInitialState: function(){
     return {
@@ -532,16 +536,35 @@ var MainInterface = React.createClass({
     );//return
   } //render
 }); //main interface
+//
+// function renderToolBar(){
+//   ReactDOM.render(
+//     <ToolbarInterface />,
+//     document.getElementById('movieInfo')
+//   );
+// }
+//
+// renderToolBar();
+//
+// function renderHeaderNav(){
+//   ReactDOM.render(
+//     <HeaderInterface />,
+//     document.getElementById('movieInfo')
+//   );
+// }
+//
+// renderHeaderNav();
+
 
 //inject the component into the div with ID = movieInfo
-function renderMainInterface(){
+function renderMoviePanel(){
   ReactDOM.render(
-    <MainInterface />,
+    <MoviePanel />,
     document.getElementById('movieInfo')
   );
 }
 
-renderMainInterface();
+renderMoviePanel();
 
 
 // function renderHeaderNav(){

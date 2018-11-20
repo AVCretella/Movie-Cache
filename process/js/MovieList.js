@@ -8,6 +8,7 @@ var MovieList = React.createClass({
   removeFromList: function(){
     this.props.onDelete(this.props.whichItem); //lets the function know which movie has been selected for deletion
   },
+  
   render: function(){
     return(
       <li className="movie-item media">
