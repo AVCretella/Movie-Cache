@@ -19,6 +19,14 @@ var Toolbar = React.createClass({
           <span className="toolbar-item-button glyphicon glyphicon-plus-sign"></span>
           <span className="toolbar-item-text">Add Movie</span>
         </div>
+        <div className="toolbar-item" onClick={this.displayRanked}>
+          <span className="toolbar-item-button"></span>
+          <span className="toolbar-item-text">Ranked List</span>
+        </div>
+        <div className="toolbar-item" onClick={this.displayWatchlist}>
+          <span className="toolbar-item-button"></span>
+          <span className="toolbar-item-text">Watch list</span>
+        </div>
       </div>
     ) //return
   } //render

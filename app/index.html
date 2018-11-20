@@ -9,8 +9,14 @@
 </head>
 <body>
   <div class="main">
+    <div id="whichList">
+      <h2> rendering <h2>
+    </div>
+    <div id="moviesToDisplay">
+      <h2> what list should we be displaying? <h2>
+    </div>
     <div id="headerNav">
-      <h2> Replace Me Please It'll mean you accomplished something <h2>
+      <h2> Replace Me with the header nav <h2>
     </div>
     <div id="movieList">
       <h2> Clock Inbound <h2>
@@ -27,7 +33,8 @@
     var dirName = __dirname; //used for Node.js __dirname command
 
     //this allows for cross-platform directory references since OS X and windows have different path standards
-    var dataLocation = require('path').resolve(__dirname, '..', 'data', 'data.json');
+    var watchlistDataLocation = require('path').resolve(__dirname, '..', 'data', 'watchlist_data.json');
+    var rankedDataLocation = require('path').resolve(__dirname, '..', 'data', 'ranked_data.json');
   </script>
   <script src="js/renderer.js"></script>
 </body>
