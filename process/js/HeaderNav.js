@@ -13,6 +13,11 @@ var HeaderNav = React.createClass({
   //this is basically just a bootstap header, with className for react like usual
   //each of the serach options is clickable and will dynamically change the list
   render: function(){
+
+    let sortFieldItems = this.props.sortFields.map((sortField) =>
+      <li><a href="#" id={sortField.field} onClick={this.handleSort}>{sortField.displayName} {(this.props.orderBy === sortField.field) ? <span className="glyphicon glyphicon-ok"></span>:null}</a></li>
+    );
+
     return(
       <nav className="navigation navbar navbar-default">
         <div className="container-fluid">
@@ -26,10 +31,7 @@ var HeaderNav = React.createClass({
                     <span className="caret"></span>
                   </button>
                     <ul className="dropdown-menu dropdown-menu-right">
-                      <li><a href="#" id="movieName" onClick={this.handleSort}>Movie Name {(this.props.orderBy === 'movieName') ? <span className="glyphicon glyphicon-ok"></span>:null}</a></li>
-                      <li><a href="#" id="releaseDate" onClick={this.handleSort}>Release Date {(this.props.orderBy === 'releaseDate') ? <span className="glyphicon glyphicon-ok"></span>:null}</a></li>
-                      <li><a href="#" id="directorName" onClick={this.handleSort}>Director {(this.props.orderBy === 'directorName') ? <span className="glyphicon glyphicon-ok"></span>:null}</a></li>
-                      <li><a href="#" id="rank" onClick={this.handleSort}>Rank {(this.props.orderBy === 'rank') ? <span className="glyphicon glyphicon-ok"></span>:null}</a></li>
+                      {sortFieldItems}
                       <li role="separator" className="divider"></li>
                       <li><a href="#" id="asc" onClick={this.handleOrder}>Asc {(this.props.orderDir === 'asc') ? <span className="glyphicon glyphicon-ok"></span>:null}</a></li>
                       <li><a href="#" id="desc" onClick={this.handleOrder}>Desc  {(this.props.orderDir === 'desc') ? <span className="glyphicon glyphicon-ok"></span>:null}</a></li>
