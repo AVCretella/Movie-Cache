@@ -349,10 +349,12 @@ var AddMovie = require('./AddMovie');
 //   } //render
 // });
 
+
+
 // //TODO will turn this into just the changing panel with lists of Movies
 // //TODO need to break this big component into smaller components
 /*==============================================================================
-                              Main Interface
+                            Main Interface Ranked
 ==============================================================================*/
 var MainInterfaceRanked = React.createClass({
   //this will load the retrieved data into an object for this component
@@ -395,6 +397,17 @@ var MainInterfaceRanked = React.createClass({
     });
   },
 
+  //TODO implement the onChangeRank function - want to be able to input a new number and update the movie entry
+  // onChangeRank: function(item){
+  //   var allMovies = this.state.myMovies;
+  //
+  //   //Need to change the rank in here somehow, maybe pull up a dialog box?
+  //
+  //   this.setState({
+  //     myMovies: newMovies
+  //   });
+  // }
+
   toggleMovieDisplay: function(){ //this will allow us to add a movie to a list
     var tempVisibility = !this.state.movieBodyVisible;
     this.setState({
@@ -434,13 +447,6 @@ var MainInterfaceRanked = React.createClass({
     var orderBy = this.state.orderBy;
     var orderDir = this.state.orderDir;
     var filteredMovies = [];
-
-    //TODO fuck this, change it, react-bootstrap
-    if(this.state.movieBodyVisible === true){
-      $('#addMovie').modal('show');
-    } else {
-      $('#addMovie').modal('hide');
-    } //handles showing the modal for adding a movie
 
     for(var i = 0; i < myMovies.length; i++){ //filtering our movie list
       //we check if what they are typing matches anything in any of the movies, if it does, return that movie
@@ -463,6 +469,7 @@ var MainInterfaceRanked = React.createClass({
           singleItem = {item} //each item at that index
           whichItem = {item}
           onDelete = {this.deleteMovie}
+          // onChangeRank = {this.changeRank}
         />
       ) //return
     }.bind(this));
@@ -484,6 +491,7 @@ var MainInterfaceRanked = React.createClass({
           <AddMovie //this is for the modal that will appear
             handleToggle = {this.toggleMovieDisplay} //send an event to toggle the modal
             addMovie = {this.addMovieObject} //when submitted, send event notification
+            isVisible = {this.state.movieBodyVisible}
           />
           <div className="container">
            <div className="row">
@@ -499,152 +507,156 @@ var MainInterfaceRanked = React.createClass({
   } //render
 }); //main interface
 
-/*==============================================================================
-                              Main Interface Watchlist
-==============================================================================*/
-var MainInterfaceWatchlist = React.createClass({
-  //this will load the retrieved data into an object for this component
-  getInitialState: function(){
-    return {
-      movieBodyVisible: false,
-      orderBy: 'movieName',
-      orderDir: 'asc',
-      queryText: '',
-      myMovies: loadWatchlistMovies
-    } //return
-  },
 
-  //componentDidMount and componentWillUnmount handle all of the menu operations that we define in main.js
-  componentDidMount: function(){
-    ipc.on('addMovie', function(event, message){
-      this.toggleMovieDisplay();
-    }.bind(this));
-  }, //componentDidMount
 
-  componentWillUnmount: function(){
-    ipc.removeListener('addMovie', function(event, message){
-      this.toggleMovieDisplay();
-    }.bind(this));
-  }, //componentDidMount
 
-  componentDidUpdate: function(){
-    fs.writeFile(watchlistDataLocation, JSON.stringify(this.state.myMovies), 'utf8', function(err){
-      if(err){
-        console.log(err);
-      }
-    }); //will go to the file location that our data is at and change it
-  }, //componentDidUpdate
-
-  deleteMovie: function(item){
-    var allMovies = this.state.myMovies;
-    var newMovies = _.without(allMovies, item); //return array without the one movie passed
-    this.setState({
-      myMovies: newMovies
-    });
-  },
-
-  toggleMovieDisplay: function(){ //this will allow us to add a movie to a list
-    var tempVisibility = !this.state.movieBodyVisible;
-    this.setState({
-      movieBodyVisible: tempVisibility
-    }); //setState
-  }, //toggleMovieDisplay
-
-  addMovieObject: function(tempItem){ //receives object saves in form
-    var tempMovies = this.state.myMovies;
-    tempMovies.push(tempItem);
-    this.setState({
-      myMovies: tempMovies,
-      movieBodyVisible: false
-    });
-  },
-
-  searchMovies: function(query){ //query is what user typed into search bar
-    this.setState({
-      queryText: query
-    });
-  },
-
-  ReOrder: function(orderBy, orderDir){ //will be sent either what to order by or the direction ot display
-    this.setState({
-      orderBy: orderBy,
-      orderDir: orderDir
-    });
-  },
-
-  showAbout: function(){ //we want to display the show about on the toolbar
-    ipc.sendSync('openInfoWindow'); //sends event notification to main process
-  },
-
-  render: function(){
-    var myMovies = this.state.myMovies; //save that object to a variable that we can refer to and manipulate
-    var queryText = this.state.queryText;
-    var orderBy = this.state.orderBy;
-    var orderDir = this.state.orderDir;
-    var filteredMovies = [];
-
-    //TODO fuck this, change it, react-bootstrap
-    if(this.state.movieBodyVisible === true){
-      $('#addMovie').modal('show');
-    } else {
-      $('#addMovie').modal('hide');
-    } //handles showing the modal for adding a movie
-
-    for(var i = 0; i < myMovies.length; i++){ //filtering our movie list
-      //we check if what they are typing matches anything in any of the movies, if it does, return that movie
-      if((myMovies[i].movieName.toLowerCase().indexOf(queryText) != -1) ||
-        (myMovies[i].directorName.toLowerCase().indexOf(queryText) != -1) ||
-        (myMovies[i].releaseDate.toLowerCase().indexOf(queryText) != -1) ||
-        (myMovies[i].Summary.toLowerCase().indexOf(queryText) != -1)){
-          filteredMovies.push(myMovies[i]);
-      }
-    }
-
-    filteredMovies = _.orderBy(filteredMovies, function(item){
-      return item[orderBy].toLowerCase();
-    }, orderDir); //uses Lodash to order the movies in the way that we want
-
-    filteredMovies = filteredMovies.map(function(item, index){ //send this data to MovieList to create a series of those tags
-      return(
-        <WatchlistMovies
-          key = {index} //each index of the data.json file
-          singleItem = {item} //each item at that index
-          whichItem = {item}
-          onDelete = {this.deleteMovie}
-        />
-      ) //return
-    }.bind(this));
-
-    return(
-      <div className="application">
-        <HeaderNav
-          orderBy = {this.state.orderBy}
-          orderDir = {this.state.orderDir}
-          onSearch = {this.searchMovies}
-          onReOrder = {this.ReOrder}
-        />
-        <div className="interface">
-          <Toolbar
-            handleAbout = {this.showAbout} //display the 'about' window
-            handleToggle = {this.toggleMovieDisplay} //can pull down the modal
-          />
-          <AddMovie //this is for the modal that will appear
-            handleToggle = {this.toggleMovieDisplay} //send an event to toggle the modal
-            addMovie = {this.addMovieObject} //when submitted, send event notification
-          />
-          <div className="container">
-           <div className="row">
-             <div className="movies col-sm-12">
-               <h2 className="movies-headline">Watchlist Movies</h2>
-               <ul className="item-list media-list">{filteredMovies}</ul>
-             </div>{/* col-sm-12 */}
-           </div>{/* row */}
-          </div>{/* container */}
-        </div>{/* interface */}
-      </div>
-    );//return
-  } //render
-}); //main interface
+// /*==============================================================================
+//                               Main Interface Watchlist
+// ==============================================================================*/
+// var MainInterfaceWatchlist = React.createClass({
+//   //this will load the retrieved data into an object for this component
+//   getInitialState: function(){
+//     return {
+//       movieBodyVisible: false,
+//       orderBy: 'movieName',
+//       orderDir: 'asc',
+//       queryText: '',
+//       myMovies: loadWatchlistMovies
+//     } //return
+//   },
+//
+//   //componentDidMount and componentWillUnmount handle all of the menu operations that we define in main.js
+//   componentDidMount: function(){
+//     ipc.on('addMovie', function(event, message){
+//       this.toggleMovieDisplay();
+//     }.bind(this));
+//   }, //componentDidMount
+//
+//   componentWillUnmount: function(){
+//     ipc.removeListener('addMovie', function(event, message){
+//       this.toggleMovieDisplay();
+//     }.bind(this));
+//   }, //componentDidMount
+//
+//   componentDidUpdate: function(){
+//     fs.writeFile(watchlistDataLocation, JSON.stringify(this.state.myMovies), 'utf8', function(err){
+//       if(err){
+//         console.log(err);
+//       }
+//     }); //will go to the file location that our data is at and change it
+//   }, //componentDidUpdate
+//
+//   deleteMovie: function(item){
+//     var allMovies = this.state.myMovies;
+//     var newMovies = _.without(allMovies, item); //return array without the one movie passed
+//     this.setState({
+//       myMovies: newMovies
+//     });
+//   },
+//
+//   toggleMovieDisplay: function(){ //this will allow us to add a movie to a list
+//     var tempVisibility = !this.state.movieBodyVisible;
+//     this.setState({
+//       movieBodyVisible: tempVisibility
+//     }); //setState
+//   }, //toggleMovieDisplay
+//
+//   addMovieObject: function(tempItem){ //receives object saves in form
+//     var tempMovies = this.state.myMovies;
+//     tempMovies.push(tempItem);
+//     this.setState({
+//       myMovies: tempMovies,
+//       movieBodyVisible: false
+//     });
+//   },
+//
+//   searchMovies: function(query){ //query is what user typed into search bar
+//     this.setState({
+//       queryText: query
+//     });
+//   },
+//
+//   ReOrder: function(orderBy, orderDir){ //will be sent either what to order by or the direction ot display
+//     this.setState({
+//       orderBy: orderBy,
+//       orderDir: orderDir
+//     });
+//   },
+//
+//   showAbout: function(){ //we want to display the show about on the toolbar
+//     ipc.sendSync('openInfoWindow'); //sends event notification to main process
+//   },
+//
+//   render: function(){
+//     var myMovies = this.state.myMovies; //save that object to a variable that we can refer to and manipulate
+//     var queryText = this.state.queryText;
+//     var orderBy = this.state.orderBy;
+//     var orderDir = this.state.orderDir;
+//     var filteredMovies = [];
+//
+//     //TODO fuck this, change it, react-bootstrap
+//     if(this.state.movieBodyVisible === true){
+//       $('#addMovie').modal('show');
+//     } else {
+//       $('#addMovie').modal('hide');
+//     } //handles showing the modal for adding a movie
+//
+//     for(var i = 0; i < myMovies.length; i++){ //filtering our movie list
+//       //we check if what they are typing matches anything in any of the movies, if it does, return that movie
+//       if((myMovies[i].movieName.toLowerCase().indexOf(queryText) != -1) ||
+//         (myMovies[i].directorName.toLowerCase().indexOf(queryText) != -1) ||
+//         (myMovies[i].releaseDate.toLowerCase().indexOf(queryText) != -1) ||
+//         (myMovies[i].Summary.toLowerCase().indexOf(queryText) != -1)){
+//           filteredMovies.push(myMovies[i]);
+//       }
+//     }
+//
+//     filteredMovies = _.orderBy(filteredMovies, function(item){
+//       return item[orderBy].toLowerCase();
+//     }, orderDir); //uses Lodash to order the movies in the way that we want
+//
+//     filteredMovies = filteredMovies.map(function(item, index){ //send this data to MovieList to create a series of those tags
+//       return(
+//         <WatchlistMovies
+//           key = {index} //each index of the data.json file
+//           singleItem = {item} //each item at that index
+//           whichItem = {item}
+//           onDelete = {this.deleteMovie}
+//         />
+//       ) //return
+//     }.bind(this));
+//
+//     return(
+//       <div className="application">
+//         <HeaderNav
+//           orderBy = {this.state.orderBy}
+//           orderDir = {this.state.orderDir}
+//           onSearch = {this.searchMovies}
+//           onReOrder = {this.ReOrder}
+//         />
+//         <div className="interface">
+//           <Toolbar
+//             handleAbout = {this.showAbout} //display the 'about' window
+//             handleToggle = {this.toggleMovieDisplay} //can pull down the modal
+//           />
+//           <AddMovie //this is for the modal that will appear
+//             handleToggle = {this.toggleMovieDisplay} //send an event to toggle the modal
+//             addMovie = {this.addMovieObject} //when submitted, send event notification
+//             isVisible = {this.state.movieBodyVisible}
+//           />
+//           <div className="container">
+//            <div className="row">
+//              <div className="movies col-sm-12">
+//                <h2 className="movies-headline">Watchlist Movies</h2>
+//                <ul className="item-list media-list">{filteredMovies}</ul>
+//              </div>{/* col-sm-12 */}
+//            </div>{/* row */}
+//           </div>{/* container */}
+//         </div>{/* interface */}
+//       </div>
+//     );//return
+//   } //render
+// }); //main interface
 
 //TODO RENDER ALL COMPONENTS SEPARATELY
 
@@ -657,19 +669,20 @@ function renderMainInterface(){
   );
 }
 
-function renderMainInterfaceWatchlist(){
-  ReactDOM.render(
-    <MainInterfaceWatchlist />,
-    document.getElementById('movieInfo')
-  );
-}
+// function renderMainInterfaceWatchlist(){
+//   ReactDOM.render(
+//     <MainInterfaceWatchlist />,
+//     document.getElementById('movieInfo')
+//   );
+// }
 
-var displayRanked = 0
-if(displayRanked){
-  renderMainInterface();
-} else {
-  renderMainInterfaceWatchlist();
-}
+// var displayRanked = 1
+// if(displayRanked){
+//   renderMainInterface();
+// } else {
+//   renderMainInterfaceWatchlist();
+// }
+renderMainInterface();
 
 
 // function renderHeaderNav(){

@@ -29,6 +29,7 @@ var AddMovie = React.createClass({
   toggleMovieDisplay: function(){
     this.props.handleToggle();
   },
+
   handleAdd: function(submitEvent){ //pass the fact that the submitEvent has happened from the form
     submitEvent.preventDefault(); //this is to prevent the page from reloading, we will handle manually with React
     var tempItem = { //temporary store the info that we want to add
@@ -54,8 +55,22 @@ var AddMovie = React.createClass({
 
   },
   render: function(){ //using bootstrap modal for the movie creation form. All proof of concept
+    let style, className;
+    if (this.props.isVisible) {
+      className = "modal fade in";
+      style = {
+        display: "block",
+        paddingLeft: "0px"
+      };
+    } else {
+      className = "modal fade";
+      style = {
+        display: "none"
+      };
+    }
+
     return(
-      <div className="modal fade" id="addMovie" tabIndex="-1" role="dialog">
+      <div className={className} id="addMovie" tabIndex="-1" role="dialog" style = {style}>
         <div className="modal-dialog" role="document">
           <div className="modal-content">
             <div className="modal-header">
@@ -113,7 +128,7 @@ var AddMovie = React.createClass({
               </div>
 
               <div className="form-group">
-                <label className="col-sm-3 control-label" htmlFor="rank">How Many Times Have You Seen This Movie?</label>
+                <label className="col-sm-3 control-label" htmlFor="rank">Rank:</label>
                 <div className="col-sm-9">
                   <input type="number" min="0" className="form-control" defaultValue={'1'}
                     id="rank" ref={(ref) => this.inputMovieViewRank = ref}/>

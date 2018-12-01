@@ -7,6 +7,9 @@ var RankedMovies = React.createClass({
   removeFromList: function(){
     this.props.onDelete(this.props.whichItem); //lets the function know which movie has been selected for deletion
   },
+  // changeRank: function(){
+  //   this.props.onChangeRank(this.props.whichItem); //need to know which movie to change the rank of
+  // },
 
   render: function(){
     return(
@@ -39,3 +42,7 @@ var RankedMovies = React.createClass({
 
 //everything will be exported from this file and sent to renderer.js
 module.exports = RankedMovies;
+//
+// export default RankedMovies;
+// export foo;
+// export bar;
