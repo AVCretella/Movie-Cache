@@ -5,7 +5,7 @@ var React = require('react');
 var WatchlistMovies = React.createClass({
 
   removeFromList: function(){
-    this.props.onDelete(this.props.whichItem); //lets the function know which movie has been selected for deletion
+    this.props.onDelete(this.props.singleItem); //lets the function know which movie has been selected for deletion
   },
 
   render: function(){

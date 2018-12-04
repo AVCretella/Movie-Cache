@@ -15,6 +15,12 @@ var Toolbar = React.createClass({
     }); //setState
   }, //toggleMovieDisplay
 
+  addMovieAndCloseMyModalPlease: function(tempItem) {
+    this.props.addMovie(tempItem);
+    this.setState({
+      isModalVisible: false
+    });
+  },
   // showAbout: function(){ //we want to display the show about on the toolbar
   //   ipc.sendSync('openInfoWindow'); //sends event notification to main process
   // },
@@ -39,7 +45,7 @@ var Toolbar = React.createClass({
         </div>
         <AddMovie //this is for the modal that will appear
           handleToggle = {this.toggleMovieDisplay} //send an event to toggle the modal
-          addMovie = {this.props.addMovieObject} //when submitted, send event notification
+          addMovie = {this.addMovieAndCloseMyModalPlease} //when submitted, send event notification
           isVisible = {this.state.isModalVisible}
         />
       </div>

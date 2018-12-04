@@ -1,7 +1,7 @@
 //copy and paste libraries here
 var $ = jQuery = require('jquery');
-var _ = require('lodash');
 var bootstrap = require('bootstrap');
+var _ = require('lodash');
 
 var fs = eRequire('fs');//eRequire to show that we are working with node now
 var loadWatchlistMovies = JSON.parse(fs.readFileSync(watchlistDataLocation));//Will go to the dataLocation defined in index.html and create a proper data file from the file there
@@ -19,236 +19,47 @@ var RankedMovies = require('./RankedMovies');
 var WatchlistMovies = require('./WatchlistMovies');
 var Toolbar = require('./Toolbar');
 var HeaderNav = require('./HeaderNav');
+var MovieList = require('./MovieList');
 // const Sidebar = require('./Sidebar.js');
 
-// function BasicExample() {
-//   return (
-//     <Router>
-//       <div>
-//         <ul>
-//           <li>
-//             <Link to="/">Home</Link>
-//           </li>
-//           <li>
-//             <Link to="/about">About</Link>
-//           </li>
-//           <li>
-//             <Link to="/topics">Topics</Link>
-//           </li>
-//         </ul>
-//
-//         <hr />
-//
-//         <Route exact path="/" component={Home} />
-//         <Route path="/about" component={About} />
-//         <Route path="/topics" component={Topics} />
-//       </div>
-//     </Router>
-//   );
-// }
-//
-// function Home() {
-//   return (
-//     <div>
-//       <h2>Home</h2>
-//     </div>
-//   );
-// }
-//
-// function About() {
-//   return (
-//     <div>
-//       <h2>About</h2>
-//     </div>
-//   );
-// }
-//
-// function Topics({ match }) {
-//   return (
-//     <div>
-//       <h2>Topics</h2>
-//       <ul>
-//         <li>
-//           <Link to={`${match.url}/rendering`}>Rendering with React</Link>
-//         </li>
-//         <li>
-//           <Link to={`${match.url}/components`}>Components</Link>
-//         </li>
-//         <li>
-//           <Link to={`${match.url}/props-v-state`}>Props v. State</Link>
-//         </li>
-//       </ul>
-//
-//       <Route path={`${match.path}/:topicId`} component={Topic} />
-//       <Route
-//         exact
-//         path={match.path}
-//         render={() => <h3>Please select a topic.</h3>}
-//       />
-//     </div>
-//   );
-// }
-//
-// function Topic({ match }) {
-//   return (
-//     <div>
-//       <h3>{match.params.topicId}</h3>
-//     </div>
-//   );
-// }
-//
-// export default BasicExample;
-
-
-
-
-
-
-
-
-
-
-// /*==============================================================================
-//                             Header Interface
-// ==============================================================================*/
-// // //TODO let's try to pull the navbar out and see what happens how about that ya dickhead
-// // var HeaderInterface = React.createClass({
-// //   //this will load the retrieved data into an object for this component
-// //   getInitialState: function(){
-// //     return {
-// //       movieBodyVisible: false,
-// //       orderBy: 'movieName',
-// //       orderDir: 'desc',
-// //       queryText: '',
-// //       myMovies: loadMovies
-// //     } //return
-// //   },
-// //
-// //   //componentDidMount and componentWillUnmount handle all of the menu operation that we define in main.js
-// //   componentDidMount: function(){
-// //     ipc.on('addMovie', function(event, message){
-// //       this.toggleMovieDisplay();
-// //     }.bind(this));
-// //   }, //componentDidMount
-// //
-// //   componentWillUnmount: function(){
-// //     ipc.removeListener('addMovie', function(event, message){
-// //       this.toggleMovieDisplay();
-// //     }.bind(this));
-// //   }, //componentDidMount
-// //
-// //   componentDidUpdate: function(){
-// //     fs.writeFile(dataLocation, JSON.stringify(this.state.myMovies), 'utf8', function(err){
-// //       if(err){
-// //         console.log(err);
-// //       }
-// //     }); //will go to the file location that our data is at and change it
-// //   }, //componentDidUpdate
-// //
-// //   deleteMovie: function(item){
-// //     var allMovies = this.state.myMovies;
-// //     var newMovies = _.without(allMovies, item); //return array without the one movie passed
-// //     this.setState({
-// //       myMovies: newMovies
-// //     });
-// //   },
-// //
-// //   toggleMovieDisplay: function(){ //this will allow us to add a movie to a list
-// //     var tempVisibility = !this.state.movieBodyVisible;
-// //     this.setState({
-// //       movieBodyVisible: tempVisibility
-// //     }); //setState
-// //   }, //toggleMovieDisplay
-// //
-// //   addMovieObject: function(tempItem){ //receives object saves in form
-// //     var tempMovies = this.state.myMovies;
-// //     tempMovies.push(tempItem);
-// //     this.setState({
-// //       myMovies: tempMovies,
-// //       movieBodyVisible: false
-// //     });
-// //   },
-// //
-// //   searchMovies: function(query){ //query is what user typed into search bar
-// //     this.setState({
-// //       queryText: query
-// //     });
-// //   },
-// //
-// //   ReOrder: function(orderBy, orderDir){ //will be sent either what to order by or the direction ot display
-// //     this.setState({
-// //       orderBy: orderBy,
-// //       orderDir: orderDir
-// //     });
-// //   },
-// //
-// //   showAbout: function(){ //we want to display the show about on the toolbar
-// //     ipc.sendSync('openInfoWindow'); //sends event notification to main process
-// //   },
-// //
-// //   render: function(){
-// //     var myMovies = this.state.myMovies; //save that object to a variable that we can refer to and manipulate
-// //     var queryText = this.state.queryText;
-// //     var orderBy = this.state.orderBy;
-// //     var orderDir = this.state.orderDir;
-// //     var filteredMovies = [];
-// //
-// //     //TODO fuck this, change it, react-bootstrap
-// //     if(this.state.movieBodyVisible === true){
-// //       $('#addMovie').modal('show');
-// //     } else {
-// //       $('#addMovie').modal('hide');
-// //     } //handles showing the modal for adding a movie
-// //
-// //     for(var i = 0; i < myMovies.length; i++){ //filtering our movie list
-// //       //we check if what they are typing matches anything in any of the movies, if it does, return that movie
-// //       if((myMovies[i].movieName.toLowerCase().indexOf(queryText) != -1) ||
-// //         (myMovies[i].directorName.toLowerCase().indexOf(queryText) != -1) ||
-// //         (myMovies[i].releaseDate.toLowerCase().indexOf(queryText) != -1) ||
-// //         (myMovies[i].Summary.toLowerCase().indexOf(queryText) != -1)){
-// //           filteredMovies.push(myMovies[i]);
-// //       }
-// //     }
-// //
-// //     filteredMovies = _.orderBy(filteredMovies, function(item){
-// //       return item[orderBy].toLowerCase();
-// //     }, orderDir); //uses Lodash to order the movies in the way that we want
-// //
-// //     filteredMovies = filteredMovies.map(function(item, index){ //send this data to MovieList to create a series of those tags
-// //       return(
-// //         <MovieList
-// //           key = {index} //each index of the data.json file
-// //           singleItem = {item} //each item at that index
-// //           whichItem = {item}
-// //           onDelete = {this.deleteMovie}
-// //         />
-// //       ) //return
-// //     }.bind(this));
-// //
-// //     return(
-// //       //a basic way to show one of the movies in that dataset, will turn into a list
-// //       <div className="application">
-// //         <HeaderNav
-// //           orderBy = {this.state.orderBy}
-// //           orderDir = {this.state.orderDir}
-// //           onSearch = {this.searchMovies}
-// //           onReOrder = {this.ReOrder}
-// //         />
-// //       </div>
-// //     );//return
-// //   } //render
-// // }); //main interface
-// //
-// //
-//
-
-
-
-// //TODO will turn this into just the changing panel with lists of Movies
-// //TODO need to break this big component into smaller components
 /*==============================================================================
                             Main Interface Ranked
 ==============================================================================*/
+
+let rankedSortFields = [
+  {
+    field: "movieName",
+    displayName: "Movie Name"
+  },
+  {
+    field: "releaseDate",
+    displayName: "Release Date"
+  },
+  {
+    field: "directorName",
+    displayName: "Director"
+  },
+  {
+    field: "rank",
+    displayName: "Rank"
+  }
+];
+
+let watchlistSortFields = [
+  {
+    field: "movieName",
+    displayName: "Movie Name"
+  },
+  {
+    field: "releaseDate",
+    displayName: "Release Date"
+  },
+  {
+    field: "directorName",
+    displayName: "Director"
+  }
+];
+
 var MainInterfaceRanked = React.createClass({
   //this will load the retrieved data into an object for this component
   getInitialState: function(){
@@ -257,7 +68,11 @@ var MainInterfaceRanked = React.createClass({
       orderBy: 'rank',
       orderDir: 'asc',
       queryText: '',
-      myMovies: loadRankedMovies
+      myMovies: loadRankedMovies,
+      MovieListItem: RankedMovies,
+      movieListTitle: "Ranked Movies",
+      sortFields: rankedSortFields,
+      fileLocation: rankedDataLocation
     } //return
   },
 
@@ -275,7 +90,7 @@ var MainInterfaceRanked = React.createClass({
   }, //componentDidMount
 
   componentDidUpdate: function(){
-    fs.writeFile(rankedDataLocation, JSON.stringify(this.state.myMovies), 'utf8', function(err){
+    fs.writeFile(this.state.fileLocation, JSON.stringify(this.state.myMovies), 'utf8', function(err){
       if(err){
         console.log(err);
       }
@@ -297,12 +112,33 @@ var MainInterfaceRanked = React.createClass({
     }); //setState
   }, //toggleMovieDisplay
 
+  displayRanked: function(){
+    this.setState({
+      myMovies: loadRankedMovies,
+      MovieListItem: RankedMovies,
+      movieListTitle: "Ranked Movies",
+      sortFields: rankedSortFields,
+      fileLocation: rankedDataLocation
+    });
+  },
+
+  displayWatchlist: function(){
+    let orderBy = (this.state.orderBy == "rank") ? "movieName" : this.state.orderBy;
+    this.setState({
+      myMovies: loadWatchlistMovies,
+      MovieListItem: WatchlistMovies,
+      movieListTitle: "Watchlist",
+      sortFields: watchlistSortFields,
+      orderBy: orderBy,
+      fileLocation: watchlistDataLocation
+    });
+  },
+
   addMovieObject: function(tempItem){ //receives object saves in form
     var tempMovies = this.state.myMovies;
     tempMovies.push(tempItem);
     this.setState({
-      myMovies: tempMovies,
-      movieBodyVisible: false
+      myMovies: tempMovies
     });
   },
 
@@ -328,52 +164,10 @@ var MainInterfaceRanked = React.createClass({
     var queryText = this.state.queryText;
     var orderBy = this.state.orderBy;
     var orderDir = this.state.orderDir;
-    var filteredMovies = [];
+    var movieListTitle = this.state.movieListTitle;
+    var sortFields = this.state.sortFields;
 
-    for(var i = 0; i < myMovies.length; i++){ //filtering our movie list
-      //we check if what they are typing matches anything in any of the movies, if it does, return that movie
-      if((myMovies[i].movieName.toLowerCase().indexOf(queryText) != -1) ||
-        (myMovies[i].directorName.toLowerCase().indexOf(queryText) != -1) ||
-        (myMovies[i].releaseDate.toLowerCase().indexOf(queryText) != -1) ||
-        (myMovies[i].Summary.toLowerCase().indexOf(queryText) != -1)){
-          filteredMovies.push(myMovies[i]);
-      }
-    }
-
-    filteredMovies = _.orderBy(filteredMovies, function(item){
-      return item[orderBy].toLowerCase();
-    }, orderDir); //uses Lodash to order the movies in the way that we want
-
-    filteredMovies = filteredMovies.map(function(item, index){ //send this data to MovieList to create a series of those tags
-      return(
-        <RankedMovies
-          key = {index} //each index of the data.json file
-          singleItem = {item} //each item at that index
-          whichItem = {item}
-          onDelete = {this.deleteMovie}
-          // onChangeRank = {this.changeRank}
-        />
-      ) //return
-    }.bind(this));
-
-    let sortFields = [
-      {
-        field: "movieName",
-        displayName: "Movie Name"
-      },
-      {
-        field: "releaseDate",
-        displayName: "Release Date"
-      },
-      {
-        field: "directorName",
-        displayName: "Director"
-      },
-      {
-        field: "rank",
-        displayName: "Rank"
-      }
-    ];
+    console.log(this.state);
 
     return(
       //a basic way to show one of the movies in that dataset, will turn into a list
@@ -389,14 +183,20 @@ var MainInterfaceRanked = React.createClass({
           <Toolbar
             handleAbout = {this.showAbout} //display the 'about' window
             handleToggle = {this.toggleMovieDisplay} //can pull down the modal
+            addMovie = {this.addMovieObject}
+            displayRanked = {this.displayRanked}
+            displayWatchlist = {this.displayWatchlist}
           />
           <div className="container">
-           <div className="row">
-             <div className="movies col-sm-12">
-               <h2 className="movies-headline">Ranked Movies</h2>
-               <ul className="item-list media-list">{filteredMovies}</ul>
-             </div>{/* col-sm-12 */}
-           </div>{/* row */}
+            <MovieList
+              movieListTitle = {movieListTitle}
+              movieList = {myMovies}
+              queryText = {queryText}
+              orderBy = {orderBy}
+              orderDir = {orderDir}
+              deleteMovie = {this.deleteMovie}
+              MovieListItem = {this.state.MovieListItem} //TODO turn into movie'
+            />
           </div>{/* container */}
         </div>{/* interface */}
       </div>
