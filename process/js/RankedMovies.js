@@ -7,9 +7,6 @@ var RankedMovies = React.createClass({
   removeFromList: function(){
     this.props.onDelete(this.props.singleItem); //lets the function know which movie has been selected for deletion
   },
-  // changeRank: function(){
-  //   this.props.onChangeRank(this.props.whichItem); //need to know which movie to change the rank of
-  // },
 
   render: function(){
     return(

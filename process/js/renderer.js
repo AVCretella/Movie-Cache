@@ -4,10 +4,10 @@ var bootstrap = require('bootstrap');
 var _ = require('lodash');
 
 var fs = eRequire('fs');//eRequire to show that we are working with node now
-var loadWatchlistMovies = JSON.parse(fs.readFileSync(watchlistDataLocation));//Will go to the dataLocation defined in index.html and create a proper data file from the file there
-var loadRankedMovies = JSON.parse(fs.readFileSync(rankedDataLocation));//Will go to the dataLocation defined in index.html and create a proper data file from the file there
-// var loadWatchlistMovies = require('../../data/watchlist_data.json');
-// var loadRankedMovies = JSON.parse(fs.readFileSync(watchlistDataLocation));
+var watchllistMovieData = JSON.parse(fs.readFileSync(watchlistDataLocation));//Will go to the dataLocation defined in index.html and create a proper data file from the file there
+var rankedMovieData = JSON.parse(fs.readFileSync(rankedDataLocation));//Will go to the dataLocation defined in index.html and create a proper data file from the file there
+// var watchllistMovieData = require('../../data/watchlist_data.json');
+// var rankedMovieData = JSON.parse(fs.readFileSync(watchlistDataLocation));
 var electron = eRequire('electron');
 var ipc = electron.ipcRenderer;
 
@@ -26,6 +26,7 @@ var MovieList = require('./MovieList');
                             Main Interface Ranked
 ==============================================================================*/
 
+//These are the fields that will populate the search bar when a specific list is being displayed
 let rankedSortFields = [
   {
     field: "movieName",
@@ -68,7 +69,7 @@ var MainInterfaceRanked = React.createClass({
       orderBy: 'rank',
       orderDir: 'asc',
       queryText: '',
-      myMovies: loadRankedMovies,
+      myMovies: rankedMovieData,
       MovieListItem: RankedMovies,
       movieListTitle: "Ranked Movies",
       sortFields: rankedSortFields,
@@ -114,7 +115,7 @@ var MainInterfaceRanked = React.createClass({
 
   displayRanked: function(){
     this.setState({
-      myMovies: loadRankedMovies,
+      myMovies: rankedMovieData,
       MovieListItem: RankedMovies,
       movieListTitle: "Ranked Movies",
       sortFields: rankedSortFields,
@@ -123,11 +124,12 @@ var MainInterfaceRanked = React.createClass({
   },
 
   displayWatchlist: function(){
+    //if rank is being used to sort right now, change that because the watchlist doesn't use rank
     let orderBy = (this.state.orderBy == "rank") ? "movieName" : this.state.orderBy;
     this.setState({
-      myMovies: loadWatchlistMovies,
+      myMovies: watchllistMovieData,
       MovieListItem: WatchlistMovies,
-      movieListTitle: "Watchlist",
+      movieListTitle: "Watchlist Movies",
       sortFields: watchlistSortFields,
       orderBy: orderBy,
       fileLocation: watchlistDataLocation
@@ -265,6 +267,7 @@ renderMainInterface();
 // }
 
 //changing clock function into a function component
+//This is what an actual component looks like from the React Tutorial
 class Clock extends React.Component{
   constructor(props){
     super(props);
@@ -328,74 +331,74 @@ renderClock();
 // /*==============================================================================
 //                             HighLightControl For Toolbar
 // ==============================================================================*/
-class HighLightControl extends React.Component {
-  constructor(props) {
-    super(props);
-    this.handleRankedClick = this.handleRankedClick.bind(this);
-    this.handleWatchlistClick = this.handleWatchlistClick.bind(this);
-    this.state = {displayRanked: false};
-  }
-
-  handleRankedClick() {
-    this.setState({displayRanked: true});
-  }
-
-  handleWatchlistClick() {
-    this.setState({displayRanked: false});
-  }
-
-  render() {
-    const displayRanked = this.state.displayRanked;
-    let button;
-
-    if (displayRanked) {
-      console.log("display ranked")
-      button = <RankedMovies onClick={this.handleRankedClick} />;
-    } else {
-      button = <WatchlistMovies onClick={this.handleWatchlistClick} />;
-    }
-
-    return (
-      <div>
-        <DisplayMovies displayRanked={displayRanked} />
-        {button}
-      </div>
-    );
-  }
-}
-
-function highlightChosenList(){
-  ReactDOM.render(
-    <HighLightControl />,
-    document.getElementById('whichList')
-  );
-}
-highlightChosenList();
-
-
-function RankedMovies(props) {
-  return <h1>We should be displaying Ranked Movies</h1>;
-}
-
-function WatchlistMovies(props) {
-  return <h1>We should be displaying Watch Later Movies</h1>;
-}
-
-function DisplayMovies(props) {
-  const displayRanked = props.displayRanked;
-  if (displayRanked) {
-    return <RankedMovies />;
-  }
-  else{
-    return <WatchlistMovies />;
-  }
-}
-
-function renderMovieList(){
-  ReactDOM.render(
-    // Try changing to isLoggedIn={true}:
-    <DisplayMovies displayRanked={true} />,
-    document.getElementById('moviesToDisplay')
-  );
-}
-renderMovieList();
+// class HighLightControl extends React.Component {
+//   constructor(props) {
+//     super(props);
+//     this.handleRankedClick = this.handleRankedClick.bind(this);
+//     this.handleWatchlistClick = this.handleWatchlistClick.bind(this);
+//     this.state = {displayRanked: false};
+//   }
+//
+//   handleRankedClick() {
+//     this.setState({displayRanked: true});
+//   }
+//
+//   handleWatchlistClick() {
+//     this.setState({displayRanked: false});
+//   }
+//
+//   render() {
+//     const displayRanked = this.state.displayRanked;
+//     let button;
+//
+//     if (displayRanked) {
+//       console.log("display ranked")
+//       button = <RankedMovies onClick={this.handleRankedClick} />;
+//     } else {
+//       button = <WatchlistMovies onClick={this.handleWatchlistClick} />;
+//     }
+//
+//     return (
+//       <div>
+//         <DisplayMovies displayRanked={displayRanked} />
+//         {button}
+//       </div>
+//     );
+//   }
+// }
+//
+// function highlightChosenList(){
+//   ReactDOM.render(
+//     <HighLightControl />,
+//     document.getElementById('whichList')
+//   );
+// }
+// highlightChosenList();
+//
+//
+// function RankedMovies(props) {
+//   return <h1>We should be displaying Ranked Movies</h1>;
+// }
+//
+// function WatchlistMovies(props) {
+//   return <h1>We should be displaying Watch Later Movies</h1>;
+// }
+//
+// function DisplayMovies(props) {
+//   const displayRanked = props.displayRanked;
+//   if (displayRanked) {
+//     return <RankedMovies />;
+//   }
+//   else{
+//     return <WatchlistMovies />;
+//   }
+// }
+//
+// function renderMovieList(){
+//   ReactDOM.render(
+//     // Try changing to isLoggedIn={true}:
+//     <DisplayMovies displayRanked={true} />,
+//     document.getElementById('moviesToDisplay')
+//   );
+// }
+// renderMovieList();

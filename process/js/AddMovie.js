@@ -1,10 +1,7 @@
 var React = require('react');
 
-
 var defaultDate = new Date();
-defaultDate.setDate(defaultDate.getDate()); //this will give us today's date possibly to use for when the movie was added
-                                            //INCOMP we will just use it for the 'releaseDate' for now, change later
-
+defaultDate.setDate(defaultDate.getDate());
 function formatDate(date, divider) { //divider is what will separate the days
   var someday = new Date(date);
   var month = someday.getUTCMonth() + 1;
@@ -22,12 +19,47 @@ function formatDate(date, divider) { //divider is what will separate the days
 }
 
 
-/* INCOMP Will probably just end up turning this into a SearchMovie.js where there is one field
+/* TODO Will probably just end up turning this into a SearchMovie.js where there is one field
     to search for a movie and get the JSON back, we'll see, but this was an interesting look
     at using bootstrap modals, could have used this over the summer for sure */
 var AddMovie = React.createClass({
+  getInitialState: function(){
+    return {
+      hits: []
+    } //return
+  },
+
   toggleMovieDisplay: function(){
     this.props.handleToggle();
+  },
+
+  //this takes whatever title you have put in and will use my API key to retrieve the JSON object
+  sendTitleToAPI: function(){
+    var searchTitle = this.inputMovieName.value;
+    var baseQuery = 'http://www.omdbapi.com/?t=';
+    var APIkey = '&apikey=2d5be971';
+    console.log(searchTitle);
+    if(searchTitle != ""){
+      fetch(baseQuery + searchTitle + APIkey)
+      .then(function(response) {
+        //TODO try to map the response information that you want and then return that
+        // const filteredInfo = response.data.map(c => {
+        //   return {
+        //     title: c.Title,
+        //     releaseDate: c.Year,
+        //     duration: c.Runtime
+        //   };
+        // });
+        // return filteredInfo.json();
+        // const newState = Object.assign({}, this.state, {
+        //   movieInfo: filterInfo
+        // });
+        return response.json();
+      })
+      .then(function(myJson) {
+        console.log(JSON.stringify(myJson));
+      });
+    }
   },
 
   handleAdd: function(submitEvent){ //pass the fact that the submitEvent has happened from the form
@@ -44,7 +76,7 @@ var AddMovie = React.createClass({
 
     this.props.addMovie(tempItem); //pass the object to the function in the renderer process
 
-    //all of this will reset the form after it has been submitted to the renderer process
+    //all of this will reset the form after it has been submitted to the renderer process so it can be reused
     this.inputMovieName.value = '';
     this.inputMovieDirector.value = '';
     this.inputMovieReleaseDate.value = formatDate(defaultDate, '-');
@@ -81,9 +113,12 @@ var AddMovie = React.createClass({
             <form className="modal-body add-movie form-horizontal" onSubmit={this.handleAdd}>
               <div className="form-group">
                 <label className="col-sm-3 control-label" htmlFor="movieName">Movie Name</label>
-                <div className="col-sm-9">
+                <div className="col-sm-6">
                   <input type="text" className="form-control"
                     id="movieName" ref={(ref) => this.inputMovieName = ref} placeholder="Movie's Name" />
+                </div>
+                <div className="col-sm-3">
+                  <button type="button" className="btn btn-success" onClick={this.sendTitleToAPI}>Search</button>
                 </div>
               </div>
 
