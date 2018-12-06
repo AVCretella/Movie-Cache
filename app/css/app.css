@@ -8309,7 +8309,7 @@ h6 {
 .navbar {
   margin-bottom: 0;
   border-radius: 0;
-  background-image: url("../images/wisdompetlogo.svg");
+  background-image: url("../images/goose.svg");
   background-repeat: no-repeat;
   background-size: 40px;
   background-position: 10px;
@@ -8331,8 +8331,8 @@ h6 {
   padding-left: 60px;
 }
 
-.navbar-default {
-  background-color: #194759;
+.navbar-default { /*This is the color for the headerNav*/
+  background-color: #008BFF;
   border: none;
 }
 
@@ -8373,8 +8373,8 @@ h6 {
   background: #D8F2F0;
 }
 
-.toolbar {
-  background-color: #296B73;
+.toolbar { /*This is the background color for the sidebar toolbar */
+  background-color: #18C1EF;
   min-width: 200px;
   color: white;
   font-size: 1.1em;
@@ -8397,8 +8397,8 @@ h6 {
   user-select: none;
 }
 
-.toolbar-item:hover {
-  background-color: #133748;
+.toolbar-item:hover { /* When you hover over a toolbar item*/
+  background-color: #006FCC;
 }
 
 .toolbar-item-button {
@@ -8424,13 +8424,13 @@ h6 {
   /* Likely future */
 }
 
-.appointments {
+.movies {
   margin-top: 15px;
 }
 
-.appointments .appointments-headline {
+.movies .movies-headline { /*The color of the name of the list*/
   margin-bottom: 10px;
-  color: #174152;
+  color: #296B73;
 }
 
 .item-list {
@@ -8445,47 +8445,47 @@ h6 {
   margin-top: 0;
 }
 
-.item-list .pet-item {
+.item-list .movie-item {
   padding: 10px;
 }
 
-.item-list .pet-item:nth-child(2n) {
+.item-list .movie-item:nth-child(2n) {
   background: rgba(255,255,255,.5);
   border-radius: 5px;
 }
 
-.item-list .pet-item:last-child {
+.item-list .movie-item:last-child {
   border-bottom: none;
 }
 
-.item-list .pet-item .pet-delete {
+.item-list .movie-item .movie-delete {
   display: none;
   opacity: 0;
   transition: all 1s;
 }
 
-.item-list  .pet-item:hover .pet-delete {
+.item-list  .movie-item:hover .movie-delete {
   display: block;
   opacity: 1;
 }
 
-.item-list .pet-name {
+.item-list .movie-name { /*The color of the Title of the movie*/
   font-weight: bold;
   color: #296B73;
   font-size: 1.3em;
 }
 
-.item-list .apt-notes {
+.item-list .movie-notes {
   font-style: italic;
 }
 
-.item-list .label-item {
+.item-list .label-item { /*The color of the labels for movie information in the list*/
   font-weight: bold;
-  color: #D03B3B;
+  color: #4CAEFF;
   padding-right: 10px;
 }
 
-.item-list .apt-date {
+.item-list .movie-release {
   font-style: italic;
 }
 
