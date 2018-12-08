@@ -35,8 +35,8 @@ h1, h2, h3, h4, h5, h6 {
   padding-left: 60px;
 }
 
-.navbar-default {
-  background-color: #5D2E79;
+.navbar-default { /*This is the color for the headerNav*/
+  background-color: #008BFF;
   border: none;
 }
 
@@ -77,8 +77,8 @@ h1, h2, h3, h4, h5, h6 {
   background: #D8F2F0;
 }
 
-.toolbar {
-  background-color: #A405FB;
+.toolbar { /*This is the background color for the sidebar toolbar */
+  background-color: #18C1EF;
   min-width: 200px;
   color: white;
   font-size: 1.1em;
@@ -103,7 +103,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .toolbar-item:hover {
-  background-color: #7715AD;
+  background-color: #006FCC;
 }
 
 .toolbar-item-button {
@@ -132,9 +132,9 @@ h1, h2, h3, h4, h5, h6 {
   margin-top: 15px;
 }
 
-.movies .movies-headline {
+.movies .movies-headline { /*The color of the name of the list*/
   margin-bottom: 10px;
-  color: #174152;
+  color: #296B73;
 }
 
 .item-list {
@@ -175,18 +175,19 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 
-.item-list .movie-name {
+.item-list .movie-name { /*The color of the Title of the movie*/
   font-weight: bold;
   color: #296B73;
   font-size: 1.3em;
 }
+
 .item-list .movie-notes {
   font-style: italic;
 }
 
-.item-list .label-item {
+.item-list .label-item { /*The color of the labels for movie information in the list*/
   font-weight: bold;
-  color: #D03B3B;
+  color: #4CAEFF;
   padding-right: 10px;
 }
 

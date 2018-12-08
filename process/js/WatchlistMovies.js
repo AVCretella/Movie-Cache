@@ -22,12 +22,15 @@ var WatchlistMovies = React.createClass({
           <div className="director-name">
             <span className="label-item">Directed By:</span>{this.props.singleItem.directorName}
           </div>
+          <div className="director-name">
+            <span className="label-item">Actors:</span>{this.props.singleItem.actors}
+          </div>
           <div>
             <span className="label-item">Summary:</span>
             <span className="movie-notes">{this.props.singleItem.Summary}</span>
           </div>
           <div className="release-date">
-            <span className="label-item">Release Date:</span>{this.props.singleItem.releaseDate}
+            <span className="label-item">Release Year:</span>{this.props.singleItem.releaseDate}
           </div>
 
         </div>

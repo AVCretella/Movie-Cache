@@ -14,6 +14,7 @@ var HeaderNav = React.createClass({
   //each of the serach options is clickable and will dynamically change the list
   render: function(){
 
+    //sortFields come from the renderer process - determined by if we are loading ranked or watch list
     let sortFieldItems = this.props.sortFields.map((sortField) =>
       <li><a href="#" id={sortField.field} onClick={this.handleSort}>{sortField.displayName} {(this.props.orderBy === sortField.field) ? <span className="glyphicon glyphicon-ok"></span>:null}</a></li>
     );

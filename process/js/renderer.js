@@ -25,7 +25,7 @@ var MovieList = require('./MovieList');
 /*==============================================================================
                             Main Interface Ranked
 ==============================================================================*/
-
+//TODO maybe change ranked list to 'favorites' list
 //These are the fields that will populate the search bar when a specific list is being displayed
 let rankedSortFields = [
   {
@@ -65,7 +65,7 @@ var MainInterfaceRanked = React.createClass({
   //this will load the retrieved data into an object for this component
   getInitialState: function(){
     return {
-      movieBodyVisible: false,
+      movieFormVisible: false,
       orderBy: 'rank',
       orderDir: 'asc',
       queryText: '',
@@ -80,13 +80,13 @@ var MainInterfaceRanked = React.createClass({
   //componentDidMount and componentWillUnmount handle all of the menu operations that we define in main.js
   componentDidMount: function(){
     ipc.on('addMovie', function(event, message){
-      this.toggleMovieDisplay();
+      this.toggleAddMovieForm();
     }.bind(this));
   }, //componentDidMount
 
   componentWillUnmount: function(){
     ipc.removeListener('addMovie', function(event, message){
-      this.toggleMovieDisplay();
+      this.toggleAddMovieForm();
     }.bind(this));
   }, //componentDidMount
 
@@ -106,12 +106,12 @@ var MainInterfaceRanked = React.createClass({
     });
   },
 
-  toggleMovieDisplay: function(){ //this will allow us to add a movie to a list
-    var tempVisibility = !this.state.movieBodyVisible;
+  toggleAddMovieForm: function(){ //this will pull up the form to add movies
+    var tempVisibility = !this.state.movieFormVisible;
     this.setState({
-      movieBodyVisible: tempVisibility
+      movieFormVisible: tempVisibility
     }); //setState
-  }, //toggleMovieDisplay
+  }, //toggleAddMovieForm
 
   displayRanked: function(){
     this.setState({
@@ -157,7 +157,7 @@ var MainInterfaceRanked = React.createClass({
     });
   },
 
-  showAbout: function(){ //we want to display the show about on the toolbar
+  showHelp: function(){ //we want to display the show about on the toolbar
     ipc.sendSync('openInfoWindow'); //sends event notification to main process
   },
 
@@ -183,8 +183,8 @@ var MainInterfaceRanked = React.createClass({
         />
         <div className="interface">
           <Toolbar
-            handleAbout = {this.showAbout} //display the 'about' window
-            handleToggle = {this.toggleMovieDisplay} //can pull down the modal
+            handleAbout = {this.showHelp} //display the 'about' window
+            handleToggle = {this.toggleAddMovieForm} //can pull down the modal
             addMovie = {this.addMovieObject}
             displayRanked = {this.displayRanked}
             displayWatchlist = {this.displayWatchlist}
@@ -307,98 +307,4 @@ function renderClock(){
   );
 }
 
-renderClock();
-//
-// function App(){
-//   return (
-//     <div>
-//       <Clock />
-//       <Clock />
-//       <Clock />
-//       <Clock />
-//     </div>
-//   );
-// }
-//
-// function render4Clock(){
-//   ReactDOM.render(
-//     <App />,
-//     document.getElementById('movieList')
-//   );
-// }
-//
-// render4Clock();
-// /*==============================================================================
-//                             HighLightControl For Toolbar
-// ==============================================================================*/
-// class HighLightControl extends React.Component {
-//   constructor(props) {
-//     super(props);
-//     this.handleRankedClick = this.handleRankedClick.bind(this);
-//     this.handleWatchlistClick = this.handleWatchlistClick.bind(this);
-//     this.state = {displayRanked: false};
-//   }
-//
-//   handleRankedClick() {
-//     this.setState({displayRanked: true});
-//   }
-//
-//   handleWatchlistClick() {
-//     this.setState({displayRanked: false});
-//   }
-//
-//   render() {
-//     const displayRanked = this.state.displayRanked;
-//     let button;
-//
-//     if (displayRanked) {
-//       console.log("display ranked")
-//       button = <RankedMovies onClick={this.handleRankedClick} />;
-//     } else {
-//       button = <WatchlistMovies onClick={this.handleWatchlistClick} />;
-//     }
-//
-//     return (
-//       <div>
-//         <DisplayMovies displayRanked={displayRanked} />
-//         {button}
-//       </div>
-//     );
-//   }
-// }
-//
-// function highlightChosenList(){
-//   ReactDOM.render(
-//     <HighLightControl />,
-//     document.getElementById('whichList')
-//   );
-// }
-// highlightChosenList();
-//
-//
-// function RankedMovies(props) {
-//   return <h1>We should be displaying Ranked Movies</h1>;
-// }
-//
-// function WatchlistMovies(props) {
-//   return <h1>We should be displaying Watch Later Movies</h1>;
-// }
-//
-// function DisplayMovies(props) {
-//   const displayRanked = props.displayRanked;
-//   if (displayRanked) {
-//     return <RankedMovies />;
-//   }
-//   else{
-//     return <WatchlistMovies />;
-//   }
-// }
-//
-// function renderMovieList(){
-//   ReactDOM.render(
-//     // Try changing to isLoggedIn={true}:
-//     <DisplayMovies displayRanked={true} />,
-//     document.getElementById('moviesToDisplay')
-//   );
-// }
-// renderMovieList();
+// renderClock();
