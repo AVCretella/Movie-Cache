@@ -71,7 +71,7 @@ var MainInterfaceRanked = React.createClass({
       queryText: '',
       myMovies: rankedMovieData,
       MovieListItem: RankedMovies,
-      movieListTitle: "Ranked Movies",
+      movieListTitle: "Favorite Movies",
       sortFields: rankedSortFields,
       fileLocation: rankedDataLocation
     } //return
@@ -117,7 +117,7 @@ var MainInterfaceRanked = React.createClass({
     this.setState({
       myMovies: rankedMovieData,
       MovieListItem: RankedMovies,
-      movieListTitle: "Ranked Movies",
+      movieListTitle: "Favorite Movies",
       sortFields: rankedSortFields,
       fileLocation: rankedDataLocation
     });

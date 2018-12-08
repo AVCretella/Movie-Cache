@@ -53,6 +53,7 @@ var AddMovieForm = React.createClass({
           this.inputMovieReleaseDate.value = json.Year; //TODO need to change the format of released date, probably just turn into the year
           this.inputMovieSummary.value = json.Plot;
           this.inputMovieDuration.value = json.Runtime; //TODO may want to save just the numbers
+          // this.inputMovieRottenTomatoes.value = json.Ratings[1].Value;
         } else {
           this.inputMovieName.value = "Movie Not Found - Please try again"
         }
@@ -92,12 +93,14 @@ var AddMovieForm = React.createClass({
       actors: this.inputMovieActors.value,
       duration: this.inputMovieDuration.value,
       viewCount: this.inputMovieViewCount.value,
-      rank: this.inputMovieRank.value
+      // rottenTomatoes: this.inputMovieRottenTomatoes.value,
+      rank: this.inputMovieRank.value,
     } //temp items
 
     this.props.addMovie(tempItem); //pass the object to the function in the renderer process
 
     //all of this will reset the form after it has been submitted to the renderer process so it can be reused
+    //TODO also need to reset when the 'x' is clicked to close the form
     this.inputMovieName.value = '';
     this.inputMoviePoster.value = '';
     this.inputMovieDirector.value = '';
@@ -105,10 +108,10 @@ var AddMovieForm = React.createClass({
     //TODO {formatDate(defaultDate, '-')} put this back when you want to use full date instead of year. API gives different format and I don't want to deal with it right now
     this.inputMovieReleaseDate.value = '2000';
     this.inputMovieSummary.value = '';
-    this.inputMovieDuration.value = '180';
+    this.inputMovieDuration.value = '120 min';
     this.inputMovieViewCount.value = '1';
     this.inputMovieViewRank.value = '1';
-
+    // this.inputMovieRottenTomatoes.value = 'Rotten Tomatoes Rating',
   },
   render: function(){ //using bootstrap modal for the movie creation form. All proof of concept
     let style, className;
@@ -158,7 +161,7 @@ var AddMovieForm = React.createClass({
               </div>
 
               <div className="form-group">
-                <label className="col-sm-3 control-label" htmlFor="director">Director</label>
+                <label className="col-sm-3 control-label" htmlFor="director">Cast:</label>
                 <div className="col-sm-9">
                   <input type="text" className="form-control"
                     id="actors" ref={(ref) => this.inputMovieActors = ref} placeholder="Actors / Actresses" />
@@ -177,7 +180,7 @@ var AddMovieForm = React.createClass({
                 <label className="col-sm-3 control-label" htmlFor="duration">Duration</label>
                 <div className="col-sm-9">
                   <input type="text" className="form-control"
-                    id="duration" ref={(ref) => this.inputMovieDuration = ref} defaultValue = {'120'}/>
+                    id="duration" ref={(ref) => this.inputMovieDuration = ref} defaultValue = {'120 min'}/>
                 </div>
               </div>
 
@@ -185,31 +188,38 @@ var AddMovieForm = React.createClass({
                 <label className="col-sm-3 control-label" htmlFor="Summary">Summary</label>
                 <div className="col-sm-9">
                   <textarea className="form-control" rows="4" cols="50"
-                    id="Summary" ref={(ref) => this.inputMovieSummary = ref} placeholder="Movie Summary"></textarea>
+                    id="Summary" ref={(ref) => this.inputMovieSummary = ref} placeholder=""></textarea>
                 </div>
               </div>
 
               <div className="form-group">
-                <label className="col-sm-3 control-label" htmlFor="duration">How Many Times Have You Seen This Movie?</label>
+                <label className="col-sm-3 control-label" htmlFor="duration">Times Seen:</label>
                 <div className="col-sm-9">
                   <input type="number" min="0" className="form-control" defaultValue={'1'}
                     id="viewCount" ref={(ref) => this.inputMovieViewCount = ref}/>
                 </div>
               </div>
 
+
+              {/* TODO gonna change rank to be the ser's rating instead. like a 9.4/10 or something */}
+              {/* TODO eventually want to make this rank changeable without having to re-add movie */}
               <div className="form-group">
-                <label className="col-sm-3 control-label" htmlFor="rank">Rank:</label>
+                <label className="col-sm-3 control-label" htmlFor="rank">Your Rating:</label>
                 <div className="col-sm-9">
-                  <input type="number" min="0" className="form-control" defaultValue={'1'}
+                  <input type="number" step=".1" min="0" max="10" className="form-control" defaultValue={'9'}
                     id="rank" ref={(ref) => this.inputMovieRank = ref}/>
                 </div>
               </div>
 
+
+
+                  {/* TODO want to add rotten tomatoes reviews here and have duration to the right */}
+                  {/* TODO should I keep everything as amanual textbox in case they want to put in their own info? */}
               <div className="form-group">
                 <label className="col-sm-3 control-label" htmlFor="poster">Poster URL:</label>
                 <div className="col-sm-9">
                   <input type="text" className="form-control"
-                    id="posterURL" ref={(ref) => this.inputMoviePoster = ref} placeholder="Movie Poster URL" />
+                    id="posterURL" ref={(ref) => this.inputMoviePoster = ref} placeholder="Put the url to the movie's poster here" />
                 </div>
               </div>
 

@@ -36,18 +36,18 @@ var MovieList = React.createClass({
   },
 
   render: function() {
-    let {movieList, queryText, orderBy, orderDir, deleteMovie, MovieListItem} = this.props;
+    let {movieListTitle, movieList, queryText, orderBy, orderDir, deleteMovie, MovieListItem} = this.props;
 
     movieList = this.filterMovies(movieList, queryText);
 
     movieList = this.sortMovies(movieList, orderBy, orderDir);
 
     movieList = this.renderListItems(movieList, deleteMovie, MovieListItem);
-
+    //TODO need to change the name to reflect the list that we are looking at
     return (
       <div className="row">
         <div className="movies col-sm-12">
-          <h2 className="movies-headline">Ranked Movies</h2>
+          <h2 className="movies-headline">{movieListTitle}</h2>
           <ul className="item-list media-list">{movieList}</ul>
         </div>
       </div>

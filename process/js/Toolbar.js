@@ -36,7 +36,7 @@ var Toolbar = React.createClass({
           </div>
           <div className="toolbar-item" onClick={this.props.displayRanked}>
             <span className="toolbar-item-button"></span>
-            <span className="toolbar-item-text">Ranked List</span>
+            <span className="toolbar-item-text">Favorites</span>
           </div>
           <div className="toolbar-item" onClick={this.props.displayWatchlist}>
             <span className="toolbar-item-button"></span>

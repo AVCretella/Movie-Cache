@@ -178,7 +178,7 @@ h1, h2, h3, h4, h5, h6 {
 .item-list .movie-name { /*The color of the Title of the movie*/
   font-weight: bold;
   color: #296B73;
-  font-size: 1.3em;
+  font-size: 1.5em;
 }
 
 .item-list .movie-notes {
