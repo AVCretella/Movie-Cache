@@ -1,5 +1,7 @@
 @import url('../../node_modules/bootstrap/dist/css/bootstrap.css');
 
+/* The CSS in this file will replace whatever was pre-existing in the app file */
+
 *, *:before, *:after {
   box-sizing: inherit;
 }
@@ -66,8 +68,10 @@ h1, h2, h3, h4, h5, h6 {
   border-color: #286D64;
 }
 
-.main {
-  background: white;
+body {
+  background: linear-gradient( 120deg,
+    rgba(57, 216, 234, 0.75),
+    rgba(81, 39, 165, 0.95));
 }
 
 /** Toolbar **/
@@ -195,33 +199,39 @@ h1, h2, h3, h4, h5, h6 {
   font-style: italic;
 }
 
+/* Help Window Styling */
+
 #page-info {
   background: transparent;
   color: white;
+  border-radius: 20px;
   display: flex;
   flex-flow: row wrap;
   flex-direction: column;
   justify-content: center;
-  height: 100vh;
+  height: 100%;
   -webkit-app-region: drag;
-  cursor: pointer;
+  /* -webkit-animation: mymove 5s infinite; /* Safari 4.0 - 8.0 */
+  /* animation: mymove 5s infinite; */
+  /* cursor: pointer; */
 }
 
 #page-info a:link {
   color: #EEC856;
 }
 
+/* HOLY SHIT DOES THAT GRADIENT LOOK GOOD SHIT I WANT TO USE IT FOR EVERYTHING */
 #page-info .info-content {
-  background: linear-gradient( 180deg,
-    rgba(234, 192, 59, .75),
-    rgba(24, 101, 85, .95));
-  width: 90%;
+  background: linear-gradient( 120deg,
+    rgba(57, 216, 234, 0.75),
+    rgba(81, 39, 165, 0.95));
+  width: 100%;
   padding: 20px;
   border-radius: 20px;
   text-align: center;
   align-self: center;
-  border: 2px solid rgba(24, 101, 85, .95);
-  box-shadow: 5px 5px 20px rgba(0, 0, 0, .4);
+  /* border: 2px solid rgba(24, 101, 85, .95); */
+  /* box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.19); */
 }
 
 #page-info .page-headline {
@@ -243,10 +253,10 @@ h1, h2, h3, h4, h5, h6 {
   z-index: 20;
 }
 
-#page-info .close:focus, #page-info .close:hover {
+#page-info .close:focus,
+#page-info .close:hover {
   outline: none;
 }
-
 
 #page-info img {
   width: 100px;

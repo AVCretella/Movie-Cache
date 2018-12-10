@@ -108,9 +108,9 @@ var AddMovieForm = React.createClass({
     //TODO {formatDate(defaultDate, '-')} put this back when you want to use full date instead of year. API gives different format and I don't want to deal with it right now
     this.inputMovieReleaseDate.value = '2000';
     this.inputMovieSummary.value = '';
-    this.inputMovieDuration.value = '120 min';
+    this.inputMovieDuration.value = '0 min';
     this.inputMovieViewCount.value = '1';
-    this.inputMovieRank.value = '1';
+    this.inputMovieRank.value = '9';
     // this.inputMovieRottenTomatoes.value = 'Rotten Tomatoes Rating',
   },
   render: function(){ //using bootstrap modal for the movie creation form. All proof of concept
@@ -190,7 +190,7 @@ var AddMovieForm = React.createClass({
                 <label className="col-sm-3 control-label" htmlFor="duration">Duration</label>
                 <div className="col-sm-9">
                   <input type="text" className="form-control"
-                    id="duration" ref={(ref) => this.inputMovieDuration = ref} defaultValue = {'120 min'}/>
+                    id="duration" ref={(ref) => this.inputMovieDuration = ref} defaultValue = {'0 min'}/>
                 </div>
               </div>
 

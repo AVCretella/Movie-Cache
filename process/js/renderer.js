@@ -167,6 +167,7 @@ var MainInterfaceRanked = React.createClass({
   },
 
   showHelp: function(){ //we want to display the show about on the toolbar
+    console.log('we got an event call, we should now display!');
     ipc.sendSync('openInfoWindow'); //sends event notification to main process
   },
 
