@@ -44,7 +44,7 @@ var RankedMovies = React.createClass({
               <span className="pull-right"><i>Duration: {this.props.singleItem.duration}</i></span>
             </div>
             <div className="reviews-times_seen">
-              {/*<span className="label-item">Rotten Tomatoes: </span>{this.props.singleItem.rottenTomatoes}*/}
+              {/*}<span className="label-item">Rotten Tomatoes: </span>{this.props.singleItem.rottenTomatoes}*/}
               <span className="pull-right"><i>Times Seen: {this.props.singleItem.viewCount}</i></span>
             </div>
           </div>

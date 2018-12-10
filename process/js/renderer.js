@@ -4,9 +4,9 @@ var bootstrap = require('bootstrap');
 var _ = require('lodash');
 
 var fs = eRequire('fs');//eRequire to show that we are working with node now
-var watchllistMovieData = JSON.parse(fs.readFileSync(watchlistDataLocation));//Will go to the dataLocation defined in index.html and create a proper data file from the file there
+var watchlistMovieData = JSON.parse(fs.readFileSync(watchlistDataLocation));//Will go to the dataLocation defined in index.html and create a proper data file from the file there
 var rankedMovieData = JSON.parse(fs.readFileSync(rankedDataLocation));//Will go to the dataLocation defined in index.html and create a proper data file from the file there
-// var watchllistMovieData = require('../../data/watchlist_data.json');
+// var watchlistMovieData = require('../../data/watchlist_data.json');
 // var rankedMovieData = JSON.parse(fs.readFileSync(watchlistDataLocation));
 var electron = eRequire('electron');
 var ipc = electron.ipcRenderer;
@@ -25,7 +25,7 @@ var MovieList = require('./MovieList');
 /*==============================================================================
                             Main Interface Ranked
 ==============================================================================*/
-//TODO maybe change ranked list to 'favorites' list
+//TODO maybe change ranked list to 'ranked' list
 //These are the fields that will populate the search bar when a specific list is being displayed
 let rankedSortFields = [
   {
@@ -67,11 +67,11 @@ var MainInterfaceRanked = React.createClass({
     return {
       movieFormVisible: false,
       orderBy: 'rank',
-      orderDir: 'asc',
+      orderDir: 'desc',
       queryText: '',
       myMovies: rankedMovieData,
       MovieListItem: RankedMovies,
-      movieListTitle: "Favorite Movies",
+      movieListTitle: "Ranked Movies",
       sortFields: rankedSortFields,
       fileLocation: rankedDataLocation
     } //return
@@ -98,14 +98,6 @@ var MainInterfaceRanked = React.createClass({
     }); //will go to the file location that our data is at and change it
   }, //componentDidUpdate
 
-  deleteMovie: function(item){
-    var allMovies = this.state.myMovies;
-    var newMovies = _.without(allMovies, item); //return array without the one movie passed
-    this.setState({
-      myMovies: newMovies
-    });
-  },
-
   toggleAddMovieForm: function(){ //this will pull up the form to add movies
     var tempVisibility = !this.state.movieFormVisible;
     this.setState({
@@ -114,20 +106,24 @@ var MainInterfaceRanked = React.createClass({
   }, //toggleAddMovieForm
 
   displayRanked: function(){
+    rankedMovieData = JSON.parse(fs.readFileSync(rankedDataLocation));
     this.setState({
       myMovies: rankedMovieData,
       MovieListItem: RankedMovies,
-      movieListTitle: "Favorite Movies",
+      movieListTitle: "Ranked Movies",
       sortFields: rankedSortFields,
+      orderBy:'rank',
+      orderDir:'desc',
       fileLocation: rankedDataLocation
     });
   },
 
   displayWatchlist: function(){
+    watchlistMovieData = JSON.parse(fs.readFileSync(watchlistDataLocation));
     //if rank is being used to sort right now, change that because the watchlist doesn't use rank
     let orderBy = (this.state.orderBy == "rank") ? "movieName" : this.state.orderBy;
     this.setState({
-      myMovies: watchllistMovieData,
+      myMovies: watchlistMovieData,
       MovieListItem: WatchlistMovies,
       movieListTitle: "Watchlist Movies",
       sortFields: watchlistSortFields,
@@ -142,6 +138,19 @@ var MainInterfaceRanked = React.createClass({
     this.setState({
       myMovies: tempMovies
     });
+    console.log("MY MOVIES: ", this.myMovies);
+  },
+
+  deleteMovieObject: function(item){
+    console.log("We should have deleted this movie: ", item);
+    var allMovies = this.state.myMovies;
+    var newMovies = _.without(allMovies, item); //return array without the one movie passed
+    console.log("ALL MOVIES: ", allMovies);
+    this.setState({
+      myMovies: newMovies
+    });
+    console.log("NEW MOVIES: ", newMovies);
+    console.log("MY MOVIES: ", this.myMovies);
   },
 
   searchMovies: function(query){ //query is what user typed into search bar
@@ -183,8 +192,8 @@ var MainInterfaceRanked = React.createClass({
         />
         <div className="interface">
           <Toolbar
-            handleAbout = {this.showHelp} //display the 'about' window
-            handleToggle = {this.toggleAddMovieForm} //can pull down the modal
+            handleAbout = {this.showHelp} //display the 'about' window - this isnt a thing anymore */}
+            handleToggle = {this.toggleAddMovieForm} //show the add movie form
             addMovie = {this.addMovieObject}
             displayRanked = {this.displayRanked}
             displayWatchlist = {this.displayWatchlist}
@@ -196,8 +205,8 @@ var MainInterfaceRanked = React.createClass({
               queryText = {queryText}
               orderBy = {orderBy}
               orderDir = {orderDir}
-              deleteMovie = {this.deleteMovie}
-              MovieListItem = {this.state.MovieListItem} //TODO turn into movie'
+              deleteMovie = {this.deleteMovieObject}
+              MovieListItem = {this.state.MovieListItem}
             />
           </div>{/* container */}
         </div>{/* interface */}
@@ -215,19 +224,6 @@ function renderMainInterface(){
   );
 }
 
-// function renderMainInterfaceWatchlist(){
-//   ReactDOM.render(
-//     <MainInterfaceWatchlist />,
-//     document.getElementById('movieInfo')
-//   );
-// }
-
-// var displayRanked = 1
-// if(displayRanked){
-//   renderMainInterface();
-// } else {
-//   renderMainInterfaceWatchlist();
-// }
 renderMainInterface();
 
 
