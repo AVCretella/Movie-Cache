@@ -71,7 +71,7 @@ var MainInterfaceRanked = React.createClass({
       queryText: '',
       myMovies: rankedMovieData,
       MovieListItem: RankedMovies,
-      movieListTitle: "Ranked Movies",
+      movieListTitle: "Favorite Movies",
       sortFields: rankedSortFields,
       fileLocation: rankedDataLocation
     } //return
@@ -110,7 +110,7 @@ var MainInterfaceRanked = React.createClass({
     this.setState({
       myMovies: rankedMovieData,
       MovieListItem: RankedMovies,
-      movieListTitle: "Ranked Movies",
+      movieListTitle: "Favorite Movies",
       sortFields: rankedSortFields,
       orderBy:'rank',
       orderDir:'desc',
@@ -193,7 +193,7 @@ var MainInterfaceRanked = React.createClass({
         />
         <div className="interface">
           <Toolbar
-            handleAbout = {this.showHelp} //display the 'about' window - this isnt a thing anymore */}
+            handleAbout = {this.showHelp} //display the 'help' window */}
             handleToggle = {this.toggleAddMovieForm} //show the add movie form
             addMovie = {this.addMovieObject}
             displayRanked = {this.displayRanked}

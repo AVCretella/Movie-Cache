@@ -45,6 +45,7 @@ var RankedMovies = React.createClass({
             </div>
             <div className="reviews-times_seen">
               {/*}<span className="label-item">Rotten Tomatoes: </span>{this.props.singleItem.rottenTomatoes}*/}
+              {/* TODO put a plus minus here that sends to handleViewCount change, pass the item and which button was pressed + update */}
               <span className="pull-right"><i>Times Seen: {this.props.singleItem.viewCount}</i></span>
             </div>
           </div>

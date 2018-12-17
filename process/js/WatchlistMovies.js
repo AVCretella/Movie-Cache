@@ -39,6 +39,11 @@ var WatchlistMovies = React.createClass({
             </div>
             <div className="release-date">
               <span className="label-item">Release Year:</span>{this.props.singleItem.releaseDate}
+              <span className="pull-right"><i>Duration: {this.props.singleItem.duration}</i></span>
+            </div>
+            <div className="release-date">
+              <span className="label-item">Rotten Tomatoes: </span>{this.props.singleItem.rottenTomatoes}
+              <span className="pull-right"><i>Duration: {this.props.singleItem.duration}</i></span>
             </div>
           </div>
         </div>

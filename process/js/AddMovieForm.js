@@ -23,16 +23,37 @@ function formatDate(date, divider) { //divider is what will separate the days
     to search for a movie and get the JSON back, we'll see, but this was an interesting look
     at using bootstrap modals, could have used this over the summer for sure */
 var AddMovieForm = React.createClass({
-
-  toggleMovieDisplay: function(){
+  getInitialState: function(){
+    return{
+      defaultName: 'Type in a name and press Search!',
+      defaultRank: 'Your rank for this movie out of 10.0',
+      defaultDirector : 'Director\'s Name',
+      defaultActors: 'Actors / Actresses',
+      defaultReleaseDate: 'The year the movie was in theaters',
+      defaultDuration: 'Ex: 120 min',
+      defaultSummary: '',
+      defaultViewCount: 'How many times have you seen this movie',
+      defaultPoster: 'Put the url to the movie\'s poster here'
+    }
+  },
+  //When toggling the display, want to reset the information in it
+  //TODO when clicking 'x' and 'cancel' as well
+  toggleMovieDisplay: function(submitEvent){
+    this.inputMovieName.value = this.state.defaultName;
+    this.inputMovieRank.value = this.state.defaultRank;
+    this.inputMovieDirector.value = this.state.defaultDirector;
+    this.inputMovieActors.value = this.state.defaultActors;
+    //TODO {formatDate(defaultDate, '-')} put this back when you want to use full date instead of year. API gives different format and I don't want to deal with it right now
+    this.inputMovieReleaseDate.value = this.state.defaultReleaseDate;
+    this.inputMovieDuration.value = this.state.defaultDuration;
+    this.inputMovieSummary.value = this.state.defaultSummary;
+    this.inputMovieViewCount.value = this.state.defaultViewCount;
+    this.inputMoviePoster.value = this.state.defaultPoster;
     this.props.handleToggle();
   },
 
   //this takes whatever title you have put in and will use my API key to retrieve the JSON object
-  /*
-  * If you want to use the API again or get more info: http://www.omdbapi.com/
-  *
-  */
+  /* If you want to use the API again or get more info: http://www.omdbapi.com/ */
   sendTitleToAPI: function(){
     var searchTitle = this.inputMovieName.value;
     var baseQuery = 'http://www.omdbapi.com/?t=';
@@ -53,38 +74,24 @@ var AddMovieForm = React.createClass({
           this.inputMovieReleaseDate.value = json.Year; //TODO need to change the format of released date, probably just turn into the year
           this.inputMovieSummary.value = json.Plot;
           this.inputMovieDuration.value = json.Runtime; //TODO may want to save just the numbers
-          // this.inputMovieRottenTomatoes.value = json.Ratings;
+          for (i in json.Ratings){
+            if(json.Ratings[i].Source == "Rotten Tomatoes"){
+              // this.inputMovieRottenTomatoes.value = json.Ratings[i].Value; TODO need to save this in movie object
+              break;
+            }
+            console.log("ratings ", json.Ratings[i]);
+          }
         } else {
           this.inputMovieName.value = "Movie Not Found - Please try again"
         }
       });
-        //TODO try to map the response information that you want and then return that
-        // const filteredInfo = response.data.map(c => {
-        //   return {
-        //     title: c.Title,
-        //     releaseDate: c.Year,
-        //     duration: c.Runtime
-        //   };
-        // });
-        // return filteredInfo.json();
-        // const newState = Object.assign({}, this.state, {
-        //   movieInfo: filterInfo
-        // });
-        // return response.json();
-      // })
-      // .then(
-      //   this.inputMovieName.value = response.Title;
-      // );
-      // .then(function(myJson) {
-      //   // console.log(JSON.stringify(myJson.Title));
-      //   inputMovieDirector.value = JSON.stringify(myJson.Director);
-      // });
     }
   },
 
   handleAdd: function(submitEvent){ //pass the fact that the submitEvent has happened from the form
     submitEvent.preventDefault(); //this is to prevent the page from reloading, we will handle manually with React
-    var tempItem = { //temporary store the info that we want to add
+
+    var tempItem = { //create an item with the value we want to add
       movieName: this.inputMovieName.value,
       posterURL: this.inputMoviePoster.value,
       directorName: this.inputMovieDirector.value,
@@ -95,22 +102,22 @@ var AddMovieForm = React.createClass({
       viewCount: this.inputMovieViewCount.value,
       rank: this.inputMovieRank.value
       // rottenTomatoes: this.inputMovieRottenTomatoes.value,
-    } //temp items
+    }
 
     this.props.addMovie(tempItem); //pass the object to the function in the renderer process
 
     //all of this will reset the form after it has been submitted to the renderer process so it can be reused
     //TODO also need to reset when the 'x' is clicked to close the form
-    this.inputMovieName.value = '';
-    this.inputMoviePoster.value = '';
-    this.inputMovieDirector.value = '';
-    this.inputMovieActors.value = '';
+    this.inputMovieName.value = this.state.defaultName;
+    this.inputMovieRank.value = this.state.defaultRank;
+    this.inputMovieDirector.value = this.state.defaultDirector;
+    this.inputMovieActors.value = this.state.defaultActors;
     //TODO {formatDate(defaultDate, '-')} put this back when you want to use full date instead of year. API gives different format and I don't want to deal with it right now
-    this.inputMovieReleaseDate.value = '2000';
-    this.inputMovieSummary.value = '';
-    this.inputMovieDuration.value = '0 min';
-    this.inputMovieViewCount.value = '1';
-    this.inputMovieRank.value = '9';
+    this.inputMovieReleaseDate.value = this.state.defaultReleaseDate;
+    this.inputMovieDuration.value = this.state.defaultDuration;
+    this.inputMovieSummary.value = this.state.defaultSummary;
+    this.inputMovieViewCount.value = this.state.defaultViewCount;
+    this.inputMoviePoster.value = this.state.defaultPoster;
     // this.inputMovieRottenTomatoes.value = 'Rotten Tomatoes Rating',
   },
   render: function(){ //using bootstrap modal for the movie creation form. All proof of concept
@@ -133,7 +140,7 @@ var AddMovieForm = React.createClass({
         <div className="modal-dialog" role="document">
           <div className="modal-content">
             <div className="modal-header">
-              <button type="button" className="close" onClick={this.toggleMovieDisplay} aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <button type="submit" className="close" onClick={this.toggleMovieDisplay} aria-label="Close"><span aria-hidden="true">&times;</span></button>
               <h4 className="modal-title">Add a Movie</h4>
             </div>
 
@@ -142,7 +149,7 @@ var AddMovieForm = React.createClass({
                 <label className="col-sm-3 control-label" htmlFor="movieName">Movie Name</label>
                 <div className="col-sm-6">
                   <input type="text" className="form-control"
-                    id="movieName" ref={(ref) => this.inputMovieName = ref} placeholder="Movie's Name" />
+                    id="movieName" ref={(ref) => this.inputMovieName = ref} placeholder={this.state.defaultName} />
                 </div>
                 <div className="col-sm-3">
                   <button type="button" className="btn btn-success" onClick={this.sendTitleToAPI}>Search</button>
@@ -157,7 +164,7 @@ var AddMovieForm = React.createClass({
               <div className="form-group">
                 <label className="col-sm-3 control-label" htmlFor="rank">Your Rating:</label>
                 <div className="col-sm-9">
-                  <input type="number" step=".1" min="0" max="10" className="form-control" defaultValue={'9'}
+                  <input type="number" step=".1" min="0" max="10" className="form-control" placeholder={this.state.defaultRank}
                     id="rank" ref={(ref) => this.inputMovieRank = ref}/>
                 </div>
               </div>
@@ -166,7 +173,7 @@ var AddMovieForm = React.createClass({
                 <label className="col-sm-3 control-label" htmlFor="director">Director</label>
                 <div className="col-sm-9">
                   <input type="text" className="form-control"
-                    id="director" ref={(ref) => this.inputMovieDirector = ref} placeholder="Director's Name" />
+                    id="director" ref={(ref) => this.inputMovieDirector = ref} placeholder={this.state.defaultDirector} />
                 </div>
               </div>
 
@@ -174,7 +181,7 @@ var AddMovieForm = React.createClass({
                 <label className="col-sm-3 control-label" htmlFor="director">Cast:</label>
                 <div className="col-sm-9">
                   <input type="text" className="form-control"
-                    id="actors" ref={(ref) => this.inputMovieActors = ref} placeholder="Actors / Actresses" />
+                    id="actors" ref={(ref) => this.inputMovieActors = ref} placeholder={this.state.defaultActors} />
                 </div>
               </div>
 
@@ -182,7 +189,7 @@ var AddMovieForm = React.createClass({
                 <label className="col-sm-3 control-label" htmlFor="releaseDate">Release Year</label>
                 <div className="col-sm-9">
                   <input type="number" className="form-control"
-                    id="releaseDate" ref={(ref) => this.inputMovieReleaseDate = ref} defaultValue={'2000'}/>
+                    id="releaseDate" ref={(ref) => this.inputMovieReleaseDate = ref} placeholder={this.state.defaultReleaseDate}/>
                 </div>
               </div>
 
@@ -190,7 +197,7 @@ var AddMovieForm = React.createClass({
                 <label className="col-sm-3 control-label" htmlFor="duration">Duration</label>
                 <div className="col-sm-9">
                   <input type="text" className="form-control"
-                    id="duration" ref={(ref) => this.inputMovieDuration = ref} defaultValue = {'0 min'}/>
+                    id="duration" ref={(ref) => this.inputMovieDuration = ref} placeholder={this.state.defaultDuration}/>
                 </div>
               </div>
 
@@ -198,14 +205,14 @@ var AddMovieForm = React.createClass({
                 <label className="col-sm-3 control-label" htmlFor="Summary">Summary</label>
                 <div className="col-sm-9">
                   <textarea className="form-control" rows="4" cols="50"
-                    id="Summary" ref={(ref) => this.inputMovieSummary = ref} placeholder=""></textarea>
+                    id="Summary" ref={(ref) => this.inputMovieSummary = ref} placeholder={this.state.defaultSummary}></textarea>
                 </div>
               </div>
 
               <div className="form-group">
                 <label className="col-sm-3 control-label" htmlFor="duration">Times Seen:</label>
                 <div className="col-sm-9">
-                  <input type="number" min="0" className="form-control" defaultValue={'1'}
+                  <input type="number" min="0" className="form-control" placeholder={this.state.defaultViewCount}
                     id="viewCount" ref={(ref) => this.inputMovieViewCount = ref}/>
                 </div>
               </div>
@@ -216,14 +223,14 @@ var AddMovieForm = React.createClass({
                 <label className="col-sm-3 control-label" htmlFor="poster">Poster URL:</label>
                 <div className="col-sm-9">
                   <input type="text" className="form-control"
-                    id="posterURL" ref={(ref) => this.inputMoviePoster = ref} placeholder="Put the url to the movie's poster here" />
+                    id="posterURL" ref={(ref) => this.inputMoviePoster = ref} placeholder={this.state.defaultPoster} />
                 </div>
               </div>
 
               <div className="form-group">
                 <div className="col-sm-offset-3 col-sm-9">
                   <div className="pull-right">
-                    <button type="button" className="btn btn-default" onClick={this.toggleMovieDisplay}>Cancel</button>&nbsp;
+                    <button type="submit" className="btn btn-default" onClick={this.toggleMovieDisplay}>Cancel</button>&nbsp;
                     <button type="submit" className="btn btn-primary">Add Movie</button>
                   </div>
                 </div>
