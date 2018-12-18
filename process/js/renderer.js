@@ -227,32 +227,6 @@ function renderMainInterface(){
 
 renderMainInterface();
 
-
-// function renderHeaderNav(){
-//   ReactDOM.render(
-//     <TestHeaderInterface />
-//     document.getElementById('headerNav')
-//   );
-// }
-//
-// renderHeaderNav();
-
-
-
-
-
-// function renderHeaderNav(){
-//   ReactDOM.render(
-//     <HeaderInterface />
-//     document.getElementById('application')
-//   );
-// }
-//
-// renderHeaderNav();
-
-
-
-
 //===== Completely Separate Proof of Concept - stick a clock at the bottom, this is how I want to do things
 // function Clock(props) {
 //   return (

@@ -3,13 +3,16 @@ var _ = require('lodash');
 
 var MovieList = React.createClass({
   filterMovies: function(movieList, queryText) {
+    console.log("this is the query text: ", queryText);
     let filteredMovies = [];
     for(var i = 0; i < movieList.length; i++){ //filtering our movie list
       //we check if what they are typing matches anything in any of the movies, if it does, return that movie
-      if((movieList[i].movieName.toLowerCase().indexOf(queryText) != -1) ||
-        (movieList[i].directorName.toLowerCase().indexOf(queryText) != -1) ||
-        (movieList[i].releaseDate.toLowerCase().indexOf(queryText) != -1) ||
-        (movieList[i].Summary.toLowerCase().indexOf(queryText) != -1)){
+      //TODO this is case sensitive at the moment, should it be?
+      //can use .toLowerCase() but that isn't how things are matched
+      if((movieList[i].movieName.indexOf(queryText) != -1) ||
+        (movieList[i].directorName.indexOf(queryText) != -1) ||
+        (movieList[i].releaseDate.indexOf(queryText) != -1) ||
+        (movieList[i].Summary.indexOf(queryText) != -1)){
           filteredMovies.push(movieList[i]);
       }
     }
