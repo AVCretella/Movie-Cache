@@ -7,6 +7,8 @@ var myAppMenu, menuTemplate;
 
 var appWindow, infoWindow;
 
+//TODO wnat to print out to console
+
 function toggleWindow(whichWindow){
   if(whichWindow.isVisible()){
     whichWindow.hide();
@@ -15,14 +17,25 @@ function toggleWindow(whichWindow){
   }
 }
 
-app.on('ready', function(){
+//TODO get this working
+app.on('window-all-closed', function() {
+  // Mac OS X - close is done explicitly with Cmd + Q, not just closing windows
+    app.quit();
+});
 
+function createWindow(){
+  console.log("created the appWindow");
   appWindow = new BrowserWindow({
     show: false,
     width: 1000,
     height: 800
   }); //appWindow
   appWindow.loadURL('file://' + __dirname + '/index.html'); //load index.html into appWindow
+};
+
+app.on('ready', function(){
+
+  createWindow()
 
   infoWindow = new BrowserWindow({
     width: 400,
@@ -115,15 +128,20 @@ app.on('ready', function(){
 
   appWindow.on('closed', function() {
     appWindow = null;
+    app.quit();
   });
+
 }); //app is ready
 
 //TODO will have to reimplement for later
-// app.on('activate', function(){
+// app.on('activate-with-no-open-windows', function(){
+//   console.log('I am being clicked');
 //   // On OS X it's common to re-create a window in the app when the
 //   // dock icon is clicked and there are no other windows open.
 //   if (appWindow === null){
 //     createWindow()
+//   } else {
+//     appWindow.show();
 //   }
 // });
 

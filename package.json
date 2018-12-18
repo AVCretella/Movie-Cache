@@ -1,5 +1,6 @@
 {
   "name": "Movie-Cache",
+  "productName": "Movie Cache",
   "version": "1.0.0",
   "scripts": {
     "start": "electron ."

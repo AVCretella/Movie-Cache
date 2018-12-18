@@ -41,12 +41,14 @@ var RankedMovies = React.createClass({
             </div>
             <div className="release-date">
               <span className="label-item">Release Year:</span>{this.props.singleItem.releaseDate}
-              <span className="pull-right"><i>Duration: {this.props.singleItem.duration}</i></span>
+              <span className="pull-right">{this.props.singleItem.duration}</span>
+              <span className="label-item pull-right">Duration:</span>
             </div>
             <div className="reviews-times_seen">
               {/*}<span className="label-item">Rotten Tomatoes: </span>{this.props.singleItem.rottenTomatoes}*/}
               {/* TODO put a plus minus here that sends to handleViewCount change, pass the item and which button was pressed + update */}
-              <span className="pull-right"><i>Times Seen: {this.props.singleItem.viewCount}</i></span>
+              <span className="pull-right">{this.props.singleItem.viewCount}</span>
+              <span className="label-item pull-right">Times Seen:</span>
             </div>
           </div>
         </div>

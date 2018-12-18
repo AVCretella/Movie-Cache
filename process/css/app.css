@@ -141,6 +141,15 @@ body {
   color: #296B73;
 }
 
+/* .movie-info .media-body{
+  position: relative;
+}
+
+.movie-info .media-body .releaseDate{
+  position: absolute;
+  bottom: 0;
+} */
+
 .item-list {
   margin: 0;
   padding: 0;

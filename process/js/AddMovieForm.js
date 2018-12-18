@@ -32,7 +32,7 @@ var AddMovieForm = React.createClass({
       defaultReleaseDate: 'The year the movie was in theaters',
       defaultDuration: 'Ex: 120 min',
       defaultSummary: '',
-      defaultViewCount: 'How many times have you seen this movie',
+      defaultViewCount: '1',
       defaultPoster: 'Put the url to the movie\'s poster here'
     }
   },
@@ -106,8 +106,8 @@ var AddMovieForm = React.createClass({
 
     this.props.addMovie(tempItem); //pass the object to the function in the renderer process
 
+    //TODO need to reset the placeholders, not the values
     //all of this will reset the form after it has been submitted to the renderer process so it can be reused
-    //TODO also need to reset when the 'x' is clicked to close the form
     this.inputMovieName.value = this.state.defaultName;
     this.inputMovieRank.value = this.state.defaultRank;
     this.inputMovieDirector.value = this.state.defaultDirector;
