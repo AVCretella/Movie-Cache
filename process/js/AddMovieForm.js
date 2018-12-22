@@ -39,17 +39,7 @@ var AddMovieForm = React.createClass({
   //When toggling the display, want to reset the information in it
   //TODO when clicking 'x' and 'cancel' as well
   toggleMovieDisplay: function(submitEvent){
-    // this.inputMovieName.placeholder = this.state.defaultName;
-    // this.inputMovieRank.placeholder = this.state.defaultRank;
-    // this.inputMovieDirector.placeholder = this.state.defaultDirector;
-    // this.inputMovieActors.placeholder = this.state.defaultActors;
-    // //TODO {formatDate(defaultDate, '-')} put this back when you want to use full date instead of year. API gives different format and I don't want to deal with it right now
-    // this.inputMovieReleaseDate.placeholder = this.state.defaultReleaseDate;
-    // this.inputMovieDuration.placeholder = this.state.defaultDuration;
-    // this.inputMovieSummary.placeholder = this.state.defaultSummary;
-    // this.inputMovieViewCount.placeholder = this.state.defaultViewCount;
-    // this.inputMoviePoster.placeholder = this.state.defaultPoster;
-    this.myFormRef.reset();
+    this.addMovieForm.reset();
     this.props.handleToggle();
   },
 
@@ -106,20 +96,6 @@ var AddMovieForm = React.createClass({
     }
 
     this.props.addMovie(tempItem); //pass the object to the function in the renderer process
-
-    //TODO need to reset the placeholders, not the values
-    //all of this will reset the form after it has been submitted to the renderer process so it can be reused
-    // this.inputMovieName.placeholder = this.state.defaultName;
-    // this.inputMovieRank.placeholder = this.state.defaultRank;
-    // this.inputMovieDirector.placeholder = this.state.defaultDirector;
-    // this.inputMovieActors.placeholder = this.state.defaultActors;
-    // //TODO {formatDate(defaultDate, '-')} put this back when you want to use full date instead of year. API gives different format and I don't want to deal with it right now
-    // this.inputMovieReleaseDate.placeholder = this.state.defaultReleaseDate;
-    // this.inputMovieDuration.placeholder = this.state.defaultDuration;
-    // this.inputMovieSummary.placeholder = this.state.defaultSummary;
-    // this.inputMovieViewCount.placeholder = this.state.defaultViewCount;
-    // this.inputMoviePoster.placeholder = this.state.defaultPoster;
-
     this.myFormRef.reset();
     // this.inputMovieRottenTomatoes.value = 'Rotten Tomatoes Rating',
   },
@@ -147,7 +123,7 @@ var AddMovieForm = React.createClass({
               <h4 className="modal-title">Add a Movie</h4>
             </div>
 
-            <form className="modal-body add-movie form-horizontal" ref={(el) => this.myFormRef = el} onSubmit={this.handleAdd}>
+            <form className="modal-body add-movie form-horizontal" ref={(ref) => this.addMovieForm = ref} onSubmit={this.handleAdd}>
               <div className="form-group">
                 <label className="col-sm-3 control-label" htmlFor="movieName">Movie Name</label>
                 <div className="col-sm-6">
@@ -162,7 +138,6 @@ var AddMovieForm = React.createClass({
                 </div>*/}
               </div>
 
-              {/* TODO gonna change rank to be the ser's rating instead. like a 9.4/10 or something */}
               {/* TODO eventually want to make this rank changeable without having to re-add movie */}
               <div className="form-group">
                 <label className="col-sm-3 control-label" htmlFor="rank">Your Rating:</label>

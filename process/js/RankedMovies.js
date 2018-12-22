@@ -3,56 +3,137 @@
 var React = require('react');
 
 var RankedMovies = React.createClass({
+  getInitialState: function(){
+    return{
+      rankChangeVisible: false
+    }
+  },
 
   removeFromList: function(){
     this.props.onDelete(this.props.singleItem); //lets the function know which movie has been selected for deletion
   },
 
+  handleChangeRank: function(submitEvent){
+    submitEvent.preventDefault(); //this is to prevent the page from reloading, we will handle manually with React
+
+    //TODO need to send data to renderer process to update rankedmoviedata
+    // var tempItem = { //create an item with the value we want to add
+    //   movieName: this.props.singleItem.movieName,
+    //   rank: this.inputMovieRank.value
+    //   // rottenTomatoes: this.inputMovieRottenTomatoes.value,
+    // }
+    //
+    // this.props.changeMovieRank(tempItem); //pass the object to the function in the renderer process
+
+    this.toggleRankDisplay();
+    this.changeRankFormRef.reset();
+  },
+
+  //Want to close and reset the changeRank modal
+  toggleRankDisplay: function(){
+    var tempVisibility = !this.state.rankChangeVisible;
+    this.setState({
+      rankChangeVisible: tempVisibility
+    }); //setState
+    this.changeRankFormRef.reset();
+  },
+
   //1 column for the poster image, 11 cols for the name, description .. stuff
   render: function(){
+    let style, className;
+    if (this.state.rankChangeVisible) {
+      className = "modal fade in";
+      style = {
+        display: "block",
+        paddingLeft: "0px"
+      };
+    } else {
+      className = "modal fade";
+      style = {
+        display: "none"
+      };
+    }
+
     return(
-      <li className="movie-item media">
+      <div>
+        <div className={className} id="changeRank" tabIndex="-1" role="dialog" style = {style}>
+          <div className="modal-dialog" role="document">
+            <div className="modal-content">
+              <div className="modal-header">
+                <button type="submit" className="close" onClick={this.toggleRankDisplay} aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 className="modal-title">Change The Rank of {this.props.singleItem.movieName}</h4>
+              </div>
 
-        <div className="col-sm-2">
-          <div className="movie-poster">
-            <img src={this.props.singleItem.posterURL} style={{width: '100%', height: '100%'}} alt="{this.props.singleItem.movieName}'s Poster Image"></img>
+              <form className="modal-body add-movie form-horizontal" ref={(ref) => this.changeRankFormRef = ref} onSubmit={this.handleChangeRank}>
+                <div className="form-group">
+                  <label className="col-sm-3 control-label" htmlFor="rank">Your Rating:</label>
+                  <div className="col-sm-9">
+                    <input type="number" step=".1" min="0" max="10" className="form-control" placeholder={this.props.singleItem.rank}
+                      id="rank" ref={(ref) => this.inputMovieRank = ref}/>
+                  </div>
+                </div>
+
+                <div className="form-group">
+                  <div className="col-sm-offset-3 col-sm-9">
+                    <div className="pull-right">
+                      {/*<button type="submit" className="btn btn-default" onClick={this.toggleRankDisplay}>Cancel</button>&nbsp;*/}
+                      <button type="submit" className="btn btn-success">Change Rank</button>
+                    </div>
+                  </div>
+                </div>
+              </form>
+
+            </div>
           </div>
         </div>
 
-        <div className="col-sm-10">
-          <div className="movie-info media-body">
-            <div className="movie-head">
-              <span className="movie-name">{this.props.singleItem.movieName}</span>
-              <button className="btn btn-primary pull-right"><span className="rank">{this.props.singleItem.rank} / 10</span></button>
-              <span className="pull-right">
-                <button className="movie-delete btn btn-xs btn-danger" onClick={this.removeFromList}>
-                <span className="glyphicon glyphicon-remove"></span></button>
-              </span>
-            </div>
-            <div className="director-name">
-              <span className="label-item">Directed By:</span>{this.props.singleItem.directorName}
-            </div>
-            <div className="director-name">
-              <span className="label-item">Actors:</span>{this.props.singleItem.actors}
-            </div>
-            <div>
-              <span className="label-item">Summary:</span>
-              <span className="movie-notes">{this.props.singleItem.Summary}</span>
-            </div>
-            <div className="release-date">
-              <span className="label-item">Release Year:</span>{this.props.singleItem.releaseDate}
-              <span className="pull-right">{this.props.singleItem.duration}</span>
-              <span className="label-item pull-right">Duration:</span>
-            </div>
-            <div className="reviews-times_seen">
-              {/*}<span className="label-item">Rotten Tomatoes: </span>{this.props.singleItem.rottenTomatoes}*/}
-              {/* TODO put a plus minus here that sends to handleViewCount change, pass the item and which button was pressed + update */}
-              <span className="pull-right">{this.props.singleItem.viewCount}</span>
-              <span className="label-item pull-right">Times Seen:</span>
+        <li className="movie-item media">
+          <div className="col-sm-2">
+            <div className="movie-poster">
+              <img src={this.props.singleItem.posterURL} style={{width: '100%', height: '100%'}} alt="{this.props.singleItem.movieName}'s Poster Image"></img>
             </div>
           </div>
-        </div>
-      </li>
+
+          <div className="col-sm-10">
+            <div className="movie-info media-body">
+              <div className="movie-head">
+                <span className="movie-name">{this.props.singleItem.movieName}</span>
+                <button className="btn btn-primary pull-right" onClick={this.toggleRankDisplay}><span className="rank">{this.props.singleItem.rank} / 10</span></button>
+                <span className="pull-right">
+                  <button className="movie-delete btn btn-xs btn-danger" onClick={this.removeFromList}>
+                  <span className="glyphicon glyphicon-remove"></span></button>
+                </span>
+              </div>
+
+              <div className="director-name">
+                <span className="label-item">Directed By:</span>{this.props.singleItem.directorName}
+              </div>
+
+              <div className="cast">
+                <span className="label-item">Actors:</span>{this.props.singleItem.actors}
+              </div>
+
+              <div>
+                <span className="label-item">Summary:</span>
+                <span className="movie-notes">{this.props.singleItem.Summary}</span>
+              </div>
+
+              <div className="release-date">
+                <span className="label-item">Release Year:</span>{this.props.singleItem.releaseDate}
+                <span className="pull-right">{this.props.singleItem.duration}</span>
+                <span className="label-item pull-right">Duration:</span>
+              </div>
+
+              <div className="reviews-times_seen">
+                {/*}<span className="label-item">Rotten Tomatoes: </span>{this.props.singleItem.rottenTomatoes}*/}
+                {/* TODO put a plus minus here that sends to handleViewCount change, pass the item and which button was pressed + update */}
+                <span className="pull-right">{this.props.singleItem.viewCount}</span>
+                <span className="label-item pull-right">Times Seen:</span>
+              </div>
+            </div>
+          </div>
+        </li>
+      </div>
     )
   }
 });
