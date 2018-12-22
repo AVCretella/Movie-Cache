@@ -39,16 +39,17 @@ var AddMovieForm = React.createClass({
   //When toggling the display, want to reset the information in it
   //TODO when clicking 'x' and 'cancel' as well
   toggleMovieDisplay: function(submitEvent){
-    this.inputMovieName.value = this.state.defaultName;
-    this.inputMovieRank.value = this.state.defaultRank;
-    this.inputMovieDirector.value = this.state.defaultDirector;
-    this.inputMovieActors.value = this.state.defaultActors;
-    //TODO {formatDate(defaultDate, '-')} put this back when you want to use full date instead of year. API gives different format and I don't want to deal with it right now
-    this.inputMovieReleaseDate.value = this.state.defaultReleaseDate;
-    this.inputMovieDuration.value = this.state.defaultDuration;
-    this.inputMovieSummary.value = this.state.defaultSummary;
-    this.inputMovieViewCount.value = this.state.defaultViewCount;
-    this.inputMoviePoster.value = this.state.defaultPoster;
+    // this.inputMovieName.placeholder = this.state.defaultName;
+    // this.inputMovieRank.placeholder = this.state.defaultRank;
+    // this.inputMovieDirector.placeholder = this.state.defaultDirector;
+    // this.inputMovieActors.placeholder = this.state.defaultActors;
+    // //TODO {formatDate(defaultDate, '-')} put this back when you want to use full date instead of year. API gives different format and I don't want to deal with it right now
+    // this.inputMovieReleaseDate.placeholder = this.state.defaultReleaseDate;
+    // this.inputMovieDuration.placeholder = this.state.defaultDuration;
+    // this.inputMovieSummary.placeholder = this.state.defaultSummary;
+    // this.inputMovieViewCount.placeholder = this.state.defaultViewCount;
+    // this.inputMoviePoster.placeholder = this.state.defaultPoster;
+    this.myFormRef.reset();
     this.props.handleToggle();
   },
 
@@ -108,16 +109,18 @@ var AddMovieForm = React.createClass({
 
     //TODO need to reset the placeholders, not the values
     //all of this will reset the form after it has been submitted to the renderer process so it can be reused
-    this.inputMovieName.value = this.state.defaultName;
-    this.inputMovieRank.value = this.state.defaultRank;
-    this.inputMovieDirector.value = this.state.defaultDirector;
-    this.inputMovieActors.value = this.state.defaultActors;
-    //TODO {formatDate(defaultDate, '-')} put this back when you want to use full date instead of year. API gives different format and I don't want to deal with it right now
-    this.inputMovieReleaseDate.value = this.state.defaultReleaseDate;
-    this.inputMovieDuration.value = this.state.defaultDuration;
-    this.inputMovieSummary.value = this.state.defaultSummary;
-    this.inputMovieViewCount.value = this.state.defaultViewCount;
-    this.inputMoviePoster.value = this.state.defaultPoster;
+    // this.inputMovieName.placeholder = this.state.defaultName;
+    // this.inputMovieRank.placeholder = this.state.defaultRank;
+    // this.inputMovieDirector.placeholder = this.state.defaultDirector;
+    // this.inputMovieActors.placeholder = this.state.defaultActors;
+    // //TODO {formatDate(defaultDate, '-')} put this back when you want to use full date instead of year. API gives different format and I don't want to deal with it right now
+    // this.inputMovieReleaseDate.placeholder = this.state.defaultReleaseDate;
+    // this.inputMovieDuration.placeholder = this.state.defaultDuration;
+    // this.inputMovieSummary.placeholder = this.state.defaultSummary;
+    // this.inputMovieViewCount.placeholder = this.state.defaultViewCount;
+    // this.inputMoviePoster.placeholder = this.state.defaultPoster;
+
+    this.myFormRef.reset();
     // this.inputMovieRottenTomatoes.value = 'Rotten Tomatoes Rating',
   },
   render: function(){ //using bootstrap modal for the movie creation form. All proof of concept
@@ -144,7 +147,7 @@ var AddMovieForm = React.createClass({
               <h4 className="modal-title">Add a Movie</h4>
             </div>
 
-            <form className="modal-body add-movie form-horizontal" onSubmit={this.handleAdd}>
+            <form className="modal-body add-movie form-horizontal" ref={(el) => this.myFormRef = el} onSubmit={this.handleAdd}>
               <div className="form-group">
                 <label className="col-sm-3 control-label" htmlFor="movieName">Movie Name</label>
                 <div className="col-sm-6">
