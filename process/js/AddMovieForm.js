@@ -33,12 +33,14 @@ var AddMovieForm = React.createClass({
       defaultDuration: 'Ex: 120 min',
       defaultSummary: '',
       defaultViewCount: '1',
-      defaultPoster: 'Put the url to the movie\'s poster here'
+      defaultPoster: 'Put the url to the movie\'s poster here',
+      defaultNameNotFound: 'Movie Not Found - Please try again'
     }
   },
   //When toggling the display, want to reset the information in it
   //TODO when clicking 'x' and 'cancel' as well
   toggleMovieDisplay: function(submitEvent){
+    console.log("should reset");
     this.addMovieForm.reset();
     this.props.handleToggle();
   },
@@ -65,6 +67,8 @@ var AddMovieForm = React.createClass({
           this.inputMovieReleaseDate.value = json.Year; //TODO need to change the format of released date, probably just turn into the year
           this.inputMovieSummary.value = json.Plot;
           this.inputMovieDuration.value = json.Runtime; //TODO may want to save just the numbers
+
+          //Run through the ratings array and find "Rotten Tomatoes"
           for (i in json.Ratings){
             if(json.Ratings[i].Source == "Rotten Tomatoes"){
               // this.inputMovieRottenTomatoes.value = json.Ratings[i].Value; TODO need to save this in movie object
@@ -73,7 +77,7 @@ var AddMovieForm = React.createClass({
             console.log("ratings ", json.Ratings[i]);
           }
         } else {
-          this.inputMovieName.value = "Movie Not Found - Please try again"
+          this.inputMovieName.value = this.state.defaultNameNotFound;
         }
       });
     }
@@ -96,7 +100,7 @@ var AddMovieForm = React.createClass({
     }
 
     this.props.addMovie(tempItem); //pass the object to the function in the renderer process
-    this.myFormRef.reset();
+    this.addMovieForm.reset();
     // this.inputMovieRottenTomatoes.value = 'Rotten Tomatoes Rating',
   },
   render: function(){ //using bootstrap modal for the movie creation form. All proof of concept
@@ -112,6 +116,26 @@ var AddMovieForm = React.createClass({
       style = {
         display: "none"
       };
+    }
+
+    if (true) {
+      rank =  <div className="form-group">
+                <label className="col-sm-3 control-label" htmlFor="rank">Your Rating:</label>
+                <div className="col-sm-9">
+                  <input type="number" step=".1" min="0" max="10" className="form-control" placeholder={this.state.defaultRank}
+                    id="rank" ref={(ref) => this.inputMovieRank = ref} required/>
+                </div>
+              </div>;
+      times_seen =  <div className="form-group">
+                      <label className="col-sm-3 control-label" htmlFor="duration">Times Seen:</label>
+                      <div className="col-sm-9">
+                        <input type="number" min="0" className="form-control" placeholder={this.state.defaultViewCount}
+                          id="viewCount" ref={(ref) => this.inputMovieViewCount = ref} required/>
+                      </div>
+                    </div>;
+    } else {
+      rank = <div></div>;
+      times_seen = <div></div>;
     }
 
     return(
@@ -139,13 +163,8 @@ var AddMovieForm = React.createClass({
               </div>
 
               {/* TODO eventually want to make this rank changeable without having to re-add movie */}
-              <div className="form-group">
-                <label className="col-sm-3 control-label" htmlFor="rank">Your Rating:</label>
-                <div className="col-sm-9">
-                  <input type="number" step=".1" min="0" max="10" className="form-control" placeholder={this.state.defaultRank}
-                    id="rank" ref={(ref) => this.inputMovieRank = ref}/>
-                </div>
-              </div>
+              {/* TODO want to make this only appear when the ranked list is used */}
+              {rank}
 
               <div className="form-group">
                 <label className="col-sm-3 control-label" htmlFor="director">Director</label>
@@ -187,13 +206,8 @@ var AddMovieForm = React.createClass({
                 </div>
               </div>
 
-              <div className="form-group">
-                <label className="col-sm-3 control-label" htmlFor="duration">Times Seen:</label>
-                <div className="col-sm-9">
-                  <input type="number" min="0" className="form-control" placeholder={this.state.defaultViewCount}
-                    id="viewCount" ref={(ref) => this.inputMovieViewCount = ref}/>
-                </div>
-              </div>
+              {/* TODO only show this if on the Ranked List */}
+              {times_seen}
 
                   {/* TODO want to add rotten tomatoes reviews here and have duration to the right */}
                   {/* TODO should I keep everything as amanual textbox in case they want to put in their own info? */}
