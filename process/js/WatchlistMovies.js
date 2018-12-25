@@ -9,6 +9,7 @@ var WatchlistMovies = React.createClass({
   },
 
   moveToFavorites: function(){
+    console.log("trying to move movie", this.props.singleItem);
     this.props.onDelete(this.props.singleItem); //lets the function know which movie has been selected for deletion
   },
 
@@ -19,7 +20,7 @@ var WatchlistMovies = React.createClass({
       {/* need to handle bad poster urls */}
         <div className="col-sm-2">{/*where the poster will be displayed*/}
           <div className="movie-poster">
-            <img src={this.props.singleItem.posterURL} style={{width: '100%', height: '100%'}} alt="{this.props.singleItem.movieName}'s Poster Image"></img>
+            <img src={this.props.singleItem.posterURL} style={{width: '100%', height: '100%'}} alt="[ Movie Poster Unavailable ]"></img>
           </div>
         </div>
 
@@ -28,10 +29,10 @@ var WatchlistMovies = React.createClass({
             <div className="movie-head">
               <span className="movie-name">{this.props.singleItem.movieName}</span>
               {/* TODO want another span for a movie to favorites button */}
-              <span className="pull-right">
+              {/*<span className="pull-right">
                 <button className="movie-delete btn btn-med btn-success" onClick={this.moveToFavorites}>
                 <span className="glyphicon glyphicon-add">Move To Favorites</span></button>
-              </span>
+              </span> */}
               <span className="pull-right">
                 <button className="movie-delete btn btn-xs btn-danger" onClick={this.removeFromList}>
                 <span className="glyphicon glyphicon-remove"></span></button>

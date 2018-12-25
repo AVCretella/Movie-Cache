@@ -25,28 +25,27 @@ var MovieList = React.createClass({
     }, orderDir); //uses Lodash to order the movies in the way that we want
   },
 
-  renderListItems: function(movieList, deleteMovie, MovieListItem) {
+  renderListItems: function(movieList, deleteMovie, changeRank, MovieListItem) {
     return movieList.map(function(item, index){ //send this data to MovieList to create a series of those tags
       return(
         <MovieListItem
           key = {index} //each index of the data.json file //TODO add to list item as an index
           singleItem = {item} //each item at that index
           onDelete = {deleteMovie}
-          // onChangeRank = {this.changeRank}
+          onChangeRank = {changeRank}
         />
       ) //return
     }.bind(this));
   },
 
   render: function() {
-    let {movieListTitle, movieList, queryText, orderBy, orderDir, deleteMovie, MovieListItem} = this.props;
+    let {movieListTitle, movieList, queryText, orderBy, orderDir, deleteMovie, changeRank, MovieListItem} = this.props;
 
     movieList = this.filterMovies(movieList, queryText);
 
     movieList = this.sortMovies(movieList, orderBy, orderDir);
 
-    movieList = this.renderListItems(movieList, deleteMovie, MovieListItem);
-    //TODO need to change the name to reflect the list that we are looking at
+    movieList = this.renderListItems(movieList, deleteMovie, changeRank, MovieListItem);
     return (
       <div className="row">
         <div className="movies col-sm-12">

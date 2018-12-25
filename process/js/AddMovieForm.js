@@ -122,7 +122,7 @@ var AddMovieForm = React.createClass({
       rank =  <div className="form-group">
                 <label className="col-sm-3 control-label" htmlFor="rank">Your Rating:</label>
                 <div className="col-sm-9">
-                  <input type="number" step=".1" min="0" max="10" className="form-control" placeholder={this.state.defaultRank}
+                  <input type="number" step=".01" min="0" max="9.99" className="form-control" placeholder={this.state.defaultRank}
                     id="rank" ref={(ref) => this.inputMovieRank = ref} required/>
                 </div>
               </div>;

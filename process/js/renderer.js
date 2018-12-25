@@ -28,41 +28,21 @@ var MovieList = require('./MovieList');
 //TODO maybe change ranked list to 'ranked' list
 //These are the fields that will populate the search bar when a specific list is being displayed
 let rankedSortFields = [
-  {
-    field: "movieName",
-    displayName: "Movie Name"
-  },
-  {
-    field: "releaseDate",
-    displayName: "Release Date"
-  },
-  {
-    field: "directorName",
-    displayName: "Director"
-  },
-  {
-    field: "rank",
-    displayName: "Rank"
-  }
+  { field: "movieName", displayName: "Movie Name" },
+  { field: "releaseDate", displayName: "Release Date" },
+  { field: "directorName", displayName: "Director" },
+  { field: "rank", displayName: "Rank" }
 ];
 
 let watchlistSortFields = [
-  {
-    field: "movieName",
-    displayName: "Movie Name"
-  },
-  {
-    field: "releaseDate",
-    displayName: "Release Date"
-  },
-  {
-    field: "directorName",
-    displayName: "Director"
-  }
+  { field: "movieName", displayName: "Movie Name" },
+  { field: "releaseDate", displayName: "Release Date" },
+  { field: "directorName", displayName: "Director" }
 ];
 
-var MainInterfaceRanked = React.createClass({
+var MainInterface = React.createClass({
   //this will load the retrieved data into an object for this component
+  //begins with the ranked movielist view
   getInitialState: function(){
     return {
       movieFormVisible: false,
@@ -153,6 +133,19 @@ var MainInterfaceRanked = React.createClass({
     console.log("MY MOVIES: ", this.myMovies);
   },
 
+  changeMovieRank: function(item){
+    // console.log("We want to change the rank of this: ", item);
+    var allMovies = this.state.myMovies;
+    // console.log("this is movieName: ", item.movieName);
+    var index = _.findIndex(allMovies, {movieName: item.movieName}); //index of the movie that we want to change rank of
+    // console.log("this is the index we found the movie at: ", index);
+    allMovies[index].rank = item.rank;
+    // console.log("this is new movies: ", allMovies);
+    this.setState({
+      myMovies: allMovies
+    });
+  },
+
   searchMovies: function(query){ //query is what user typed into search bar
     this.setState({
       queryText: query
@@ -207,6 +200,7 @@ var MainInterfaceRanked = React.createClass({
               orderBy = {orderBy}
               orderDir = {orderDir}
               deleteMovie = {this.deleteMovieObject}
+              changeRank = {this.changeMovieRank}
               MovieListItem = {this.state.MovieListItem}
             />
           </div>{/* container */}
@@ -220,7 +214,7 @@ var MainInterfaceRanked = React.createClass({
 // inject the component into the div with ID = movieInfo
 function renderMainInterface(){
   ReactDOM.render(
-    <MainInterfaceRanked />,
+    <MainInterface />,
     document.getElementById('movieInfo')
   );
 }

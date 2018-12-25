@@ -17,14 +17,14 @@ var RankedMovies = React.createClass({
     submitEvent.preventDefault(); //this is to prevent the page from reloading, we will handle manually with React
 
     //TODO need to send data to renderer process to update rankedmoviedata
-    // var tempItem = { //create an item with the value we want to add
-    //   movieName: this.props.singleItem.movieName,
-    //   rank: this.inputMovieRank.value
-    //   // rottenTomatoes: this.inputMovieRottenTomatoes.value,
-    // }
+    var tempItem = { //create an item with the value we want to add
+      movieName: this.props.singleItem.movieName,
+      rank: this.inputMovieRank.value
+      // rottenTomatoes: this.inputMovieRottenTomatoes.value,
+    }
+    this.props.onChangeRank(tempItem);
     //
     // this.props.changeMovieRank(tempItem); //pass the object to the function in the renderer process
-
     this.toggleRankDisplay();
     this.changeRankFormRef.reset();
   },
@@ -56,6 +56,7 @@ var RankedMovies = React.createClass({
 
     return(
       <div>
+        {/* Modal for the changerank functionality */}
         <div className={className} id="changeRank" tabIndex="-1" role="dialog" style = {style}>
           <div className="modal-dialog" role="document">
             <div className="modal-content">
@@ -68,7 +69,7 @@ var RankedMovies = React.createClass({
                 <div className="form-group">
                   <label className="col-sm-3 control-label" htmlFor="rank">Your Rating:</label>
                   <div className="col-sm-9">
-                    <input type="number" step=".1" min="0" max="10" className="form-control" placeholder={this.props.singleItem.rank}
+                    <input type="number" step=".01" min="0" max="9.99" className="form-control" placeholder={this.props.singleItem.rank}
                       id="rank" ref={(ref) => this.inputMovieRank = ref}/>
                   </div>
                 </div>
@@ -98,7 +99,9 @@ var RankedMovies = React.createClass({
             <div className="movie-info media-body">
               <div className="movie-head">
                 <span className="movie-name">{this.props.singleItem.movieName}</span>
-                <button className="btn btn-primary pull-right" onClick={this.toggleRankDisplay}><span className="rank">{this.props.singleItem.rank} / 10</span></button>
+                <button className="btn btn-primary pull-right" onClick={this.toggleRankDisplay}>
+                  <span className="rank">{this.props.singleItem.rank} / 10</span>
+                </button>
                 <span className="pull-right">
                   <button className="movie-delete btn btn-xs btn-danger" onClick={this.removeFromList}>
                   <span className="glyphicon glyphicon-remove"></span></button>
