@@ -86,17 +86,30 @@ var AddMovieForm = React.createClass({
   handleAdd: function(submitEvent){ //pass the fact that the submitEvent has happened from the form
     submitEvent.preventDefault(); //this is to prevent the page from reloading, we will handle manually with React
 
-    var tempItem = { //create an item with the value we want to add
-      movieName: this.inputMovieName.value,
-      posterURL: this.inputMoviePoster.value,
-      directorName: this.inputMovieDirector.value,
-      actors: this.inputMovieActors.value,
-      releaseDate: this.inputMovieReleaseDate.value,
-      Summary: this.inputMovieSummary.value,
-      duration: this.inputMovieDuration.value,
-      viewCount: this.inputMovieViewCount.value,
-      rank: this.inputMovieRank.value
-      // rottenTomatoes: this.inputMovieRottenTomatoes.value,
+    var tempItem = {};
+    if (this.props.isDisplayingRanked) {
+      tempItem = { //create an item with the value we want to add
+        movieName: this.inputMovieName.value,
+        posterURL: this.inputMoviePoster.value,
+        directorName: this.inputMovieDirector.value,
+        actors: this.inputMovieActors.value,
+        releaseDate: this.inputMovieReleaseDate.value,
+        Summary: this.inputMovieSummary.value,
+        duration: this.inputMovieDuration.value,
+        viewCount: this.inputMovieViewCount.value,
+        rank: this.inputMovieRank.value
+        // rottenTomatoes: this.inputMovieRottenTomatoes.value,
+      }
+    } else {
+      tempItem = {
+        movieName: this.inputMovieName.value,
+        posterURL: this.inputMoviePoster.value,
+        directorName: this.inputMovieDirector.value,
+        actors: this.inputMovieActors.value,
+        releaseDate: this.inputMovieReleaseDate.value,
+        Summary: this.inputMovieSummary.value,
+        duration: this.inputMovieDuration.value
+      }
     }
 
     this.props.addMovie(tempItem); //pass the object to the function in the renderer process
@@ -118,7 +131,7 @@ var AddMovieForm = React.createClass({
       };
     }
 
-    if (true) {
+    if (this.props.isDisplayingRanked) {
       rank =  <div className="form-group">
                 <label className="col-sm-3 control-label" htmlFor="rank">Your Rating:</label>
                 <div className="col-sm-9">

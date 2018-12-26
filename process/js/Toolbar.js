@@ -4,8 +4,26 @@ var AddMovie = require('./AddMovieForm.js')
 var Toolbar = React.createClass({
   getInitialState: function(){
     return {
-      isModalVisible: false
+      isModalVisible: false,
+      isShowingRankedList: true
     }
+  },
+
+  displayRankedList: function(){
+    console.log("ranked list being displayed");
+    this.setState({
+      isShowingRankedList: true
+    });
+    this.props.displayRanked();
+  },
+
+  //TODO change the name of this, just didnt want name conflicts
+  displayTheWatchlist: function(){
+    console.log("ranked list being displayed");
+    this.setState({
+      isShowingRankedList: false
+    });
+    this.props.displayWatchlist();
   },
 
   toggleMovieDisplay: function(){ //this will allow us to add a movie to a list
@@ -40,12 +58,12 @@ var Toolbar = React.createClass({
             <span className="toolbar-item-text">Add Movie</span>
           </div>
 
-          <div className="toolbar-item" onClick={this.props.displayRanked}>
+          <div className="toolbar-item" onClick={this.displayRankedList}>
             <span className="toolbar-item-button glyphicon glyphicon-star"></span>
             <span className="toolbar-item-text">Favorites</span>
           </div>
 
-          <div className="toolbar-item" onClick={this.props.displayWatchlist}>
+          <div className="toolbar-item" onClick={this.displayTheWatchlist}>
             <span className="toolbar-item-button glyphicon glyphicon-time"></span>
             <span className="toolbar-item-text">Watch list</span>
           </div>
@@ -59,6 +77,7 @@ var Toolbar = React.createClass({
           handleToggle = {this.toggleMovieDisplay} //send an event to toggle the modal
           addMovie = {this.addMovieAndCloseMyModalPlease} //when submitted, send event notification
           isVisible = {this.state.isModalVisible}
+          isDisplayingRanked = {this.state.isShowingRankedList}
         />
       </div>
     ) //return
