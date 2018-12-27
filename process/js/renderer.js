@@ -30,14 +30,14 @@ var MovieList = require('./MovieList');
 let rankedSortFields = [
   { field: "movieName", displayName: "Movie Name" },
   { field: "releaseDate", displayName: "Release Date" },
-  { field: "directorName", displayName: "Director" },
+  { field: "duration", displayName: "Duration" },
   { field: "rank", displayName: "Rank" }
 ];
 
 let watchlistSortFields = [
   { field: "movieName", displayName: "Movie Name" },
   { field: "releaseDate", displayName: "Release Date" },
-  { field: "directorName", displayName: "Director" }
+  { field: "duration", displayName: "Duration" }
 ];
 
 var MainInterface = React.createClass({
@@ -178,8 +178,8 @@ var MainInterface = React.createClass({
       //a basic way to show one of the movies in that dataset, will turn into a list
       <div className="application">
         <HeaderNav
-          orderBy = {this.state.orderBy}
-          orderDir = {this.state.orderDir}
+          orderBy = {orderBy}
+          orderDir = {orderDir}
           onSearch = {this.searchMovies}
           onReOrder = {this.ReOrder}
           sortFields = {sortFields}

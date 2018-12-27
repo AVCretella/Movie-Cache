@@ -50,7 +50,7 @@ var WatchlistMovies = React.createClass({
             </div>
             <div className="release-date" >
               <span className="label-item">Release Year:</span>{this.props.singleItem.releaseDate}
-              <span className="pull-right">{this.props.singleItem.duration}</span>
+              <span className="pull-right">{this.props.singleItem.duration} minutes</span>
               <span className="label-item pull-right">Duration:</span>
             </div>
             {/*<div className="release-date">

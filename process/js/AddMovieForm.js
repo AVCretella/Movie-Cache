@@ -86,7 +86,14 @@ var AddMovieForm = React.createClass({
   handleAdd: function(submitEvent){ //pass the fact that the submitEvent has happened from the form
     submitEvent.preventDefault(); //this is to prevent the page from reloading, we will handle manually with React
 
+    //When the Favorites list is being displayed, we need to send the viewCount and rank as well
     var tempItem = {};
+
+    //OMDB returns 'xxx min' for duration, just want the number when sorting, can append 'min' in view
+    var durationMinutes = this.inputMovieDuration.value.match(/[0-9]+/g);
+
+    console.log("+++++++++++want modified duration: ", durationMinutes);
+
     if (this.props.isDisplayingRanked) {
       tempItem = { //create an item with the value we want to add
         movieName: this.inputMovieName.value,
@@ -95,7 +102,7 @@ var AddMovieForm = React.createClass({
         actors: this.inputMovieActors.value,
         releaseDate: this.inputMovieReleaseDate.value,
         Summary: this.inputMovieSummary.value,
-        duration: this.inputMovieDuration.value,
+        duration: durationMinutes,
         viewCount: this.inputMovieViewCount.value,
         rank: this.inputMovieRank.value
         // rottenTomatoes: this.inputMovieRottenTomatoes.value,
@@ -108,7 +115,7 @@ var AddMovieForm = React.createClass({
         actors: this.inputMovieActors.value,
         releaseDate: this.inputMovieReleaseDate.value,
         Summary: this.inputMovieSummary.value,
-        duration: this.inputMovieDuration.value
+        duration: durationMinutes
       }
     }
 
