@@ -89,21 +89,28 @@ var AddMovieForm = React.createClass({
     //When the Favorites list is being displayed, we need to send the viewCount and rank as well
     var tempItem = {};
 
-    //OMDB returns 'xxx min' for duration, just want the number when sorting, can append 'min' in view
-    var durationMinutes = this.inputMovieDuration.value.match(/[0-9]+/g);
+    /*
+      When storing numbers, if they are stored as strings, sorting does not
+      work as intended. Need to store just as ints
+    */
+    var durationMinutes = parseInt(this.inputMovieDuration.value.match(/[0-9]+/g)[0]);
+    var releaseDateInt = parseInt(this.inputMovieReleaseDate.value.match(/[0-9]+/g)[0]);
 
     console.log("+++++++++++want modified duration: ", durationMinutes);
 
     if (this.props.isDisplayingRanked) {
+      //timesSeen is only in the ranked list
+      var timesSeen = parseInt(this.inputMovieViewCount.value.match(/[0-9]+/g)[0]);
+
       tempItem = { //create an item with the value we want to add
         movieName: this.inputMovieName.value,
         posterURL: this.inputMoviePoster.value,
         directorName: this.inputMovieDirector.value,
         actors: this.inputMovieActors.value,
-        releaseDate: this.inputMovieReleaseDate.value,
+        releaseDate: releaseDateInt,
         Summary: this.inputMovieSummary.value,
         duration: durationMinutes,
-        viewCount: this.inputMovieViewCount.value,
+        viewCount: timesSeen,
         rank: this.inputMovieRank.value
         // rottenTomatoes: this.inputMovieRottenTomatoes.value,
       }
@@ -113,7 +120,7 @@ var AddMovieForm = React.createClass({
         posterURL: this.inputMoviePoster.value,
         directorName: this.inputMovieDirector.value,
         actors: this.inputMovieActors.value,
-        releaseDate: this.inputMovieReleaseDate.value,
+        releaseDate: releaseDateInt,
         Summary: this.inputMovieSummary.value,
         duration: durationMinutes
       }

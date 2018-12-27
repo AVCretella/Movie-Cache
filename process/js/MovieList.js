@@ -20,26 +20,12 @@ var MovieList = React.createClass({
   },
 
   //Takes the list of movies and orders it however the user has dictated
+  /*
+    This method assumes that numbers are stored as integers, not strings because
+    ints as strings are treated differently by Lodash than ints
+  */
   sortMovies: function(movieList, orderBy, orderDir) {
-    console.log("orderBy: ", orderBy, " orderDir: ", orderDir);
-    //If we are ordering by duration, numbers need to be treated differently
-    if(orderBy == "duration"){
-      // var durationArray = _.orderBy(movieList, function(item){
-      //   return item[orderBy][0];
-      // }, orderDir);
-      // console.log("duration array: ", durationArray);
-      // const myOrderedArray = _.sortBy(movieList, item => item.duration);
-      const myOrderedArray = _.orderBy(movieList, 'duration', orderDir);
-      console.log("ordered: ", myOrderedArray);
-
-      return _.orderBy(movieList, function(item){
-        return item[orderBy];
-      }, orderDir);
-    } else {
-      return _.orderBy(movieList, function(item){
-        return item[orderBy].toLowerCase();
-      }, orderDir); //uses Lodash to order the movies in the way that we want
-    }
+    return _.orderBy(movieList, item => item[orderBy], orderDir);
   },
 
   renderListItems: function(movieList, deleteMovie, changeRank, MovieListItem) {

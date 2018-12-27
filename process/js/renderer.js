@@ -1,3 +1,9 @@
+/*
+  Alex Cretella
+  Honors By Contract Project - Movie Cache
+  Wanted to learn React
+*/
+
 //copy and paste libraries here
 var $ = jQuery = require('jquery');
 var bootstrap = require('bootstrap');
