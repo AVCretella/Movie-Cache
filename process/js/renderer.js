@@ -29,7 +29,7 @@ var MovieList = require('./MovieList');
 // const Sidebar = require('./Sidebar.js');
 
 /*==============================================================================
-                            Main Interface Ranked
+                            Main Interface
 ==============================================================================*/
 //TODO maybe change ranked list to 'ranked' list
 //These are the fields that will populate the search bar when a specific list is being displayed
@@ -46,10 +46,11 @@ let watchlistSortFields = [
   { field: "duration", displayName: "Duration" }
 ];
 
+//TODO standardize dates so we can have day and month
 var MainInterface = React.createClass({
   //this will load the retrieved data into an object for this component
   //begins with the ranked movielist view
-  getInitialState: function(){
+  getInitialState: function() {
     return {
       movieFormVisible: false,
       orderBy: 'rank',
@@ -64,34 +65,38 @@ var MainInterface = React.createClass({
   },
 
   //componentDidMount and componentWillUnmount handle all of the menu operations that we define in main.js
-  componentDidMount: function(){
-    ipc.on('addMovie', function(event, message){
+  componentDidMount: function() {
+    ipc.on('addMovie', function(event, message) {
       this.toggleAddMovieForm();
     }.bind(this));
   }, //componentDidMount
 
-  componentWillUnmount: function(){
-    ipc.removeListener('addMovie', function(event, message){
+  componentWillUnmount: function() {
+    ipc.removeListener('addMovie', function(event, message) {
       this.toggleAddMovieForm();
     }.bind(this));
   }, //componentDidMount
 
-  componentDidUpdate: function(){
-    fs.writeFile(this.state.fileLocation, JSON.stringify(this.state.myMovies), 'utf8', function(err){
-      if(err){
+  componentDidUpdate: function() {
+    fs.writeFile(this.state.fileLocation, JSON.stringify(this.state.myMovies), 'utf8', function(err) {
+      if (err) {
         console.log(err);
       }
     }); //will go to the file location that our data is at and change it
   }, //componentDidUpdate
 
-  toggleAddMovieForm: function(){ //this will pull up the form to add movies
+  stringifyMovies: function() {
+
+  },
+
+  toggleAddMovieForm: function() { //this will pull up the form to add movies
     var tempVisibility = !this.state.movieFormVisible;
     this.setState({
       movieFormVisible: tempVisibility
     }); //setState
   }, //toggleAddMovieForm
 
-  displayRanked: function(){
+  displayRanked: function() {
     rankedMovieData = JSON.parse(fs.readFileSync(rankedDataLocation));
     this.setState({
       myMovies: rankedMovieData,
@@ -104,7 +109,7 @@ var MainInterface = React.createClass({
     });
   },
 
-  displayWatchlist: function(){
+  displayWatchlist: function() {
     watchlistMovieData = JSON.parse(fs.readFileSync(watchlistDataLocation));
     //if rank is being used to sort right now, change that because the watchlist doesn't use rank
     let orderBy = (this.state.orderBy == "rank") ? "movieName" : this.state.orderBy;
@@ -118,7 +123,8 @@ var MainInterface = React.createClass({
     });
   },
 
-  addMovieObject: function(tempItem){ //receives object saves in form
+  //TODO THERE IS NO REASON THIS SHOULDNT BE HOOKED UP TO A DATABASE!!! HOOK IT UP BOI
+  addMovieObject: function(tempItem) { //receives object saves in form
     var tempMovies = this.state.myMovies;
     tempMovies.push(tempItem);
     this.setState({
@@ -127,7 +133,7 @@ var MainInterface = React.createClass({
     console.log("MY MOVIES: ", this.myMovies);
   },
 
-  deleteMovieObject: function(item){
+  deleteMovieObject: function(item) {
     console.log("We should have deleted this movie: ", item);
     var allMovies = this.state.myMovies;
     var newMovies = _.without(allMovies, item); //return array without the one movie passed
@@ -139,7 +145,7 @@ var MainInterface = React.createClass({
     console.log("MY MOVIES: ", this.myMovies);
   },
 
-  changeMovieRank: function(item){
+  changeMovieRank: function(item) {
     // console.log("We want to change the rank of this: ", item);
     var allMovies = this.state.myMovies;
     // console.log("this is movieName: ", item.movieName);
@@ -152,25 +158,25 @@ var MainInterface = React.createClass({
     });
   },
 
-  searchMovies: function(query){ //query is what user typed into search bar
+  searchMovies: function(query) { //query is what user typed into search bar
     this.setState({
       queryText: query
     });
   },
 
-  ReOrder: function(orderBy, orderDir){ //will be sent either what to order by or the direction ot display
+  ReOrder: function(orderBy, orderDir) { //will be sent either what to order by or the direction ot display
     this.setState({
       orderBy: orderBy,
       orderDir: orderDir
     });
   },
 
-  showHelp: function(){ //we want to display the show about on the toolbar
+  showHelp: function() { //we want to display the show about on the toolbar
     console.log('we got an event call, we should now display!');
     ipc.sendSync('openInfoWindow'); //sends event notification to main process
   },
 
-  render: function(){
+  render: function() {
     var myMovies = this.state.myMovies; //save that object to a variable that we can refer to and manipulate
     var queryText = this.state.queryText;
     var orderBy = this.state.orderBy;
@@ -218,7 +224,7 @@ var MainInterface = React.createClass({
 
 
 // inject the component into the div with ID = movieInfo
-function renderMainInterface(){
+function renderMainInterface() {
   ReactDOM.render(
     <MainInterface />,
     document.getElementById('movieInfo')
@@ -239,29 +245,29 @@ renderMainInterface();
 
 //changing clock function into a function component
 //This is what an actual component looks like from the React Tutorial
-class Clock extends React.Component{
-  constructor(props){
+class Clock extends React.Component {
+  constructor(props) {
     super(props);
     this.state = {date: new Date()}; //turns date into a component state
   }
 
-  componentDidMount(){
+  componentDidMount() {
     this.timerID = setInterval(
       () => this.tick(), 1000
     );
   }
 
-  componentWillUnmount(){
+  componentWillUnmount() {
     clearInterval(this.timerID);
   }
 
-  tick(){
+  tick() {
     this.setState({ //setState is the only way to update the state once out of the constructor
       date: new Date()
     });
   }
 
-  render(){
+  render() {
     return(
       <div>
         <h1>Hello Alex, Do Your Work!</h1>
@@ -271,7 +277,7 @@ class Clock extends React.Component{
   }
 }
 
-function renderClock(){
+function renderClock() {
   ReactDOM.render(
     <Clock />,
     document.getElementById('movieList')

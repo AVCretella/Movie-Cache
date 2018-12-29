@@ -51,9 +51,10 @@ var AddMovieForm = React.createClass({
     var searchTitle = this.inputMovieName.value;
     var baseQuery = 'http://www.omdbapi.com/?t=';
     var APIkey = '&apikey=2d5be971';
+    var longPlot = '&plot=full'; //TODO let this be dynamically short or long
     console.log(searchTitle);
     if(searchTitle != ""){
-      fetch(baseQuery + searchTitle + APIkey) //send the query to OMDB for searching
+      fetch(baseQuery + searchTitle + longPlot + APIkey) //send the query to OMDB for searching
       .then(response => response.json())
       .then(json =>{
         console.log(JSON.stringify(json));
@@ -165,6 +166,12 @@ var AddMovieForm = React.createClass({
       times_seen = <div></div>;
     }
 
+    /*
+    TODO want a first modal that asks for the movie name, so the user has to
+      search and there is no ambiguity involved, then bring them to full modal
+    Can ask if they would like a short or long Plot
+    Can also see if they want to add the year
+    */
     return(
       <div className={className} id="addMovie" tabIndex="-1" role="dialog" style = {style}>
         <div className="modal-dialog" role="document">

@@ -79,7 +79,7 @@ app.on('ready', function(){
         },
         {
           role: 'help',
-          label: 'Check out my good noodle boxes as of late',
+          label: 'Github Page',
           click(){electron.shell.openExternal('https://github.com/AVCretella')} //open a website from the menus
         },
         {role: 'quit'},

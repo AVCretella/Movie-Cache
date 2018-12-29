@@ -176,9 +176,8 @@ body {
 }
 
 .item-list .movie-item .movie-delete {
-  display: none;
-  opacity: 0;
-  transition: all 1s;
+  margin-left: .7em;
+  display: block;
 }
 
 

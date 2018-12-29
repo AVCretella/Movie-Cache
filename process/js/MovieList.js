@@ -11,7 +11,7 @@ var MovieList = React.createClass({
       //can use .toLowerCase() but that isn't how things are matched
       if((movieList[i].movieName.indexOf(queryText) != -1) ||
         (movieList[i].directorName.indexOf(queryText) != -1) ||
-        (movieList[i].releaseDate.indexOf(queryText) != -1) ||
+        (movieList[i].releaseDate == queryText) ||
         (movieList[i].Summary.indexOf(queryText) != -1)){
           filteredMovies.push(movieList[i]);
       }

@@ -99,13 +99,13 @@ var RankedMovies = React.createClass({
             <div className="movie-info media-body">
               <div className="movie-head">
                 <span className="movie-name">{this.props.singleItem.movieName}</span>
+                <span className="pull-right">
+                  <button className="movie-delete btn btn-med btn-danger" onClick={this.removeFromList}>
+                  <span className="glyphicon glyphicon-remove"></span></button>
+                </span>
                 <button className="btn btn-primary pull-right" onClick={this.toggleRankDisplay}>
                   <span className="rank">{this.props.singleItem.rank} / 10</span>
                 </button>
-                <span className="pull-right">
-                  <button className="movie-delete btn btn-xs btn-danger" onClick={this.removeFromList}>
-                  <span className="glyphicon glyphicon-remove"></span></button>
-                </span>
               </div>
 
               <div className="director-name">
