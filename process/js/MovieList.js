@@ -28,11 +28,16 @@ var MovieList = React.createClass({
     return _.orderBy(movieList, item => item[orderBy], orderDir);
   },
 
+  exportList: function(movieList){
+    //depending on which movie list we have, we want to export it individually
+    //TODO will have an import button soon enough
+  },
+
   renderListItems: function(movieList, deleteMovie, changeRank, MovieListItem) {
     return movieList.map(function(item, index){ //send this data to MovieList to create a series of those tags
       return(
         <MovieListItem
-          key = {index} //each index of the data.json file //TODO add to list item as an index
+          key = {index} //each index of the data.json file
           singleItem = {item} //each item at that index
           onDelete = {deleteMovie}
           onChangeRank = {changeRank}
@@ -52,7 +57,16 @@ var MovieList = React.createClass({
     return (
       <div className="row">
         <div className="movies col-sm-12">
+
+        <div>
           <h2 className="movies-headline">{movieListTitle}</h2>
+          {/* Button to export the ranked and wish lists*/}
+          <span className="pull-right">
+            <button className="btn btn-med btn-info" onClick={this.exportList}>
+            <span className="glyphicon glyphicon-download"></span></button>
+          </span>
+        </div>
+
           <ul className="item-list media-list">{movieList}</ul>
         </div>
       </div>
