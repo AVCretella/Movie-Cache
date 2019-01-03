@@ -87,14 +87,20 @@ var MainInterface = React.createClass({
 
   writeMovieListToFile: function(whichList) {
     if (whichList == "Favorite Movies"){
-      fs.writeFile("RankedList.txt", "hey what's going on", function(err) {
+      fs.writeFile("../RankedList.txt", JSON.stringify(rankedMovieData), function(err) {
         if (err) {
             return console.log(err);
         }
-        console.log("The file was saved!");
+        console.log("The file was saved as rankedList!");
       });
+    } else { // == "WatchList Movies"
+    fs.writeFile("../WatchList.txt", JSON.stringify(watchlistMovieData), function(err) {
+      if (err) {
+          return console.log(err);
+      }
+      console.log("The file was saved as watchlist!");
+    });
     }
-    console.log("we made it bois into write file:", whichList);
   },
 
   toggleAddMovieForm: function() { //this will pull up the form to add movies
