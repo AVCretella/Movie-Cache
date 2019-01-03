@@ -86,12 +86,14 @@ var MainInterface = React.createClass({
   }, //componentDidUpdate
 
   writeMovieListToFile: function(whichList) {
-    // fs.writeFile("/tmp/test", "Hey there!", function(err) {
-    //   if(err) {
-    //       return console.log(err);
-    //   }
-    //   console.log("The file was saved!");
-    // });
+    if (whichList == "Favorite Movies"){
+      fs.writeFile("RankedList.txt", "hey what's going on", function(err) {
+        if (err) {
+            return console.log(err);
+        }
+        console.log("The file was saved!");
+      });
+    }
     console.log("we made it bois into write file:", whichList);
   },
 
