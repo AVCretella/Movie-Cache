@@ -29,8 +29,9 @@ var MovieList = React.createClass({
   },
 
   exportList: function(movieList){
-    //depending on which movie list we have, we want to export it individually
     //TODO will have an import button soon enough
+    this.props.createMovieListFile(this.props.movieListTitle);
+    console.log("Sending ", this.props.movieListTitle, " to the renderer process");
   },
 
   renderListItems: function(movieList, deleteMovie, changeRank, MovieListItem) {

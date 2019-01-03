@@ -85,8 +85,14 @@ var MainInterface = React.createClass({
     }); //will go to the file location that our data is at and change it
   }, //componentDidUpdate
 
-  stringifyMovies: function() {
-
+  writeMovieListToFile: function(whichList) {
+    // fs.writeFile("/tmp/test", "Hey there!", function(err) {
+    //   if(err) {
+    //       return console.log(err);
+    //   }
+    //   console.log("The file was saved!");
+    // });
+    console.log("we made it bois into write file:", whichList);
   },
 
   toggleAddMovieForm: function() { //this will pull up the form to add movies
@@ -211,9 +217,10 @@ var MainInterface = React.createClass({
               queryText = {queryText}
               orderBy = {orderBy}
               orderDir = {orderDir}
+              MovieListItem = {this.state.MovieListItem}
               deleteMovie = {this.deleteMovieObject}
               changeRank = {this.changeMovieRank}
-              MovieListItem = {this.state.MovieListItem}
+              createMovieListFile = {this.writeMovieListToFile}
             />
           </div>{/* container */}
         </div>{/* interface */}
