@@ -89,20 +89,41 @@ var MainInterface = React.createClass({
   }, //componentDidUpdate
 
   writeMovieListToFile: function(whichList) {
+    var exportMovies = [];
     if (whichList == rankedListTitle){
-      fs.writeFile("../RankedList.txt", JSON.stringify(rankedMovieData), function(err) {
+      //we want to get the movie title, the personal rank, and the times seen, just save those
+      // var tempString = JSON.stringify(rankedMovieData[0].movieName);
+      rankedMovieData.forEach(function(movie, idx, rankedMovieData){
+        var movieObject = {
+          movieName: movie.movieName,
+          rank: movie.rank,
+          viewCount: movie.viewCount
+        };
+        exportMovies.push(movieObject);
+        // movieString = movie;
+      });
+      console.log(exportMovies);
+      fs.writeFile("../RankedList.txt", JSON.stringify(exportMovies), function(err) {
         if (err) {
             return console.log(err);
         }
         console.log("The file was saved as rankedList!");
       });
     } else { // == "WatchList Movies"
-    fs.writeFile("../WatchList.txt", JSON.stringify(watchlistMovieData), function(err) {
-      if (err) {
-          return console.log(err);
-      }
-      console.log("The file was saved as watchlist!");
-    });
+      //we want to just get the movie title
+      watchlistMovieData.forEach(function(movie, idx, watchlistMovieData){
+        var movieObject = {
+          movieName: movie.movieName,
+        };
+        exportMovies.push(movieObject);
+        // movieString = movie;
+      });
+      fs.writeFile("../WatchList.txt", JSON.stringify(exportMovies), function(err) {
+        if (err) {
+            return console.log(err);
+        }
+        console.log("The file was saved as watchlist!");
+      });
     }
   },
 
