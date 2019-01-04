@@ -146,7 +146,7 @@ var AddMovieForm = React.createClass({
       };
     }
 
-    if (this.props.isDisplayingRanked) {
+    if (this.props.isDisplayingRanked) { //if we are displaying the ranked, include these in the form
       rank =  <div className="form-group">
                 <label className="col-sm-3 control-label" htmlFor="rank">Your Rating:</label>
                 <div className="col-sm-9">
@@ -161,7 +161,7 @@ var AddMovieForm = React.createClass({
                           id="viewCount" ref={(ref) => this.inputMovieViewCount = ref} required/>
                       </div>
                     </div>;
-    } else {
+    } else { //otherwise leave them empty
       rank = <div></div>;
       times_seen = <div></div>;
     }

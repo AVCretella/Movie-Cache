@@ -46,6 +46,9 @@ let watchlistSortFields = [
   { field: "duration", displayName: "Duration" }
 ];
 
+let watchlistTitle = "Watchlist";
+let rankedListTitle = "Favorite Movies"
+
 //TODO standardize dates so we can have day and month
 var MainInterface = React.createClass({
   //this will load the retrieved data into an object for this component
@@ -58,7 +61,7 @@ var MainInterface = React.createClass({
       queryText: '',
       myMovies: rankedMovieData,
       MovieListItem: RankedMovies,
-      movieListTitle: "Favorite Movies",
+      movieListTitle: rankedListTitle,
       sortFields: rankedSortFields,
       fileLocation: rankedDataLocation
     } //return
@@ -86,7 +89,7 @@ var MainInterface = React.createClass({
   }, //componentDidUpdate
 
   writeMovieListToFile: function(whichList) {
-    if (whichList == "Favorite Movies"){
+    if (whichList == rankedListTitle){
       fs.writeFile("../RankedList.txt", JSON.stringify(rankedMovieData), function(err) {
         if (err) {
             return console.log(err);
@@ -115,7 +118,7 @@ var MainInterface = React.createClass({
     this.setState({
       myMovies: rankedMovieData,
       MovieListItem: RankedMovies,
-      movieListTitle: "Favorite Movies",
+      movieListTitle: rankedListTitle,
       sortFields: rankedSortFields,
       orderBy:'rank',
       orderDir:'desc',
@@ -130,7 +133,7 @@ var MainInterface = React.createClass({
     this.setState({
       myMovies: watchlistMovieData,
       MovieListItem: WatchlistMovies,
-      movieListTitle: "Watchlist Movies",
+      movieListTitle: watchlistTitle,
       sortFields: watchlistSortFields,
       orderBy: orderBy,
       fileLocation: watchlistDataLocation
