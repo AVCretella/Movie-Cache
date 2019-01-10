@@ -29,10 +29,23 @@ var MovieList = React.createClass({
   },
 
   exportList: function(movieList){
-    //TODO will have an import button soon enough
     this.props.createMovieListFile(this.props.movieListTitle);
     console.log("Sending ", this.props.movieListTitle, " to the renderer process");
   },
+
+  // importList: function(movieList){
+  //   //TODO Need to allow users to upload file
+  //
+  //   //get the file from user system
+  //
+  //   //parse into necessary components
+  //
+  //   //send object to renderer to add to the existing list
+  //
+  //   // this.props.addMoviesFromFile{this.props.movieListTitle});
+  //   //make sure to check they've uploaded the correct file - says ranked or watchlist
+  //   console.log("Trying to upload a file");
+  // },
 
   renderListItems: function(movieList, deleteMovie, changeRank, MovieListItem) {
     return movieList.map(function(item, index){ //send this data to MovieList to create a series of those tags
@@ -59,14 +72,22 @@ var MovieList = React.createClass({
       <div className="row">
         <div className="movies col-sm-12">
 
-        <div>
-          <h2 className="movies-headline">{movieListTitle}</h2>
-          {/* Button to export the ranked and wish lists*/}
-          <span className="pull-right">
-            <button className="btn btn-med btn-info" onClick={this.exportList}>
-            <span className="glyphicon glyphicon-download"></span></button>
-          </span>
-        </div>
+          <div>
+            <h2 className="movies-headline">{movieListTitle}</h2>
+
+            {/* Button to export the ranked and wish lists*/}
+            <span className="pull-right export">
+              <button className="btn btn-med btn-info" onClick={this.exportList}>
+              <span className="glyphicon glyphicon-download"></span></button>
+            </span>
+
+            {/*
+            <span className="pull-right import">
+              <button className="btn btn-med btn-info" onClick={this.importList}>
+              <span className="glyphicon glyphicon-upload"></span></button>
+            </span>
+            */}
+          </div>
 
           <ul className="item-list media-list">{movieList}</ul>
         </div>

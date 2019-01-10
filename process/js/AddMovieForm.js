@@ -34,7 +34,8 @@ var AddMovieForm = React.createClass({
       defaultSummary: '',
       defaultViewCount: '1',
       defaultPoster: 'Put the url to the movie\'s poster here',
-      defaultNameNotFound: 'Movie Not Found - Please try again'
+      defaultNameNotFound: 'Movie Not Found - Please try again',
+      sentFromForm: "movieForm"
     }
   },
   //When toggling the display, want to reset the information in it
@@ -47,6 +48,8 @@ var AddMovieForm = React.createClass({
 
   //this takes whatever title you have put in and will use my API key to retrieve the JSON object
   /* If you want to use the API again or get more info: http://www.omdbapi.com/ */
+  /* TODO need to accept a parameter of Title so that this can be modularized, so that all it does it get back the json object
+    other functions will be responsible for the manipulation of that JSON object*/
   sendTitleToAPI: function(){
     var searchTitle = this.inputMovieName.value;
     var baseQuery = 'http://www.omdbapi.com/?t=';
@@ -54,10 +57,38 @@ var AddMovieForm = React.createClass({
     var longPlot = '&plot=full'; //TODO let this be dynamically short or long
     console.log(searchTitle);
     if(searchTitle != ""){
-      fetch(baseQuery + searchTitle + longPlot + APIkey) //send the query to OMDB for searching
+      fetch(baseQuery + searchTitle + APIkey) //send the query to OMDB for searching
       .then(response => response.json())
       .then(json =>{
         console.log(JSON.stringify(json));
+      //   if(json.Response != "False") { //MODULARITY
+      //     {/*TODO Modularity step may have been stupid, just need to call props.addMovie(movieInfo) several times when parsing a file
+      //       Also that should be in MovieList an not here because this is just movieAddmform, shouldnt control past it's scope*/}
+      //     console.log(JSON.stringify(json));
+      //     if (sentFrom == this.state.sentFromFile) {
+      //       this.inputMovieName.value = json.Title;
+      //       this.inputMoviePoster.value = json.Poster;
+      //       this.inputMovieDirector.value = json.Director;
+      //       this.inputMovieActors.value = json.Actors;
+      //       this.inputMovieReleaseDate.value = json.Year; //TODO need to change the format of released date, probably just turn into the year
+      //       this.inputMovieSummary.value = json.Plot;
+      //       this.inputMovieDuration.value = json.Runtime; //TODO may want to save just the numbers
+      //
+      //       //Run through the ratings array and find "Rotten Tomatoes"
+      //       for (i in json.Ratings){
+      //         if(json.Ratings[i].Source == "Rotten Tomatoes") {
+      //           // this.inputMovieRottenTomatoes.value = json.Ratings[i].Value; TODO need to save this in movie object
+      //           break;
+      //         }
+      //         console.log("ratings ", json.Ratings[i]);
+      //       }
+      //     } else { //TODO sent from uploading a file need to read the uploaded file and parse
+      //       console.log("not sent by addmovieform: ", JSON.stringify(json));
+      //     }
+      //   } else { //The json.Repsonse was false, user needs to retype title
+      //     this.inputMovieName.value = this.state.defaultNameNotFound;
+      //   }
+      // });
 
         //Finally set all of the retrieved data to the respective spot in the AddMovie Form
         if(json.Response != "False"){ //if we don't get an error from the API
@@ -69,14 +100,14 @@ var AddMovieForm = React.createClass({
           this.inputMovieSummary.value = json.Plot;
           this.inputMovieDuration.value = json.Runtime; //TODO may want to save just the numbers
 
-          //Run through the ratings array and find "Rotten Tomatoes"
-          for (i in json.Ratings){
-            if(json.Ratings[i].Source == "Rotten Tomatoes"){
-              // this.inputMovieRottenTomatoes.value = json.Ratings[i].Value; TODO need to save this in movie object
-              break;
-            }
-            console.log("ratings ", json.Ratings[i]);
-          }
+          //TODO Run through the ratings array and find "Rotten Tomatoes"
+          // for (i in json.Ratings){
+          //   if(json.Ratings[i].Source == "Rotten Tomatoes"){
+          //     // this.inputMovieRottenTomatoes.value = json.Ratings[i].Value; TODO need to save this in movie object
+          //     break;
+          //   }
+          //   console.log("ratings ", json.Ratings[i]);
+          // }
         } else {
           this.inputMovieName.value = this.state.defaultNameNotFound;
         }
@@ -188,12 +219,12 @@ var AddMovieForm = React.createClass({
                   <input type="text" className="form-control"
                     id="movieName" ref={(ref) => this.inputMovieName = ref} placeholder={this.state.defaultName} />
                 </div>
+                {/* TODO if we sendTitleToAPI with an argument, we czn modularize, send with this.inputMovieName*/}
+                {/* TODO need to execute two functions on this single click *
+                    If you want it to be real jank, you can send the title and that it's from the form and have a conditional in the function */}
                 <div className="col-sm-3">
                   <button type="button" className="btn btn-success" onClick={this.sendTitleToAPI}>Search</button>
                 </div>
-                {/*<div> //want a popup when you enter an invalid name
-                  <span> Movie with this title not found </span>
-                </div>*/}
               </div>
 
               {/* TODO eventually want to make this rank changeable without having to re-add movie */}

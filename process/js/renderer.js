@@ -8,6 +8,10 @@
 var $ = jQuery = require('jquery');
 var bootstrap = require('bootstrap');
 var _ = require('lodash');
+// var remote = require('remote'); // Load remote compnent that contains the dialog dependency
+// var dialog = eRequire('electron');
+// var path = require('path');
+// console.log("this is dialog?: ", dialog);
 
 var fs = eRequire('fs');//eRequire to show that we are working with node now
 var watchlistMovieData = JSON.parse(fs.readFileSync(watchlistDataLocation));//Will go to the dataLocation defined in index.html and create a proper data file from the file there
@@ -89,7 +93,10 @@ var MainInterface = React.createClass({
   }, //componentDidUpdate
 
   writeMovieListToFile: function(whichList) {
+    console.log("hello  we are here");
+
     var exportMovies = [];
+
     if (whichList == rankedListTitle){
       //we want to get the movie title, the personal rank, and the times seen, just save those
       // var tempString = JSON.stringify(rankedMovieData[0].movieName);
@@ -102,13 +109,37 @@ var MainInterface = React.createClass({
         exportMovies.push(movieObject);
         // movieString = movie;
       });
-      console.log(exportMovies);
-      fs.writeFile("../RankedList.txt", JSON.stringify(exportMovies), function(err) {
-        if (err) {
-            return console.log(err);
-        }
-        console.log("The file was saved as rankedList!");
-      });
+      console.log("export movies", exportMovies);
+      var fileName = "RankedList.text";
+      ipc.sendSync('exportList');
+      // console.log("after fuck");
+      // dialog.showSaveDialog(fileName, (err) => {
+      //   if (fileName === undefined){
+      //       console.log("You didn't save the file");
+      //       return;
+      //   }
+      //
+      //   // fileName is a string that contains the path and filename created in the save file dialog.
+      //   fs.writeFile(fileName, JSON.stringify(exportMovies), (err) => {
+      //       if(err){
+      //           return console.log(err);
+      //       }
+      //
+      //       alert("The file has been succesfully saved");
+      //   });
+      // const options = {
+      //   defaultPath: app.getPath('desktop') + fileName,
+      // }
+      // dialog.showSaveDialog(null, options, (path) => {
+      //   console.log(path);
+      // });
+      // });
+      // fs.writeFile("../RankedList.txt", JSON.stringify(exportMovies), function(err) {
+      //   if (err) {
+      //       return console.log(err);
+      //   }
+      //   console.log("The file was saved as rankedList!");
+      // });
     } else { // == "WatchList Movies"
       //we want to just get the movie title
       watchlistMovieData.forEach(function(movie, idx, watchlistMovieData){
@@ -125,6 +156,10 @@ var MainInterface = React.createClass({
         console.log("The file was saved as watchlist!");
       });
     }
+  },
+
+  importMoviesFromFile: function(whichList) {
+    var importMovies = [];
   },
 
   toggleAddMovieForm: function() { //this will pull up the form to add movies

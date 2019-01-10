@@ -142,6 +142,12 @@ body {
   color: #296B73;
 }
 
+/* So the buttons aren't on top of one another */
+/* .movies .export {
+  margin-left: .7em;
+  display: block;
+} */
+
 /* .movie-info .media-body{
   position: relative;
 }
@@ -187,11 +193,14 @@ body {
   display: block;
 }
 
+/*
 
 .item-list  .movie-item:hover .movie-delete {
   display: block;
   opacity: 1;
 }
+
+*/
 
 
 .item-list .movie-name { /*The color of the Title of the movie*/
