@@ -8,7 +8,10 @@
 var $ = jQuery = require('jquery');
 var bootstrap = require('bootstrap');
 var _ = require('lodash');
-// var remote = require('remote'); // Load remote compnent that contains the dialog dependency
+//TODO GET THIS WORKING OR IM GOIGN TO EXPLODE
+// var remote = require('electron').remote;
+// var dialog = remote.dialog;
+
 // var dialog = eRequire('electron');
 // var path = require('path');
 // console.log("this is dialog?: ", dialog);
@@ -112,6 +115,13 @@ var MainInterface = React.createClass({
       console.log("export movies", exportMovies);
       var fileName = "RankedList.text";
       ipc.sendSync('exportList');
+      // dialog.showOpenDialog(function (exportMovies) {
+      //
+      // });
+
+
+
+
       // console.log("after fuck");
       // dialog.showSaveDialog(fileName, (err) => {
       //   if (fileName === undefined){
@@ -134,12 +144,17 @@ var MainInterface = React.createClass({
       //   console.log(path);
       // });
       // });
-      // fs.writeFile("../RankedList.txt", JSON.stringify(exportMovies), function(err) {
-      //   if (err) {
-      //       return console.log(err);
-      //   }
-      //   console.log("The file was saved as rankedList!");
-      // });
+
+
+
+      fs.writeFile("../RankedList.txt", JSON.stringify(exportMovies), function(err) {
+        if (err) {
+            return console.log(err);
+        }
+        console.log("The file was saved as rankedList!");
+      });
+
+      console.log("we shouuld have opened the dialog");
     } else { // == "WatchList Movies"
       //we want to just get the movie title
       watchlistMovieData.forEach(function(movie, idx, watchlistMovieData){
