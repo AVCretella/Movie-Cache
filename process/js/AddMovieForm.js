@@ -54,10 +54,16 @@ var AddMovieForm = React.createClass({
     var searchTitle = this.inputMovieName.value;
     var baseQuery = 'http://www.omdbapi.com/?t=';
     var APIkey = '&apikey=2d5be971';
-    var longPlot = '&plot=full'; //TODO let this be dynamically short or long
+    var longPlot = '&plot=full'; //TODO let this be dynamically short or long, maybe user inputs this?
+    var year = '';
+    if (this.inputMovieReleaseDate.value != undefined) { //including the year will make the query more accurate
+      year = '&y=' + this.inputMovieReleaseDate.value;
+    }
     console.log(searchTitle);
     if(searchTitle != ""){
-      fetch(baseQuery + searchTitle + APIkey) //send the query to OMDB for searching
+      var fullQuery = baseQuery + searchTitle + year + APIkey;
+      console.log("fullquery: ", fullQuery);
+      fetch(baseQuery + searchTitle + year + APIkey) //send the query to OMDB for searching
       .then(response => response.json())
       .then(json =>{
         console.log(JSON.stringify(json));
