@@ -8,6 +8,9 @@
 var $ = jQuery = require('jquery');
 var bootstrap = require('bootstrap');
 var _ = require('lodash');
+// var remote = eRequire('electron').remote;
+var dialog = eRequire('electron').remote;
+console.log("hthis is dialgo, ",dialog);
 //TODO GET THIS WORKING OR IM GOIGN TO EXPLODE
 // var remote = require('electron').remote;
 // var dialog = remote.dialog;
@@ -114,13 +117,19 @@ var MainInterface = React.createClass({
       });
       console.log("export movies", exportMovies);
       var fileName = "RankedList.text";
-      ipc.sendSync('exportList');
-      // dialog.showOpenDialog(function (exportMovies) {
-      //
+      ipc.sendSync('exportList', exportMovies);
+      // dialog.showOpenDialog(
+      //   {
+      //     properties: ['openFile', 'multiSelections']
+      //   },
+      //   {
+      //     filters: [{ name: 'text', extensions: ['txt'] }]
+      //   },
+      //   function (exportMovies) {
+      //     if (exportMovies !== undefined) {
+      //         // handle files
+      //     }
       // });
-
-
-
 
       // console.log("after fuck");
       // dialog.showSaveDialog(fileName, (err) => {
@@ -144,15 +153,6 @@ var MainInterface = React.createClass({
       //   console.log(path);
       // });
       // });
-
-
-
-      fs.writeFile("../RankedList.txt", JSON.stringify(exportMovies), function(err) {
-        if (err) {
-            return console.log(err);
-        }
-        console.log("The file was saved as rankedList!");
-      });
 
       console.log("we shouuld have opened the dialog");
     } else { // == "WatchList Movies"

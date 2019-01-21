@@ -60,6 +60,39 @@ app.on('ready', function(){
     infoWindow.hide();
   }); //closeInfoWindow
 
+  ipc.on('exportList', function(event, movieList){
+    event.returnValue='';
+    let movies = JSON.stringify(movieList);
+    const {dialog} = require('electron');
+    const fs = require('fs');
+    //title is just the title of the dialog, not the path
+    dialog.showSaveDialog(
+      {
+        message: 'Save Your Movie List\n The name you give will be replaced by RankedList.txt, do not change this',
+        defaultPath: '~/RankedList.txt'
+      }, function(arg) {
+
+      // // fileNames is an array that contains all the selected
+      // if(fileNames === undefined) {
+      //    console.log("No file selected");
+      //
+      // } else {
+      //    readFile(fileNames[0]);
+      // }
+
+      fs.writeFile(arg, movies, function(err) {
+        if (err) {
+            return console.log(err);
+        }
+        console.log("The file was saved as rankedList!");
+      });
+    });
+    // dialog.showOpenDialog(function (arg) {
+    //
+    // });
+    // process.stdout.write('your output to command prompt console or node js ')
+  }); //closeInfoWindow
+
   menuTemplate = [
     {label: 'Movie Cache',
       submenu: [
@@ -68,15 +101,15 @@ app.on('ready', function(){
           accelerator: process.platform === 'darwin' ? 'Command+I':'Ctrl+I',
           click(item){ toggleWindow(infoWindow) }
         },
-        {
-          label: 'Add Movie',
-          accelerator: process.platform === 'darwin' ? 'Command+N':'Ctrl+N', //this is determined by OS, 'darwin' is mac
-          click(item,focusedWindow){
-            if(focusedWindow){
-              focusedWindow.webContents.send('addMovie'); //sends event over to the renderer process
-            }
-          }
-        },
+        // {
+        //   label: 'Add Movie',
+        //   accelerator: process.platform === 'darwin' ? 'Command+N':'Ctrl+N', //this is determined by OS, 'darwin' is mac
+        //   click(item,focusedWindow){
+        //     if(focusedWindow){
+        //       focusedWindow.webContents.send('addMovie'); //sends event over to the renderer process
+        //     }
+        //   }
+        // },
         {
           role: 'help',
           label: 'Github Page',
