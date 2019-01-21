@@ -116,45 +116,8 @@ var MainInterface = React.createClass({
         // movieString = movie;
       });
       console.log("export movies", exportMovies);
-      var fileName = "RankedList.text";
-      ipc.sendSync('exportList', exportMovies);
-      // dialog.showOpenDialog(
-      //   {
-      //     properties: ['openFile', 'multiSelections']
-      //   },
-      //   {
-      //     filters: [{ name: 'text', extensions: ['txt'] }]
-      //   },
-      //   function (exportMovies) {
-      //     if (exportMovies !== undefined) {
-      //         // handle files
-      //     }
-      // });
-
-      // console.log("after fuck");
-      // dialog.showSaveDialog(fileName, (err) => {
-      //   if (fileName === undefined){
-      //       console.log("You didn't save the file");
-      //       return;
-      //   }
-      //
-      //   // fileName is a string that contains the path and filename created in the save file dialog.
-      //   fs.writeFile(fileName, JSON.stringify(exportMovies), (err) => {
-      //       if(err){
-      //           return console.log(err);
-      //       }
-      //
-      //       alert("The file has been succesfully saved");
-      //   });
-      // const options = {
-      //   defaultPath: app.getPath('desktop') + fileName,
-      // }
-      // dialog.showSaveDialog(null, options, (path) => {
-      //   console.log(path);
-      // });
-      // });
-
-      console.log("we shouuld have opened the dialog");
+      ipc.sendSync('exportList', exportMovies, 'ranked');
+      console.log("we shouuld have opened the dialog for ranked movies");
     } else { // == "WatchList Movies"
       //we want to just get the movie title
       watchlistMovieData.forEach(function(movie, idx, watchlistMovieData){
@@ -164,12 +127,8 @@ var MainInterface = React.createClass({
         exportMovies.push(movieObject);
         // movieString = movie;
       });
-      fs.writeFile("../WatchList.txt", JSON.stringify(exportMovies), function(err) {
-        if (err) {
-            return console.log(err);
-        }
-        console.log("The file was saved as watchlist!");
-      });
+      ipc.sendSync('exportList', exportMovies, 'watch');
+      console.log("we shouuld have opened the dialog for watchlist movies");
     }
   },
 

@@ -60,33 +60,42 @@ app.on('ready', function(){
     infoWindow.hide();
   }); //closeInfoWindow
 
-  ipc.on('exportList', function(event, movieList){
+  ipc.on('exportList', function(event, movieList, which){
     event.returnValue='';
     let movies = JSON.stringify(movieList);
     const {dialog} = require('electron');
     const fs = require('fs');
-    //title is just the title of the dialog, not the path
-    dialog.showSaveDialog(
+
+    if (which == 'ranked') {
+      //title is just the title of the dialog, not the path
+      dialog.showSaveDialog(
       {
-        message: 'Save Your Movie List\n The name you give will be replaced by RankedList.txt, do not change this',
+        message: 'Save Your Ranked Movie List\n The name you give will be replaced by RankedList.txt, do not change this',
         defaultPath: '~/RankedList.txt'
-      }, function(arg) {
-
-      // // fileNames is an array that contains all the selected
-      // if(fileNames === undefined) {
-      //    console.log("No file selected");
-      //
-      // } else {
-      //    readFile(fileNames[0]);
-      // }
-
-      fs.writeFile(arg, movies, function(err) {
-        if (err) {
-            return console.log(err);
+      }, (path) => {
+        if (path != undefined) {
+          fs.writeFile(path, movies, function(err) {
+            if (err) {
+                return console.log(err);
+            }
+          });
         }
-        console.log("The file was saved as rankedList!");
       });
-    });
+    } else {
+      dialog.showSaveDialog(
+      {
+        message: 'Save Your Watchlist\n The name you give will be replaced by Watchlist.txt, do not change this',
+        defaultPath: '~/Watchlist.txt'
+      }, (path) => {
+        if (path != undefined) {
+          fs.writeFile(path, movies, function(err) {
+            if (err) {
+                return console.log(err);
+            }
+          });
+        }
+      });
+    }
     // dialog.showOpenDialog(function (arg) {
     //
     // });
