@@ -3,12 +3,15 @@
   "productName": "Movie Cache",
   "version": "1.0.0",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "package-mac": "electron-packager . --overwrite --platform=darwin --arch=x64 --icon=./icons/MCacheIcon.icns --prune=true --out=../release-builds",
+    "package-win": "electron-packager . Movie-Cache --overwrite --asar=true --platform=win32 --arch=ia32 --icon=./icons/MCache.ico --prune=true --out=../Windows-release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"Movie Cache\"",
+    "package-linux": "electron-packager . Movie-Cache --overwrite --asar=true --platform=linux --arch=x64 --icon=./icons/MCache.png --prune=true --out=../Linux-release-builds"
   },
   "main": "app/main.js",
   "devDependencies": {
     "electron": "^3.0.3",
-    "electron-packager": "^8.0.0",
+    "electron-packager": "12.1.0",
     "gulp": "^3.8.8",
     "gulp-browserify": "^0.5.1",
     "gulp-concat-css": "^2.3.0",
@@ -16,7 +19,8 @@
     "gulp-run": "^1.7.1",
     "react": "^15.1.0",
     "react-dom": "^15.1.0",
-    "reactify": "^1.1.1"
+    "reactify": "^1.1.1",
+    "remote": "^0.2.6"
   },
   "author": "Alex Cretella",
   "license": "ISC",
