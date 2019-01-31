@@ -11,13 +11,6 @@ var _ = require('lodash');
 // var remote = eRequire('electron').remote;
 var dialog = eRequire('electron').remote;
 console.log("hthis is dialgo, ",dialog);
-//TODO GET THIS WORKING OR IM GOIGN TO EXPLODE
-// var remote = require('electron').remote;
-// var dialog = remote.dialog;
-
-// var dialog = eRequire('electron');
-// var path = require('path');
-// console.log("this is dialog?: ", dialog);
 
 var fs = eRequire('fs');//eRequire to show that we are working with node now
 var watchlistMovieData = JSON.parse(fs.readFileSync(watchlistDataLocation));//Will go to the dataLocation defined in index.html and create a proper data file from the file there
@@ -115,7 +108,6 @@ var MainInterface = React.createClass({
         exportMovies.push(movieObject);
         // movieString = movie;
       });
-      console.log("export movies", exportMovies);
       ipc.sendSync('exportList', exportMovies, 'ranked');
       console.log("we shouuld have opened the dialog for ranked movies");
     } else { // == "WatchList Movies"

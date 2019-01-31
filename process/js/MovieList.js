@@ -23,9 +23,19 @@ var MovieList = React.createClass({
   /*
     This method assumes that numbers are stored as integers, not strings because
     ints as strings are treated differently by Lodash than ints
+
+    //TODO want to add a relativeRank. like 1,2,3,4,5,.. for each of the movies
+    //if we just assume that we need to put the values here, we can keep the same values When
+    //movies are being tossed around by other filtering and whatever. This will only care about the rank a person gave
   */
   sortMovies: function(movieList, orderBy, orderDir) {
-    return _.orderBy(movieList, item => item[orderBy], orderDir);
+    let newMovies = _.orderBy(movieList, item => item[orderBy], orderDir);
+    //TODO need to map a different number to a new field for every movie
+    //TODO need to worry about this when adding and removing movies too, maybe need another function
+    // var newerMovies = _.map(newMovies, function(element) {
+    //  return _.extend({}, element, {relativeRank: 1});
+    // });
+    return newMovies;
   },
 
   exportList: function(movieList){

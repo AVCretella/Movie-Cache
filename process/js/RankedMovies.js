@@ -25,12 +25,12 @@ var RankedMovies = React.createClass({
     this.props.onChangeRank(tempItem);
     //
     // this.props.changeMovieRank(tempItem); //pass the object to the function in the renderer process
-    this.toggleRankDisplay();
+    this.toggleChangeRankDisplay();
     this.changeRankFormRef.reset();
   },
 
   //Want to close and reset the changeRank modal
-  toggleRankDisplay: function(){
+  toggleChangeRankDisplay: function(){
     var tempVisibility = !this.state.rankChangeVisible;
     this.setState({
       rankChangeVisible: tempVisibility
@@ -61,7 +61,7 @@ var RankedMovies = React.createClass({
           <div className="modal-dialog" role="document">
             <div className="modal-content">
               <div className="modal-header">
-                <button type="submit" className="close" onClick={this.toggleRankDisplay} aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="submit" className="close" onClick={this.toggleChangeRankDisplay} aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 className="modal-title">Change The Rank of {this.props.singleItem.movieName}</h4>
               </div>
 
@@ -103,7 +103,7 @@ var RankedMovies = React.createClass({
                   <button className="movie-delete btn btn-med btn-danger" onClick={this.removeFromList}>
                   <span className="glyphicon glyphicon-remove"></span></button>
                 </span>
-                <button className="btn btn-primary pull-right" onClick={this.toggleRankDisplay}>
+                <button className="btn btn-primary pull-right" onClick={this.toggleChangeRankDisplay}>
                   <span className="rank">{this.props.singleItem.rank} / 10</span>
                 </button>
               </div>

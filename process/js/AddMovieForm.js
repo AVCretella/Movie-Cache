@@ -184,6 +184,7 @@ var AddMovieForm = React.createClass({
     }
 
     if (this.props.isDisplayingRanked) { //if we are displaying the ranked, include these in the form
+      //TODO figure out why we cant use 10 when comparing double vals!!
       rank =  <div className="form-group">
                 <label className="col-sm-3 control-label" htmlFor="rank">Your Rating:</label>
                 <div className="col-sm-9">
