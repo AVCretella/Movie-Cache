@@ -125,7 +125,42 @@ var MainInterface = React.createClass({
   },
 
   importMoviesFromFile: function(whichList) {
-    var importMovies = [];
+    console.log("SENT TO IPC");
+    ipc.on('pathReply', (event, arg) => {
+      console.log(arg); // prints "pong"
+    });
+    if(whichList == rankedListTitle){
+      var importedMovies = ipc.sendSync('importList', 'ranked');
+      // console.log("hello  we are here: here is the list", importedMovies);
+
+      // if (whichList == rankedListTitle){
+      //   //we want to get the movie title, the personal rank, and the times seen, just save those
+      //   // var tempString = JSON.stringify(rankedMovieData[0].movieName);
+      //   rankedMovieData.forEach(function(movie, idx, rankedMovieData){
+      //     var movieObject = {
+      //       movieName: movie.movieName,
+      //       rank: movie.rank,
+      //       viewCount: movie.viewCount
+      //     };
+      //     exportMovies.push(movieObject);
+      //   });
+      //   ipc.sendSync('exportList', exportMovies, 'ranked');
+      //   console.log("we shouuld have opened the dialog for ranked movies");
+      // }
+      // else { // == "WatchList Movies"
+      //   var importMovis = ipc.sendSync('getList', 'ranked');
+      //   //we want to just get the movie title
+      //   watchlistMovieData.forEach(function(movie, idx, watchlistMovieData){
+      //     var movieObject = {
+      //       movieName: movie.movieName,
+      //     };
+      //     exportMovies.push(movieObject);
+      //     // movieString = movie;
+      //   });
+      //   ipc.sendSync('exportList', exportMovies, 'watch');
+      //   console.log("we shouuld have opened the dialog for watchlist movies");
+      // }
+    }
   },
 
   toggleAddMovieForm: function() { //this will pull up the form to add movies
@@ -254,6 +289,7 @@ var MainInterface = React.createClass({
               deleteMovie = {this.deleteMovieObject}
               changeRank = {this.changeMovieRank}
               createMovieListFile = {this.writeMovieListToFile}
+              addMoviesFromFile = {this.importMoviesFromFile}
             />
           </div>{/* container */}
         </div>{/* interface */}

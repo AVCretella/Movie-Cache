@@ -100,7 +100,30 @@ app.on('ready', function(){
     //
     // });
     // process.stdout.write('your output to command prompt console or node js ')
-  }); //closeInfoWindow
+  }); //exportList
+
+  ipc.on('importList', function(event, which, arg){
+    event.returnValue='';
+    const {dialog} = require('electron');
+    const fs = require('fs');
+    var importedList = [];
+
+    dialog.showOpenDialog(
+      {
+        title: 'Select the movie file that you would like to import'
+      }, (filePath) => {
+        if (filePath !== undefined) {
+          // obj.from.path('filePath').to.array(function (data) {
+          // for (var index = 0; index < data.length; index++) {
+          //     importedList.push(new MyCSV(data[index][0], data[index][1], data[index][2]));
+          // }
+          event.sender.send('pathReply', filePath);
+        // });
+        }
+      // console.log("here is the file path")
+      // return(importedList);
+    });
+  }); //importList
 
   menuTemplate = [
     {label: 'Movie Cache',

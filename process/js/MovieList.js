@@ -43,19 +43,19 @@ var MovieList = React.createClass({
     console.log("Sending ", this.props.movieListTitle, " to the renderer process");
   },
 
-  // importList: function(movieList){
-  //   //TODO Need to allow users to upload file
-  //
-  //   //get the file from user system
-  //
-  //   //parse into necessary components
-  //
-  //   //send object to renderer to add to the existing list
-  //
-  //   // this.props.addMoviesFromFile{this.props.movieListTitle});
-  //   //make sure to check they've uploaded the correct file - says ranked or watchlist
-  //   console.log("Trying to upload a file");
-  // },
+  importList: function(movieList){
+    //TODO Need to allow users to upload file
+
+    //get the file from user system
+
+    //parse into necessary components
+
+    //send object to renderer to add to the existing list
+
+    this.props.addMoviesFromFile(this.props.movieListTitle);
+    console.log("Sending ", this.props.movieListTitle, " to the renderer process");
+    //make sure to check they've uploaded the correct file - says ranked or watchlist
+  },
 
   renderListItems: function(movieList, deleteMovie, changeRank, MovieListItem) {
     return movieList.map(function(item, index){ //send this data to MovieList to create a series of those tags
@@ -91,12 +91,11 @@ var MovieList = React.createClass({
               <span className="glyphicon glyphicon-download"></span></button>
             </span>
 
-            {/*
+            {/* Button to import the movies. TODO will need to be able to identify whether it is a csv (to convert to object form for watchlist) or if it already in object form) */}
             <span className="pull-right import">
               <button className="btn btn-med btn-info" onClick={this.importList}>
               <span className="glyphicon glyphicon-upload"></span></button>
             </span>
-            */}
           </div>
 
           <ul className="item-list media-list">{movieList}</ul>
