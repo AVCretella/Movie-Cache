@@ -126,9 +126,13 @@ var MainInterface = React.createClass({
 
   importMoviesFromFile: function(whichList) {
     console.log("SENT TO IPC");
+    var importedMovieList = [];
     ipc.on('pathReply', (event, arg) => {
-      console.log(arg); // prints "pong"
+      console.log(arg);
+      importedMovieList = arg;
+      console.log('this is imported list from renderer: ', importedMovieList);
     });
+    
     if(whichList == rankedListTitle){
       var importedMovies = ipc.sendSync('importList', 'ranked');
       // console.log("hello  we are here: here is the list", importedMovies);

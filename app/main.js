@@ -106,18 +106,67 @@ app.on('ready', function(){
     event.returnValue='';
     const {dialog} = require('electron');
     const fs = require('fs');
+    const csv = require('csv-parse');
+
+    var imputFilePath = '/Users/Desktop/movieTest.csv';
     var importedList = [];
+    var i = 0;
 
     dialog.showOpenDialog(
       {
         title: 'Select the movie file that you would like to import'
       }, (filePath) => {
         if (filePath !== undefined) {
-          // obj.from.path('filePath').to.array(function (data) {
-          // for (var index = 0; index < data.length; index++) {
-          //     importedList.push(new MyCSV(data[index][0], data[index][1], data[index][2]));
-          // }
-          event.sender.send('pathReply', filePath);
+          console.log(filePath[0]);
+
+          // var parser = parse({delimiter: ','}, function (err, data) {
+          //   async.eachSeries(data, function (line, callback) {
+          //     // do something with the line
+          //     doSomething(line).then(function() {
+          //       // when processing finishes invoke the callback to move to the next one
+          //       callback();
+          //     });
+          //   })
+          // });
+          // fs.createReadStream(inputFile).pipe(parser);
+
+          fs.createReadStream(filePath[0])
+          .pipe(csv())
+          .on('data', function(data){
+              try {
+                // event.sender.send('pathReply', data);
+                importedList.push(data[0]);
+                // event.sender.send('pathReply', importedList);
+              }
+              catch(err) {
+                  console.log(err);
+              }
+          })
+          .on('end',function(){
+            event.sender.send('pathReply', importedList);
+          });
+
+          // fs.createReadStream(filePath[0])
+          // .pipe(parse())
+          // .on('data', importedList.push)
+          // .on('end', () => {
+          //   event.sender.send('pathReply', importedList);
+          //   // [
+          //   //   { NAME: 'Daffy Duck', AGE: 24 },
+          //   //   { NAME: 'Bugs Bunny', AGE: 22 }
+          //   // ]
+          // });
+
+
+          // fs.readFile(filePath[0], 'utf8', function (err, data) {
+          //   var dataArray = data.split(/\r?\n/);  //Be careful if you are in a \r\n world...
+          //   for (i = 0; i < dataArray.length; i++) {
+          //     importedList.push(dataArray[i]);
+          //   }
+          // // Your array contains ['ID', 'D11', ... ]
+          // })
+          // event.sender.send('pathReply', importedList);
+          event.sender.send('pathReply', filePath[0]);
         // });
         }
       // console.log("here is the file path")
