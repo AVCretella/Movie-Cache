@@ -124,47 +124,99 @@ var MainInterface = React.createClass({
     }
   },
 
+  addToRankedFromFile: function(movieList) {
+    console.log("hello we've arrived in add to ranked");
+  },
+
+  addToWatchlistFromFile: function(fileMovieList) {
+    //TODO no update call for the main interface, so the movies don't get added until another movie is added! WHY
+    // console.log("hello we've arrived in add to watchlist, here is list: ", movieList);
+    let moviesNotFound = []; //TODO movies that weren't formatted correctly, return to user so they can try manually
+    let matchedMovies = []; //TODO tell the user which movies in the uploaded list matched existing ones
+    let currentMovies = this.state.myMovies;
+    let addedMovies = []; //I love you async js
+
+    let baseQuery = 'http://www.omdbapi.com/?t=';
+    let APIkey = '&apikey=2d5be971';
+    var longPlot = '&plot=full';
+    var shortPlot = '&plot=short';
+        // console.log("this is currentMovies before it's appended: ", currentMovies);
+    var tempMovieObject = {};
+
+    /* we need to check if a movie already exists
+      TODO there are still some cases that will get by this. Like if you have 'Tomb' it won't match with the existing 'Tomb Raider',
+      but the query will get 'Tomb Raider' and then add a duplicate anyway even though you tried to stop it. */
+    fileMovieList.forEach(function(movieName, idx, fileMovieList){
+      //if the movie is already in the watchlist, we don't want to waste time on a duplicate query and addition
+      if (!currentMovies.find(x => x.movieName.toLowerCase() === movieName.toLowerCase())) {
+        let APIquery = baseQuery + movieName + shortPlot + APIkey;
+        console.log("here is the query: ", APIquery);
+        fetch(APIquery) //send the query to OMDB for searching
+        .then(response => response.json())
+        .then(json =>{
+          console.log(JSON.stringify(json));
+          if(json.Response != "False"){ //if we don't get an error from the API
+            //create a movie object with desired fields and put into existing list
+            var durationMinutes = parseInt(json.Runtime.match(/[0-9]+/g)[0]); //make sure these two store correctly formatted, not as strings
+            var releaseDateInt = parseInt(json.Year.match(/[0-9]+/g)[0]);
+
+            tempMovieObject = {
+              movieName: json.Title,
+              posterURL: json.Poster,
+              directorName: json.Director,
+              actors: json.Actors,
+              releaseDate: releaseDateInt,
+              Summary: json.Plot,
+              duration: durationMinutes
+            };
+
+            currentMovies.push(tempMovieObject); //So that we check for duplicates even within our uploaded file
+            addedMovies.push(tempMovieObject);
+            console.log("this is what im stuffing in: ", tempMovieObject);
+          } else {
+            moviesNotFound.push(movieName);
+          }
+        });
+      } else {
+        matchedMovies.push(movieName);
+      }
+    });
+    console.log("this is added movies: ", addedMovies);
+
+    //TODO doing it like this is super inefficient, temp variables created everytime in addMovieObject(), could just do here
+    addedMovies.forEach(function(object, idx, addedMovies){
+      this.addMovieObject(tempMovieObject); //TODO make sure this sends to the right list, should add to whatever list you're currently on
+    });
+
+    console.log("=======");
+    // console.log("this is currentMovies and what the wishlist should be: ", currentMovies);
+    console.log("matched movie in list already, deal with these yourself you filthy animal: ", matchedMovies);
+    console.log("these titles didnt return anything, need to do manually: ", moviesNotFound);
+    console.log("=======");
+  },
+
   importMoviesFromFile: function(whichList) {
-    console.log("SENT TO IPC");
     var importedMovieList = [];
+
+    /*
+
+      TODO Also, we need to check if we are adding to the ranked list and make sure that the movies have a rank and stuff too,
+      or we can save the ones that don't and ask the user to give a personal rank and times seen to each.
+      Could be a lot of initial work for a user but very owrth it, and much quicker than searching for everything beforehand
+      */
+
+    if(this.state.movieListTitle == rankedListTitle){ //call the method in main.js
+      var importedMovies = ipc.sendSync('importList', 'ranked');
+    } else {
+      var importedMovies = ipc.sendSync('importList', 'watchlist');
+    }
+
     ipc.on('pathReply', (event, arg) => {
       console.log(arg);
       importedMovieList = arg;
       console.log('this is imported list from renderer: ', importedMovieList);
+      this.addToWatchlistFromFile(importedMovieList);
     });
-    
-    if(whichList == rankedListTitle){
-      var importedMovies = ipc.sendSync('importList', 'ranked');
-      // console.log("hello  we are here: here is the list", importedMovies);
-
-      // if (whichList == rankedListTitle){
-      //   //we want to get the movie title, the personal rank, and the times seen, just save those
-      //   // var tempString = JSON.stringify(rankedMovieData[0].movieName);
-      //   rankedMovieData.forEach(function(movie, idx, rankedMovieData){
-      //     var movieObject = {
-      //       movieName: movie.movieName,
-      //       rank: movie.rank,
-      //       viewCount: movie.viewCount
-      //     };
-      //     exportMovies.push(movieObject);
-      //   });
-      //   ipc.sendSync('exportList', exportMovies, 'ranked');
-      //   console.log("we shouuld have opened the dialog for ranked movies");
-      // }
-      // else { // == "WatchList Movies"
-      //   var importMovis = ipc.sendSync('getList', 'ranked');
-      //   //we want to just get the movie title
-      //   watchlistMovieData.forEach(function(movie, idx, watchlistMovieData){
-      //     var movieObject = {
-      //       movieName: movie.movieName,
-      //     };
-      //     exportMovies.push(movieObject);
-      //     // movieString = movie;
-      //   });
-      //   ipc.sendSync('exportList', exportMovies, 'watch');
-      //   console.log("we shouuld have opened the dialog for watchlist movies");
-      // }
-    }
   },
 
   toggleAddMovieForm: function() { //this will pull up the form to add movies

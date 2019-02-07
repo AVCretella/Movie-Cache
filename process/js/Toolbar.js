@@ -9,7 +9,7 @@ var Toolbar = React.createClass({
     }
   },
 
-  displayRankedList: function(){
+  displayTheRankedList: function(){
     console.log("ranked list being displayed");
     this.setState({
       isShowingRankedList: true
@@ -58,7 +58,7 @@ var Toolbar = React.createClass({
             <span className="toolbar-item-text">Add Movie</span>
           </div>
 
-          <div className="toolbar-item" onClick={this.displayRankedList}>
+          <div className="toolbar-item" onClick={this.displayTheRankedList}>
             <span className="toolbar-item-button glyphicon glyphicon-star"></span>
             <span className="toolbar-item-text">Favorites</span>
           </div>

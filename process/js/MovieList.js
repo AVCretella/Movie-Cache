@@ -43,6 +43,8 @@ var MovieList = React.createClass({
     console.log("Sending ", this.props.movieListTitle, " to the renderer process");
   },
 
+  //sends the list that is currently being shown so we know what to add to
+  //actually i can just check the state of the main component for that
   importList: function(movieList){
     //TODO Need to allow users to upload file
 

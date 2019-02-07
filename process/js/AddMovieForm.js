@@ -129,12 +129,10 @@ var AddMovieForm = React.createClass({
 
     /*
       When storing numbers, if they are stored as strings, sorting does not
-      work as intended. Need to store just as ints
+      work as intended. Need to store as actual ints
     */
     var durationMinutes = parseInt(this.inputMovieDuration.value.match(/[0-9]+/g)[0]);
     var releaseDateInt = parseInt(this.inputMovieReleaseDate.value.match(/[0-9]+/g)[0]);
-
-    console.log("+++++++++++want modified duration: ", durationMinutes);
 
     if (this.props.isDisplayingRanked) {
       //timesSeen is only in the ranked list
