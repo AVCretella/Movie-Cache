@@ -1,22 +1,22 @@
 var React = require('react');
 
-var defaultDate = new Date();
-defaultDate.setDate(defaultDate.getDate());
-function formatDate(date, divider) { //divider is what will separate the days
-  var someday = new Date(date);
-  var month = someday.getUTCMonth() + 1;
-  var day = someday.getUTCDate();
-  var year = someday.getUTCFullYear();
-
-  //if num <= 9, prepend a 0 for correct formatting
-  if(month <= 9){
-    month = '0' + month;
-  }
-  if(day <= 9){
-    day = '0' + day;
-  }
-  return ('' + year + divider + month + divider + day);
-}
+// var defaultDate = new Date();
+// defaultDate.setDate(defaultDate.getDate());
+// function formatDate(date, divider) { //divider is what will separate the days
+//   var someday = new Date(date);
+//   var month = someday.getUTCMonth() + 1;
+//   var day = someday.getUTCDate();
+//   var year = someday.getUTCFullYear();
+//
+//   //if num <= 9, prepend a 0 for correct formatting
+//   if(month <= 9){
+//     month = '0' + month;
+//   }
+//   if(day <= 9){
+//     day = '0' + day;
+//   }
+//   return ('' + year + divider + month + divider + day);
+// }
 
 
 /* TODO Will probably just end up turning this into a SearchMovie.js where there is one field
@@ -38,8 +38,7 @@ var AddMovieForm = React.createClass({
       sentFromForm: "movieForm"
     }
   },
-  //When toggling the display, want to reset the information in it
-  //TODO when clicking 'x' and 'cancel' as well
+
   toggleMovieDisplay: function(submitEvent){
     console.log("should reset");
     this.addMovieForm.reset();
@@ -135,10 +134,9 @@ var AddMovieForm = React.createClass({
     var releaseDateInt = parseInt(this.inputMovieReleaseDate.value.match(/[0-9]+/g)[0]);
 
     if (this.props.isDisplayingRanked) {
-      //timesSeen is only in the ranked list
-      var timesSeen = parseInt(this.inputMovieViewCount.value.match(/[0-9]+/g)[0]);
+      var timesSeen = parseInt(this.inputMovieViewCount.value.match(/[0-9]+/g)[0]); //only in the ranked list
 
-      tempItem = { //create an item with the value we want to add
+      tempItem = { //create an item with the values we want to add
         movieName: this.inputMovieName.value,
         posterURL: this.inputMoviePoster.value,
         directorName: this.inputMovieDirector.value,
@@ -150,7 +148,7 @@ var AddMovieForm = React.createClass({
         rank: this.inputMovieRank.value
         // rottenTomatoes: this.inputMovieRottenTomatoes.value,
       }
-    } else {
+    } else { //if just a wishlist movie, need less information
       tempItem = {
         movieName: this.inputMovieName.value,
         posterURL: this.inputMoviePoster.value,
@@ -292,7 +290,7 @@ var AddMovieForm = React.createClass({
               <div className="form-group">
                 <div className="col-sm-offset-3 col-sm-9">
                   <div className="pull-right">
-                    <button type="submit" className="btn btn-default" onClick={this.toggleMovieDisplay}>Cancel</button>&nbsp;
+                    <button type="submit" className="btn btn-default" onClick={this.toggleMovieDisplay} aria-label="Cancel">Cancel</button>&nbsp;
                     <button type="submit" className="btn btn-primary">Add Movie</button>
                   </div>
                 </div>

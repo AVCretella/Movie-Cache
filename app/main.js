@@ -131,8 +131,7 @@ app.on('ready', function(){
         } else {
           console.log("hello this wont print");
         }
-
-        event.sender.send('pathReply', filePath[0]);
+        // event.sender.send('pathReply', filePath[0]); //if you send this over you will make the foreach loop unhappy
       }
     });
   }); //importList
