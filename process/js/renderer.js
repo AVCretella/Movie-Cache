@@ -53,7 +53,6 @@ let watchlistSortFields = [
 let watchlistTitle = "Watchlist";
 let rankedListTitle = "Favorite Movies"
 
-//TODO standardize dates so we can have day and month
 var MainInterface = React.createClass({
   //this will load the retrieved data into an object for this component
   //begins with the ranked movielist view
@@ -130,8 +129,6 @@ var MainInterface = React.createClass({
   },
 
   addToWatchlistFromFile: function(fileMovieList) {
-    //TODO no update call for the main interface, so the movies don't get added until another movie is added! WHY
-    // console.log("hello we've arrived in add to watchlist, here is list: ", movieList);
     let moviesNotFound = []; //TODO movies that weren't formatted correctly, return to user so they can try manually
     let matchedMovies = []; //TODO tell the user which movies in the uploaded list matched existing ones
     let currentMovies = this.state.myMovies.slice();
@@ -186,15 +183,12 @@ var MainInterface = React.createClass({
         matchedMovies.push(movieName);
       }
     });
-    console.log("this is added movies: ", addedMovies);
-
-    //TODO doing it like this is super inefficient, temp variables created everytime in addMovieObject(), could just do here
-
-    console.log("=======");
+    // console.log("=======");
+    // console.log("this is added movies: ", addedMovies);
     // console.log("this is currentMovies and what the wishlist should be: ", currentMovies);
-    console.log("matched movie in list already, deal with these yourself you filthy animal: ", matchedMovies);
-    console.log("these titles didnt return anything, need to do manually: ", moviesNotFound);
-    console.log("=======");
+    // console.log("matched movie in list already, deal with these yourself you filthy animal: ", matchedMovies);
+    // console.log("these titles didnt return anything, need to do manually: ", moviesNotFound);
+    // console.log("=======");
 
     /*
     TODO now that everything is added, let's create a popup modal with the movies that weren't added because the names were messed up, and the ones that were duplicates
@@ -223,6 +217,10 @@ var MainInterface = React.createClass({
       importedMovieList = arg;
       // console.log('this is imported list from renderer: ', importedMovieList);
       this.addToWatchlistFromFile(importedMovieList);
+    });
+
+    ipc.on('numtimes', (event, arg) => {
+      console.log(arg);
     });
   },
 

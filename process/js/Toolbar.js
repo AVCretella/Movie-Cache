@@ -17,7 +17,6 @@ var Toolbar = React.createClass({
     this.props.displayRanked();
   },
 
-  //TODO change the name of this, just didnt want name conflicts
   displayTheWatchlist: function(){
     console.log("ranked list being displayed");
     this.setState({
@@ -43,8 +42,6 @@ var Toolbar = React.createClass({
   showAbout: function(){ //we want to display the show about on the toolbar
     console.log("we've been clicked and should be displaying the about")
     this.props.handleAbout();
-    //TODO need to make this call a function in the main renderer
-    // ipc.sendSync('openInfoWindow'); //sends event notification to main process
   },
 
   //INCOMP - add list buttons to this render function and figure out how to change the main page

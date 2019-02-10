@@ -66,34 +66,6 @@ var AddMovieForm = React.createClass({
       .then(response => response.json())
       .then(json =>{
         console.log(JSON.stringify(json));
-      //   if(json.Response != "False") { //MODULARITY
-      //     {/*TODO Modularity step may have been stupid, just need to call props.addMovie(movieInfo) several times when parsing a file
-      //       Also that should be in MovieList an not here because this is just movieAddmform, shouldnt control past it's scope*/}
-      //     console.log(JSON.stringify(json));
-      //     if (sentFrom == this.state.sentFromFile) {
-      //       this.inputMovieName.value = json.Title;
-      //       this.inputMoviePoster.value = json.Poster;
-      //       this.inputMovieDirector.value = json.Director;
-      //       this.inputMovieActors.value = json.Actors;
-      //       this.inputMovieReleaseDate.value = json.Year; //TODO need to change the format of released date, probably just turn into the year
-      //       this.inputMovieSummary.value = json.Plot;
-      //       this.inputMovieDuration.value = json.Runtime; //TODO may want to save just the numbers
-      //
-      //       //Run through the ratings array and find "Rotten Tomatoes"
-      //       for (i in json.Ratings){
-      //         if(json.Ratings[i].Source == "Rotten Tomatoes") {
-      //           // this.inputMovieRottenTomatoes.value = json.Ratings[i].Value; TODO need to save this in movie object
-      //           break;
-      //         }
-      //         console.log("ratings ", json.Ratings[i]);
-      //       }
-      //     } else { //TODO sent from uploading a file need to read the uploaded file and parse
-      //       console.log("not sent by addmovieform: ", JSON.stringify(json));
-      //     }
-      //   } else { //The json.Repsonse was false, user needs to retype title
-      //     this.inputMovieName.value = this.state.defaultNameNotFound;
-      //   }
-      // });
 
         //Finally set all of the retrieved data to the respective spot in the AddMovie Form
         if(json.Response != "False"){ //if we don't get an error from the API

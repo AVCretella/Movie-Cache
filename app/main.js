@@ -7,8 +7,6 @@ var myAppMenu, menuTemplate;
 
 var appWindow, infoWindow;
 
-//TODO wnat to print out to console
-
 function toggleWindow(whichWindow){
   if(whichWindow.isVisible()){
     whichWindow.hide();
@@ -17,7 +15,6 @@ function toggleWindow(whichWindow){
   }
 }
 
-//TODO get this working
 app.on('window-all-closed', function() {
   // Mac OS X - close is done explicitly with Cmd + Q, not just closing windows
     app.quit();
@@ -96,10 +93,6 @@ app.on('ready', function(){
         }
       });
     }
-    // dialog.showOpenDialog(function (arg) {
-    //
-    // });
-    // process.stdout.write('your output to command prompt console or node js ')
   }); //exportList
 
   ipc.on('importList', function(event, which, arg){
@@ -132,6 +125,7 @@ app.on('ready', function(){
           console.log("hello this wont print");
         }
         // event.sender.send('pathReply', filePath[0]); //if you send this over you will make the foreach loop unhappy
+        event.sender.send('numtimes', 'hello');
       }
     });
   }); //importList
@@ -208,17 +202,3 @@ app.on('ready', function(){
   });
 
 }); //app is ready
-
-//TODO will have to reimplement for later
-// app.on('activate-with-no-open-windows', function(){
-//   console.log('I am being clicked');
-//   // On OS X it's common to re-create a window in the app when the
-//   // dock icon is clicked and there are no other windows open.
-//   if (appWindow === null){
-//     createWindow()
-//   } else {
-//     appWindow.show();
-//   }
-// });
-
-//will want the functionality to click to reopen
