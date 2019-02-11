@@ -29,7 +29,8 @@ var AddMovieForm = React.createClass({
       defaultRank: 'Your rank for this movie out of 10.0',
       defaultDirector : 'Director\'s Name',
       defaultActors: 'Actors / Actresses',
-      defaultReleaseDate: 'The year the movie was in theaters',
+      defaultGenre: 'Genre of the movie',
+      defaultReleaseDate: 'The year the movie was released',
       defaultDuration: 'Ex: 120 min',
       defaultSummary: '',
       defaultViewCount: '1',
@@ -73,6 +74,8 @@ var AddMovieForm = React.createClass({
           this.inputMoviePoster.value = json.Poster;
           this.inputMovieDirector.value = json.Director;
           this.inputMovieActors.value = json.Actors;
+          //TODO when we get genre we need to make  into an array, use comma as delimeter
+          this.inputMovieGenre.value = json.Genre;
           this.inputMovieReleaseDate.value = json.Year; //TODO need to change the format of released date, probably just turn into the year
           this.inputMovieSummary.value = json.Plot;
           this.inputMovieDuration.value = json.Runtime; //TODO may want to save just the numbers
@@ -113,6 +116,7 @@ var AddMovieForm = React.createClass({
         posterURL: this.inputMoviePoster.value,
         directorName: this.inputMovieDirector.value,
         actors: this.inputMovieActors.value,
+        genre: this.inputMovieGenre.value,
         releaseDate: releaseDateInt,
         Summary: this.inputMovieSummary.value,
         duration: durationMinutes,
@@ -126,6 +130,7 @@ var AddMovieForm = React.createClass({
         posterURL: this.inputMoviePoster.value,
         directorName: this.inputMovieDirector.value,
         actors: this.inputMovieActors.value,
+        genre: this.inputMovieGenre.value,
         releaseDate: releaseDateInt,
         Summary: this.inputMovieSummary.value,
         duration: durationMinutes
@@ -219,6 +224,14 @@ var AddMovieForm = React.createClass({
                 <div className="col-sm-9">
                   <input type="text" className="form-control"
                     id="actors" ref={(ref) => this.inputMovieActors = ref} placeholder={this.state.defaultActors} />
+                </div>
+              </div>
+
+              <div className="form-group">
+                <label className="col-sm-3 control-label" htmlFor="genre">Genre</label>
+                <div className="col-sm-9">
+                  <input type="text" className="form-control"
+                    id="genre" ref={(ref) => this.inputMovieGenre = ref} placeholder={this.state.defaultGenre} />
                 </div>
               </div>
 

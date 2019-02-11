@@ -47,6 +47,8 @@ var MovieList = React.createClass({
   //actually i can just check the state of the main component for that
   importList: function(movieList){
     this.props.addMoviesFromFile(this.props.movieListTitle);
+    console.log("Button Pressed!!!!!!!!!!!!!");
+
     console.log("Sending ", this.props.movieListTitle, " to the renderer process");
     //make sure to check they've uploaded the correct file - says ranked or watchlist
   },

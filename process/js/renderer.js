@@ -39,6 +39,7 @@ var ImportedReportModal = require('./ImportedReportModal');
 //These are the fields that will populate the search bar when a specific list is being displayed
 let rankedSortFields = [
   { field: "movieName", displayName: "Movie Name" },
+  { field: "genre", displayName: "Genre" },
   { field: "releaseDate", displayName: "Release Date" },
   { field: "duration", displayName: "Duration" },
   { field: "rank", displayName: "Rank" }
@@ -46,6 +47,7 @@ let rankedSortFields = [
 
 let watchlistSortFields = [
   { field: "movieName", displayName: "Movie Name" },
+  { field: "genre", displayName: "Genre" },
   { field: "releaseDate", displayName: "Release Date" },
   { field: "duration", displayName: "Duration" }
 ];
@@ -166,6 +168,7 @@ var MainInterface = React.createClass({
               posterURL: json.Poster,
               directorName: json.Director,
               actors: json.Actors,
+              genre: json.Genre,
               releaseDate: releaseDateInt,
               Summary: json.Plot,
               duration: durationMinutes
@@ -265,19 +268,18 @@ var MainInterface = React.createClass({
     this.setState({
       myMovies: tempMovies
     });
-    console.log("MY MOVIES: ", this.state.myMovies);
   },
 
   deleteMovieObject: function(item) {
-    console.log("We should have deleted this movie: ", item);
+    // console.log("We should have deleted this movie: ", item);
     var allMovies = this.state.myMovies;
     var newMovies = _.without(allMovies, item); //return array without the one movie passed
-    console.log("ALL MOVIES: ", allMovies);
+    // console.log("ALL MOVIES: ", allMovies);
     this.setState({
       myMovies: newMovies
     });
-    console.log("NEW MOVIES: ", newMovies);
-    console.log("MY MOVIES: ", this.myMovies);
+    // console.log("NEW MOVIES: ", newMovies);
+    // console.log("MY MOVIES: ", this.myMovies);
   },
 
   changeMovieRank: function(item) {

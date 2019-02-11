@@ -38,16 +38,24 @@ var WatchlistMovies = React.createClass({
                 <span className="glyphicon glyphicon-remove"></span></button>
               </span>
             </div>
+
             <div className="director-name">
               <span className="label-item">Directed By:</span>{this.props.singleItem.directorName}
             </div>
-            <div className="director-name">
+
+            <div className="cast">
               <span className="label-item">Actors:</span>{this.props.singleItem.actors}
             </div>
+
+            <div className="director-name">
+              <span className="label-item">Genre:</span>{this.props.singleItem.genre}
+            </div>
+
             <div>
               <span className="label-item">Summary:</span>
               <span className="movie-notes">{this.props.singleItem.Summary}</span>
             </div>
+
             <div className="release-date" >
               <span className="label-item">Release Year:</span>{this.props.singleItem.releaseDate}
               <span className="pull-right">{this.props.singleItem.duration} minutes</span>

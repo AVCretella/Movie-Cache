@@ -15,6 +15,20 @@ var HeaderNav = React.createClass({
   render: function(){
 
     //sortFields come from the renderer process - determined by if we are loading ranked or watch list
+    // let sortFieldItems = this.props.sortFields.map((sortField) =>
+    //   if (sortField.field == "genre") {
+    //     <ul className="dropdown-menu dropdown-menu-right">
+    //       <li role="separator" className="divider"></li>
+    //       <li><a href="#" id={sortField.field} onClick={this.handleSort}>{sortField.displayName} {(this.props.orderBy === sortField.field) ? <span className="glyphicon glyphicon-ok"></span>:null}</a></li>
+    //       <li><a href="#" id="asc" onClick={this.handleOrder}>Asc {(this.props.orderDir === 'asc') ? <span className="glyphicon glyphicon-ok"></span>:null}</a></li>
+    //       <li><a href="#" id="desc" onClick={this.handleOrder}>Desc  {(this.props.orderDir === 'desc') ? <span className="glyphicon glyphicon-ok"></span>:null}</a></li>
+    //     </ul>
+    //   } else {
+    //     <li><a href="#" id={sortField.field} onClick={this.handleSort}>{sortField.displayName} {(this.props.orderBy === sortField.field) ? <span className="glyphicon glyphicon-ok"></span>:null}</a></li>
+    //   }
+    // );
+
+
     let sortFieldItems = this.props.sortFields.map((sortField) =>
       <li><a href="#" id={sortField.field} onClick={this.handleSort}>{sortField.displayName} {(this.props.orderBy === sortField.field) ? <span className="glyphicon glyphicon-ok"></span>:null}</a></li>
     );

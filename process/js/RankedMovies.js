@@ -116,6 +116,10 @@ var RankedMovies = React.createClass({
                 <span className="label-item">Actors:</span>{this.props.singleItem.actors}
               </div>
 
+              <div className="cast">
+                <span className="label-item">Genre:</span>{this.props.singleItem.genre}
+              </div>
+
               <div>
                 <span className="label-item">Summary:</span>
                 <span className="movie-notes">{this.props.singleItem.Summary}</span>
