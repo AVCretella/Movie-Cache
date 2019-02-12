@@ -105,8 +105,10 @@ var AddMovieForm = React.createClass({
       When storing numbers, if they are stored as strings, sorting does not
       work as intended. Need to store as actual ints
     */
-    var durationMinutes = parseInt(this.inputMovieDuration.value.match(/[0-9]+/g)[0]);
-    var releaseDateInt = parseInt(this.inputMovieReleaseDate.value.match(/[0-9]+/g)[0]);
+    let durationMinutes = parseInt(this.inputMovieDuration.value.match(/[0-9]+/g)[0]);
+    let releaseDateInt = parseInt(this.inputMovieReleaseDate.value.match(/[0-9]+/g)[0]);
+    let formattedGenre = this.inputMovieGenre.value.split(', ');
+    console.log('this is genre now: ', genre)
 
     if (this.props.isDisplayingRanked) {
       var timesSeen = parseInt(this.inputMovieViewCount.value.match(/[0-9]+/g)[0]); //only in the ranked list
@@ -116,7 +118,7 @@ var AddMovieForm = React.createClass({
         posterURL: this.inputMoviePoster.value,
         directorName: this.inputMovieDirector.value,
         actors: this.inputMovieActors.value,
-        genre: this.inputMovieGenre.value,
+        genre: formattedGenre,
         releaseDate: releaseDateInt,
         Summary: this.inputMovieSummary.value,
         duration: durationMinutes,
@@ -130,7 +132,7 @@ var AddMovieForm = React.createClass({
         posterURL: this.inputMoviePoster.value,
         directorName: this.inputMovieDirector.value,
         actors: this.inputMovieActors.value,
-        genre: this.inputMovieGenre.value,
+        genre:  formattedGenre,
         releaseDate: releaseDateInt,
         Summary: this.inputMovieSummary.value,
         duration: durationMinutes

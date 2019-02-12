@@ -112,6 +112,7 @@ app.on('ready', function(){
             try { //push the first element into the array
               if (data[0] != ""){
                importedList.push(data[0]);
+               event.sender.send('numtimes', 'pushed a movie');
               }
             }
             catch(err) {
@@ -125,7 +126,6 @@ app.on('ready', function(){
           console.log("hello this wont print");
         }
         // event.sender.send('pathReply', filePath[0]); //if you send this over you will make the foreach loop unhappy
-        event.sender.send('numtimes', 'hello');
       }
     });
   }); //importList

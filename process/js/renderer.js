@@ -162,13 +162,15 @@ var MainInterface = React.createClass({
             //reformat duration and year to be saved as ints, not strings
             var durationMinutes = parseInt(json.Runtime.match(/[0-9]+/g)[0]);
             var releaseDateInt = parseInt(json.Year.match(/[0-9]+/g)[0]);
+            let formattedGenre = this.inputMovieGenre.value.split(', ');
+
 
             tempMovieObject = {
               movieName: json.Title,
               posterURL: json.Poster,
               directorName: json.Director,
               actors: json.Actors,
-              genre: json.Genre,
+              genre: formattedGenre,
               releaseDate: releaseDateInt,
               Summary: json.Plot,
               duration: durationMinutes
