@@ -107,7 +107,7 @@ var AddMovieForm = React.createClass({
     */
     let durationMinutes = parseInt(this.inputMovieDuration.value.match(/[0-9]+/g)[0]);
     let releaseDateInt = parseInt(this.inputMovieReleaseDate.value.match(/[0-9]+/g)[0]);
-    let formattedGenre = this.inputMovieGenre.value.split(', ');
+    let formattedGenres = this.inputMovieGenre.value.split(', ');
     console.log('this is genre now: ', genre)
 
     if (this.props.isDisplayingRanked) {
@@ -118,7 +118,7 @@ var AddMovieForm = React.createClass({
         posterURL: this.inputMoviePoster.value,
         directorName: this.inputMovieDirector.value,
         actors: this.inputMovieActors.value,
-        genre: formattedGenre,
+        genres: formattedGenres,
         releaseDate: releaseDateInt,
         Summary: this.inputMovieSummary.value,
         duration: durationMinutes,
@@ -132,7 +132,7 @@ var AddMovieForm = React.createClass({
         posterURL: this.inputMoviePoster.value,
         directorName: this.inputMovieDirector.value,
         actors: this.inputMovieActors.value,
-        genre:  formattedGenre,
+        genres:  formattedGenres,
         releaseDate: releaseDateInt,
         Summary: this.inputMovieSummary.value,
         duration: durationMinutes

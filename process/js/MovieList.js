@@ -30,6 +30,13 @@ var MovieList = React.createClass({
   */
   sortMovies: function(movieList, orderBy, orderDir) {
     let newMovies = _.orderBy(movieList, item => item[orderBy], orderDir);
+    console.log("this is genre rn: ", this.props.genre);
+    if (this.props.genre != 'All') {
+      //TODO filter the array down to the specific genre
+      newMovies = newMovies.filter((movie) =>
+        movie.genres.includes(this.props.genre)
+      );
+    }
     //TODO need to map a different number to a new field for every movie
     //TODO need to worry about this when adding and removing movies too, maybe need another function
     // var newerMovies = _.map(newMovies, function(element) {

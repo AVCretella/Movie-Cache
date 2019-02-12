@@ -117,7 +117,7 @@ var RankedMovies = React.createClass({
               </div>
 
               <div className="cast">
-                <span className="label-item">Genre:</span>{this.props.singleItem.genre} {/*TODO join(", ") to get the array into string format */}
+                <span className="label-item">Genre:</span>{this.props.singleItem.genres.join(", ")}
               </div>
 
               <div>

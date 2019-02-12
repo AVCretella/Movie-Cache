@@ -48,7 +48,7 @@ var WatchlistMovies = React.createClass({
             </div>
 
             <div className="director-name">
-              <span className="label-item">Genre:</span>{this.props.singleItem.genre}
+              <span className="label-item">Genre:</span>{this.props.singleItem.genres.join(", ")}
             </div>
 
             <div>

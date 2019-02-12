@@ -39,7 +39,7 @@ var ImportedReportModal = require('./ImportedReportModal');
 //These are the fields that will populate the search bar when a specific list is being displayed
 let rankedSortFields = [
   { field: "movieName", displayName: "Movie Name" },
-  { field: "genre", displayName: "Genre" },
+  { field: "genres", displayName: "Genres" },
   { field: "releaseDate", displayName: "Release Date" },
   { field: "duration", displayName: "Duration" },
   { field: "rank", displayName: "Rank" }
@@ -47,10 +47,13 @@ let rankedSortFields = [
 
 let watchlistSortFields = [
   { field: "movieName", displayName: "Movie Name" },
-  { field: "genre", displayName: "Genre" },
+  { field: "genres", displayName: "Genres" },
   { field: "releaseDate", displayName: "Release Date" },
   { field: "duration", displayName: "Duration" }
 ];
+
+let genreItems = ["All", "Action","Adventure","Animation","Biography","Comedy","Crime","Documentary","Drama","Family","Fantasy","Film Noir",
+"History","Horror","Music","Musical","Mystery","Romance","Sci-Fi","Short","Sport","Superhero","Thriller","War","Western"];
 
 let watchlistTitle = "Watchlist";
 let rankedListTitle = "Favorite Movies"
@@ -63,6 +66,7 @@ var MainInterface = React.createClass({
       movieFormVisible: false,
       orderBy: 'rank',
       orderDir: 'desc',
+      genre: 'All',
       queryText: '',
       myMovies: rankedMovieData,
       MovieListItem: RankedMovies,
@@ -162,21 +166,20 @@ var MainInterface = React.createClass({
             //reformat duration and year to be saved as ints, not strings
             var durationMinutes = parseInt(json.Runtime.match(/[0-9]+/g)[0]);
             var releaseDateInt = parseInt(json.Year.match(/[0-9]+/g)[0]);
-            let formattedGenre = this.inputMovieGenre.value.split(', ');
-
+            let formattedGenres = json.Genre.split(', ');
 
             tempMovieObject = {
               movieName: json.Title,
               posterURL: json.Poster,
               directorName: json.Director,
               actors: json.Actors,
-              genre: formattedGenre,
+              genres: formattedGenres,
               releaseDate: releaseDateInt,
               Summary: json.Plot,
               duration: durationMinutes
             };
 
-            // currentMovies.push(tempMovieObject); //So that we check for duplicates even within our uploaded file
+            currentMovies.push(tempMovieObject); //So that we check for duplicates even within our uploaded file
             // addedMovies.push(tempMovieObject);
             boundAddMovieObject(tempMovieObject);
             // console.log("this is what im stuffing in: ", tempMovieObject);
@@ -245,6 +248,7 @@ var MainInterface = React.createClass({
       sortFields: rankedSortFields,
       orderBy:'rank',
       orderDir:'desc',
+      genre:'All', //reset genre on list change
       fileLocation: rankedDataLocation
     });
   },
@@ -252,13 +256,14 @@ var MainInterface = React.createClass({
   displayWatchlist: function() {
     watchlistMovieData = JSON.parse(fs.readFileSync(watchlistDataLocation));
     //if rank is being used to sort right now, change that because the watchlist doesn't use rank
-    let orderBy = (this.state.orderBy == "rank") ? "movieName" : this.state.orderBy;
+    let orderBy = (this.state.orderBy == "rank") ? "movieName" : this.state.orderBy; //otherwise, stick with the sorting we were using
     this.setState({
       myMovies: watchlistMovieData,
       MovieListItem: WatchlistMovies,
       movieListTitle: watchlistTitle,
       sortFields: watchlistSortFields,
       orderBy: orderBy,
+      genre:'All', //reset genre
       fileLocation: watchlistDataLocation
     });
   },
@@ -310,6 +315,12 @@ var MainInterface = React.createClass({
     });
   },
 
+  onFilterGenre: function(genreChosen) {
+    this.setState({
+      genre: genreChosen
+    });
+  },
+
   showHelp: function() { //we want to display the show about on the toolbar
     console.log('we got an event call, we should now display!');
     ipc.sendSync('openInfoWindow'); //sends event notification to main process
@@ -331,9 +342,12 @@ var MainInterface = React.createClass({
         <HeaderNav
           orderBy = {orderBy}
           orderDir = {orderDir}
+          genre = {this.state.genre}
           onSearch = {this.searchMovies}
           onReOrder = {this.ReOrder}
+          filterGenre = {this.onFilterGenre}
           sortFields = {sortFields}
+          genreItems = {genreItems}
         />
         <div className="interface">
           <Toolbar
@@ -350,6 +364,7 @@ var MainInterface = React.createClass({
               queryText = {queryText}
               orderBy = {orderBy}
               orderDir = {orderDir}
+              genre = {this.state.genre}
               MovieListItem = {this.state.MovieListItem}
               deleteMovie = {this.deleteMovieObject}
               changeRank = {this.changeMovieRank}
