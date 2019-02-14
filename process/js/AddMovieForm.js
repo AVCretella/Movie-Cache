@@ -19,9 +19,10 @@ var React = require('react');
 // }
 
 
-/* TODO Will probably just end up turning this into a SearchMovie.js where there is one field
-    to search for a movie and get the JSON back, we'll see, but this was an interesting look
-    at using bootstrap modals, could have used this over the summer for sure */
+/* TODO May want to turn this into just the movie title field, so the user can search for it, and if the correct information isn't returned
+  go back to the first modal and tell them to include the year to have a better chance of finding the movie.
+
+  Maybe allow them to switch to manual mode, but probs no need for that*/
 var AddMovieForm = React.createClass({
   getInitialState: function(){
     return{

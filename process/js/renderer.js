@@ -180,7 +180,6 @@ var MainInterface = React.createClass({
             };
 
             currentMovies.push(tempMovieObject); //So that we check for duplicates even within our uploaded file
-            // addedMovies.push(tempMovieObject);
             boundAddMovieObject(tempMovieObject);
             // console.log("this is what im stuffing in: ", tempMovieObject);
           } else {

@@ -32,7 +32,6 @@ var MovieList = React.createClass({
     let newMovies = _.orderBy(movieList, item => item[orderBy], orderDir);
     console.log("this is genre rn: ", this.props.genre);
     if (this.props.genre != 'All') {
-      //TODO filter the array down to the specific genre
       newMovies = newMovies.filter((movie) =>
         movie.genres.includes(this.props.genre)
       );

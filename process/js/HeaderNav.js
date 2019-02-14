@@ -19,40 +19,22 @@ var HeaderNav = React.createClass({
   //this is basically just a bootstap header, with className for react like usual
   //each of the serach options is clickable and will dynamically change the list
   render: function(){
-  //
-  // const props = this.props;
-  // let sortFieldItems = [];
-  //   props.sortFields.forEach( function(sortFieldObject){
-  //     if (sortFieldObject.field == 'genres') {
-  //       sortFieldItems.push(
-  //         <div className= "input-group-btn">
-  //           <button type="button" className="btn btn-info dropdown-toggle"
-  //             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Genre &nbsp;
-  //             <span className="caret"></span>
-  //           </button>
-  //           {/*<ul className="dropdown-menu dropdown-menu-right">
-  //             <li><a href="#" id={sortFieldObject.field} onClick={this.handleSort}>{sortFieldObject.displayName}</a></li>
-  //           </ul> */}
-  //         </div>
-  //       );
-  //     } else {
-  //       sortFieldItems.push(<li><a href="#" id={sortFieldObject.field} onClick={this.handleSort}>{sortFieldObject.displayName} {(props.orderBy === sortFieldObject.field) ? <span className="glyphicon glyphicon-ok"></span>:null}</a></li>);
-  //       // return <li><a href="#" id={sortField.field} onClick={this.handleSort}> {sortField.displayName} {(this.props.orderBy === sortField.field) ? <span className="glyphicon glyphicon-ok"></span>:null}</a></li>;
-  //     }
-  //   });
 
-    // var preliminaryItems = this.props.sortFields.filter(function (sortFieldObject) {
-    //   return sortFieldObject.field != "genres";
-    // });
+    //Genre and Sort By buttons are now separate so you can filter genre and order at the same time :)
+
+    //Generates the pre-determined Genres from renderer.js, the genre being displayed will have a checkmark next to it
     let genreItems = this.props.genreItems.map((genre) =>
-      <li><a href="#" id={genre} onClick={this.handleGenre}> {genre} {(this.props.genre === genre) ? <span className="glyphicon glyphicon-ok"></span>:null}</a></li>
+      <li >
+        <a href="#" id={genre} onClick={this.handleGenre}>
+        {(this.props.genre === genre) ? <span className="glyphicon glyphicon-ok"></span>:null} {genre}</a>
+      </li>
     );
 
+    //Generates the pre-determined sortFields for ranked/watchlist from renderer.js, the field being used will have a checkmark next to it
     let sortFieldItems = this.props.sortFields.map((sortField) =>
       <li>
-        <a href="#" id={sortField.field} onClick={this.handleSort}> {sortField.displayName}
-          {(this.props.orderBy === sortField.field) ? <span className="glyphicon glyphicon-ok"></span>:null}
-        </a>
+        <a href="#" id={sortField.field} onClick={this.handleSort}>
+        {(this.props.orderBy === sortField.field) ? <span className="glyphicon glyphicon-ok"></span>:null} {sortField.displayName}</a>
       </li>
     );
 
