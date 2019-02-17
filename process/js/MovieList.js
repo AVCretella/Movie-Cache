@@ -2,6 +2,12 @@ var React = require('React');
 var _ = require('lodash');
 
 var MovieList = React.createClass({
+  getInitialState: function(){
+    return{
+      isMoviesNotAddedModalVisible: false
+    }
+  },
+
   filterMovies: function(movieList, queryText) {
     console.log("this is the query text: ", queryText);
     let filteredMovies = [];
@@ -57,6 +63,8 @@ var MovieList = React.createClass({
 
     console.log("Sending ", this.props.movieListTitle, " to the renderer process");
     //make sure to check they've uploaded the correct file - says ranked or watchlist
+
+    //TODO want to wait for the API calls to be done and then pop up a modal with the movies that weren't added
   },
 
   renderListItems: function(movieList, deleteMovie, changeRank, MovieListItem) {
@@ -75,11 +83,19 @@ var MovieList = React.createClass({
   render: function() {
     let {movieListTitle, movieList, queryText, orderBy, orderDir, deleteMovie, changeRank, MovieListItem} = this.props;
 
+    if (movieListTitle == "Watchlist") {
+      importButton =  <span className="pull-right import">
+                        <button className="btn btn-med btn-info" onClick={this.importList}>
+                        <span className="glyphicon glyphicon-upload"></span></button>
+                      </span>
+    } else {
+      importButton = <div></div>;
+    }
+
     movieList = this.filterMovies(movieList, queryText);
-
     movieList = this.sortMovies(movieList, orderBy, orderDir);
-
     movieList = this.renderListItems(movieList, deleteMovie, changeRank, MovieListItem);
+
     return (
       <div className="row">
         <div className="movies col-sm-12">
@@ -94,10 +110,7 @@ var MovieList = React.createClass({
             </span>
 
             {/* Button to import the movies. TODO will need to be able to identify whether it is a csv (to convert to object form for watchlist) or if it already in object form) */}
-            <span className="pull-right import">
-              <button className="btn btn-med btn-info" onClick={this.importList}>
-              <span className="glyphicon glyphicon-upload"></span></button>
-            </span>
+            {importButton}
           </div>
 
           <ul className="item-list media-list">{movieList}</ul>

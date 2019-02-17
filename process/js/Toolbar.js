@@ -4,7 +4,7 @@ var AddMovie = require('./AddMovieForm.js')
 var Toolbar = React.createClass({
   getInitialState: function(){
     return {
-      isModalVisible: false,
+      isAddModalVisible: false,
       isShowingRankedList: true
     }
   },
@@ -26,16 +26,16 @@ var Toolbar = React.createClass({
   },
 
   toggleMovieDisplay: function(){ //this will allow us to add a movie to a list
-    var tempVisibility = !this.state.isModalVisible;
+    var tempVisibility = !this.state.isAddModalVisible;
     this.setState({
-      isModalVisible: tempVisibility
+      isAddModalVisible: tempVisibility
     }); //setState
   }, //toggleMovieDisplay
 
   addMovieAndCloseMyModalPlease: function(tempItem) {
     this.props.addMovie(tempItem);
     this.setState({
-      isModalVisible: false
+      isAddModalVisible: false
     });
   },
 
@@ -73,7 +73,7 @@ var Toolbar = React.createClass({
         <AddMovie //this is for the modal that will appear
           handleToggle = {this.toggleMovieDisplay} //send an event to toggle the modal
           addMovie = {this.addMovieAndCloseMyModalPlease} //when submitted, send event notification
-          isVisible = {this.state.isModalVisible}
+          isVisible = {this.state.isAddModalVisible}
           isDisplayingRanked = {this.state.isShowingRankedList}
         />
       </div>

@@ -98,13 +98,9 @@ var MainInterface = React.createClass({
   }, //componentDidUpdate
 
   writeMovieListToFile: function(whichList) {
-    console.log("hello  we are here");
-
     var exportMovies = [];
 
-    if (whichList == rankedListTitle){
-      //we want to get the movie title, the personal rank, and the times seen, just save those
-      // var tempString = JSON.stringify(rankedMovieData[0].movieName);
+    if (whichList == rankedListTitle){  //we want to get the movie title, the personal rank, and the times seen, just save those
       rankedMovieData.forEach(function(movie, idx, rankedMovieData){
         var movieObject = {
           movieName: movie.movieName,
@@ -112,7 +108,6 @@ var MainInterface = React.createClass({
           viewCount: movie.viewCount
         };
         exportMovies.push(movieObject);
-        // movieString = movie;
       });
       ipc.sendSync('exportList', exportMovies, 'ranked');
       console.log("we shouuld have opened the dialog for ranked movies");
@@ -123,7 +118,6 @@ var MainInterface = React.createClass({
           movieName: movie.movieName,
         };
         exportMovies.push(movieObject);
-        // movieString = movie;
       });
       ipc.sendSync('exportList', exportMovies, 'watch');
       console.log("we shouuld have opened the dialog for watchlist movies");

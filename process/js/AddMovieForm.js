@@ -37,7 +37,6 @@ var AddMovieForm = React.createClass({
       defaultViewCount: '1',
       defaultPoster: 'Put the url to the movie\'s poster here',
       defaultNameNotFound: 'Movie Not Found - Please try again',
-      sentFromForm: "movieForm"
     }
   },
 
@@ -144,6 +143,7 @@ var AddMovieForm = React.createClass({
     this.addMovieForm.reset();
     // this.inputMovieRottenTomatoes.value = 'Rotten Tomatoes Rating',
   },
+
   render: function(){ //using bootstrap modal for the movie creation form. All proof of concept
     let style, className;
     if (this.props.isVisible) {
