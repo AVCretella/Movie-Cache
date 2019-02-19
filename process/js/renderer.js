@@ -114,9 +114,10 @@ var MainInterface = React.createClass({
     } else { // == "WatchList Movies"
       //we want to just get the movie title
       watchlistMovieData.forEach(function(movie, idx, watchlistMovieData){
-        var movieObject = {
-          movieName: movie.movieName,
-        };
+        // var movieObject = {
+        //   movieName: movie.movieName,
+        // };
+        movieObject = movie.movieName; //TODO outputs just the array, want to put a title at each line of the csv
         exportMovies.push(movieObject);
       });
       ipc.sendSync('exportList', exportMovies, 'watch');
@@ -161,12 +162,13 @@ var MainInterface = React.createClass({
             var durationMinutes = parseInt(json.Runtime.match(/[0-9]+/g)[0]);
             var releaseDateInt = parseInt(json.Year.match(/[0-9]+/g)[0]);
             let formattedGenres = json.Genre.split(', ');
+            let formattedActors = json.Actors.split(', ');
 
             tempMovieObject = {
               movieName: json.Title,
               posterURL: json.Poster,
               directorName: json.Director,
-              actors: json.Actors,
+              actors: formattedActors,
               genres: formattedGenres,
               releaseDate: releaseDateInt,
               Summary: json.Plot,
@@ -184,12 +186,12 @@ var MainInterface = React.createClass({
         matchedMovies.push(movieName);
       }
     });
-    // console.log("=======");
+    console.log("=======");
     // console.log("this is added movies: ", addedMovies);
     // console.log("this is currentMovies and what the wishlist should be: ", currentMovies);
-    // console.log("matched movie in list already, deal with these yourself you filthy animal: ", matchedMovies);
-    // console.log("these titles didnt return anything, need to do manually: ", moviesNotFound);
-    // console.log("=======");
+    console.log("matched movie in list already, deal with these yourself you filthy animal: ", matchedMovies);
+    console.log("these titles didnt return anything, need to do manually: ", moviesNotFound);
+    console.log("=======");
 
     /*
     TODO now that everything is added, let's create a popup modal with the movies that weren't added because the names were messed up, and the ones that were duplicates

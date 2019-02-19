@@ -44,7 +44,7 @@ var WatchlistMovies = React.createClass({
             </div>
 
             <div className="cast">
-              <span className="label-item">Actors:</span>{this.props.singleItem.actors}
+              <span className="label-item">Actors:</span>{this.props.singleItem.actors.join(", ")}
             </div>
 
             <div className="director-name">

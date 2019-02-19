@@ -108,7 +108,10 @@ var AddMovieForm = React.createClass({
     let durationMinutes = parseInt(this.inputMovieDuration.value.match(/[0-9]+/g)[0]);
     let releaseDateInt = parseInt(this.inputMovieReleaseDate.value.match(/[0-9]+/g)[0]);
     let formattedGenres = this.inputMovieGenre.value.split(', ');
-    console.log('this is genre now: ', genre)
+    let formattedActors = this.inputMovieActors.value.split(', ');
+
+    //TODO for movies without some information, we need to have safe cases for all of them
+            //something like 'triple frontier' has no duration yet, breaks the modal
 
     if (this.props.isDisplayingRanked) {
       var timesSeen = parseInt(this.inputMovieViewCount.value.match(/[0-9]+/g)[0]); //only in the ranked list
@@ -117,7 +120,7 @@ var AddMovieForm = React.createClass({
         movieName: this.inputMovieName.value,
         posterURL: this.inputMoviePoster.value,
         directorName: this.inputMovieDirector.value,
-        actors: this.inputMovieActors.value,
+        actors: formattedActors,
         genres: formattedGenres,
         releaseDate: releaseDateInt,
         Summary: this.inputMovieSummary.value,
@@ -131,7 +134,7 @@ var AddMovieForm = React.createClass({
         movieName: this.inputMovieName.value,
         posterURL: this.inputMoviePoster.value,
         directorName: this.inputMovieDirector.value,
-        actors: this.inputMovieActors.value,
+        actors: formattedActors,
         genres:  formattedGenres,
         releaseDate: releaseDateInt,
         Summary: this.inputMovieSummary.value,

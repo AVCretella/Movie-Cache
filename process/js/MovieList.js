@@ -8,14 +8,17 @@ var MovieList = React.createClass({
     }
   },
 
+  //TODO really crappy search, but not the focus rn, and complexity isn't huge because lists will only be so big
   filterMovies: function(movieList, queryText) {
     console.log("this is the query text: ", queryText);
     let filteredMovies = [];
+
+    //we check if what they are typing matches anything in any of the movies, if it does, return that movie
+    //TODO this is case sensitive at the moment, should it be?
+            //can use .toLowerCase() but that isn't how things are matched
     for(var i = 0; i < movieList.length; i++){ //filtering our movie list
-      //we check if what they are typing matches anything in any of the movies, if it does, return that movie
-      //TODO this is case sensitive at the moment, should it be?
-      //can use .toLowerCase() but that isn't how things are matched
       if((movieList[i].movieName.indexOf(queryText) != -1) ||
+        (movieList[i].actors.includes(queryText)) || //check the actors array has an actor
         (movieList[i].directorName.indexOf(queryText) != -1) ||
         (movieList[i].releaseDate == queryText) ||
         (movieList[i].Summary.indexOf(queryText) != -1)){

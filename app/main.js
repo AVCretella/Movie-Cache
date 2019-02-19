@@ -82,7 +82,7 @@ app.on('ready', function(){
       dialog.showSaveDialog(
       {
         message: 'Save Your Watchlist\n The name you give will be replaced by Watchlist.txt, do not change this',
-        defaultPath: '~/Watchlist.txt'
+        defaultPath: '~/Watchlist.csv'
       }, (path) => {
         if (path != undefined) {
           fs.writeFile(path, movies, function(err) {
