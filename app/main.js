@@ -99,8 +99,8 @@ app.on('ready', function(){
     event.returnValue='';
     const {dialog} = require('electron');
     const fs = require('fs');
-    // const csv = require('csv-parse');
-    var parse = require('csv').parse;
+    const csv = require('csv-parse');
+    // var csv = require('csv').parse;
 
     var importedList = [];
 
@@ -108,7 +108,7 @@ app.on('ready', function(){
       if (filePath != undefined) {
         if (which == 'watchlist') { //just need the movie titles
           fs.createReadStream(filePath[0])
-          .pipe(parse())
+          .pipe(csv())
           .on('data', function(data){
             try { //push the first element into the array
               if ( (data[0] != "") && (!importedList.includes(data[0])) ){ //try to get rid of duplicates
