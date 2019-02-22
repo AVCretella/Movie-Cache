@@ -1,24 +1,5 @@
 var React = require('react');
 
-// var defaultDate = new Date();
-// defaultDate.setDate(defaultDate.getDate());
-// function formatDate(date, divider) { //divider is what will separate the days
-//   var someday = new Date(date);
-//   var month = someday.getUTCMonth() + 1;
-//   var day = someday.getUTCDate();
-//   var year = someday.getUTCFullYear();
-//
-//   //if num <= 9, prepend a 0 for correct formatting
-//   if(month <= 9){
-//     month = '0' + month;
-//   }
-//   if(day <= 9){
-//     day = '0' + day;
-//   }
-//   return ('' + year + divider + month + divider + day);
-// }
-
-
 /* TODO May want to turn this into just the movie title field, so the user can search for it, and if the correct information isn't returned
   go back to the first modal and tell them to include the year to have a better chance of finding the movie.
 

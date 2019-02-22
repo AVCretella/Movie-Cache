@@ -70,25 +70,26 @@ var MovieList = React.createClass({
     //TODO want to wait for the API calls to be done and then pop up a modal with the movies that weren't added
   },
 
-  renderListItems: function(movieList, deleteMovie, changeRank, MovieListItem) {
+  renderListItems: function(movieList, deleteMovie, changeRank, moveToFavorites, MovieListItem) {
     return movieList.map(function(item, index){ //send this data to MovieList to create a series of those tags
       return(
         <MovieListItem
           key = {index} //each index of the data.json file
           singleItem = {item} //each item at that index
-          onDelete = {deleteMovie}
-          onChangeRank = {changeRank}
+          onDelete = {deleteMovie} //calls the deleteMovie function in renderer.js
+          onChangeRank = {changeRank} //calls the changeRank function in renderer.js
+          onMoveToFavorites = {moveToFavorites} //calls the moveToFavorites function in renderer.js
         />
       ) //return
     }.bind(this));
   },
 
   render: function() {
-    let {movieListTitle, movieList, queryText, orderBy, orderDir, deleteMovie, changeRank, MovieListItem} = this.props;
+    let {movieListTitle, movieList, queryText, orderBy, orderDir, deleteMovie, changeRank, moveToFavorites, MovieListItem} = this.props;
 
     if (movieListTitle == "Watchlist") {
       importButton =  <span className="pull-right import">
-                        <button className="btn btn-med btn-info" onClick={this.importList}>
+                        <button className="btn btn-med btn-info" title="Import a movie list .csv from file" onClick={this.importList}>
                         <span className="glyphicon glyphicon-open"></span></button>
                       </span>
     } else {
@@ -97,7 +98,7 @@ var MovieList = React.createClass({
 
     movieList = this.filterMovies(movieList, queryText);
     movieList = this.sortMovies(movieList, orderBy, orderDir);
-    movieList = this.renderListItems(movieList, deleteMovie, changeRank, MovieListItem);
+    movieList = this.renderListItems(movieList, deleteMovie, changeRank, moveToFavorites, MovieListItem);
 
     return (
       <div className="row">
@@ -108,7 +109,7 @@ var MovieList = React.createClass({
 
             {/* Button to export the ranked and wish lists*/}
             <span className="pull-right export">
-              <button className="btn btn-med btn-info" onClick={this.exportList}>
+              <button className="btn btn-med btn-info" title="Export this list to a file" onClick={this.exportList}>
               <span className="glyphicon glyphicon-save"></span></button>
             </span>
 

@@ -88,7 +88,7 @@ var RankedMovies = React.createClass({
           </div>
         </div>
 
-        <li className="movie-item media">
+        <li className="item-list movie-item media">
           <div className="col-sm-1">
             <button className="btn btn-success" onClick={this.toggleChangeRankDisplay}>
               <span className="glyphicon glyphicon-arrow-up"></span>
@@ -108,10 +108,10 @@ var RankedMovies = React.createClass({
               <div className="movie-head">
                 <span className="movie-name">{this.props.singleItem.movieName}</span>
                 <span className="pull-right">
-                  <button className="movie-delete btn btn-med btn-danger" onClick={this.removeFromList}>
+                  <button className="movie-delete btn btn-sm btn-danger" title="Delete this movie from the list" onClick={this.removeFromList}>
                   <span className="glyphicon glyphicon-remove"></span></button>
                 </span>
-                <button className="btn btn-primary pull-right" onClick={this.toggleChangeRankDisplay}>
+                <button className="btn btn-primary btn-sm pull-right" onClick={this.toggleChangeRankDisplay}>
                   <span className="rank">{this.props.singleItem.rank} / 10</span>
                 </button>
               </div>

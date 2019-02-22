@@ -297,6 +297,23 @@ var MainInterface = React.createClass({
     });
   },
 
+  //Given an item with ranked format (all movie info + rank and timesSeen), write it directly to rankedDataLocation and then delete
+  //the item from the watchlist
+  moveMovieToFavorites: function(item){
+    rankedMovieData.push(item);
+    fs.writeFile(rankedDataLocation, JSON.stringify(rankedMovieData), 'utf8', function(err) {
+      if (err) {
+        console.log(err);
+      }
+    }); //will go to the file location that our data is at and change it
+
+    //pulls the rank and timesSeen fields out of the object so it can be recognized by the deleteMovieObject function
+    delete item.rank;
+    delete item.timesSeen;
+    this.deleteMovieObject(item);
+    // watchlistMovieData = _.remove(item.movieName);
+  },
+
   searchMovies: function(query) { //query is what user typed into search bar
     this.setState({
       queryText: query
@@ -363,6 +380,7 @@ var MainInterface = React.createClass({
               MovieListItem = {this.state.MovieListItem}
               deleteMovie = {this.deleteMovieObject}
               changeRank = {this.changeMovieRank}
+              moveToFavorites = {this.moveMovieToFavorites}
               createMovieListFile = {this.writeMovieListToFile}
               addMoviesFromFile = {this.importMoviesFromFile}
             />
