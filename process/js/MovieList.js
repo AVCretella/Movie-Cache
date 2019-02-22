@@ -89,7 +89,7 @@ var MovieList = React.createClass({
     if (movieListTitle == "Watchlist") {
       importButton =  <span className="pull-right import">
                         <button className="btn btn-med btn-info" onClick={this.importList}>
-                        <span className="glyphicon glyphicon-upload"></span></button>
+                        <span className="glyphicon glyphicon-open"></span></button>
                       </span>
     } else {
       importButton = <div></div>;
@@ -109,7 +109,7 @@ var MovieList = React.createClass({
             {/* Button to export the ranked and wish lists*/}
             <span className="pull-right export">
               <button className="btn btn-med btn-info" onClick={this.exportList}>
-              <span className="glyphicon glyphicon-download"></span></button>
+              <span className="glyphicon glyphicon-save"></span></button>
             </span>
 
             {/* Button to import the movies. TODO will need to be able to identify whether it is a csv (to convert to object form for watchlist) or if it already in object form) */}

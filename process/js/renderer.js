@@ -5,7 +5,7 @@
 */
 
 //copy and paste libraries here
-var $ = jQuery = require('jquery');
+var $ = jQuery = require('jquery'); //TODO NO LONGER NEED JQUERY
 var bootstrap = require('bootstrap');
 var _ = require('lodash');
 // var remote = eRequire('electron').remote;
@@ -147,9 +147,9 @@ var MainInterface = React.createClass({
       but the query will get 'Tomb Raider' and then add a duplicate anyway even though you tried to stop it.
       */
 
-
     // console.log("this is what ed wants", fileMovieList);
     fileMovieList.forEach(function(movieName, idx, fileMovieList){
+      //TODO currentMovies never updates, so if it wasn't there to begin with, wont find a duplicate
       if (!currentMovies.find(x => x.movieName.toLowerCase() === movieName.toLowerCase())) { //if already in watchlist, don't waste time on duplicate query + addition
         let APIquery = baseQuery + movieName + shortPlot + APIkey;
         fetch(APIquery) //send the query to OMDB for searching

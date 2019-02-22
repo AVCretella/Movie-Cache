@@ -89,13 +89,21 @@ var RankedMovies = React.createClass({
         </div>
 
         <li className="movie-item media">
+          <div className="col-sm-1">
+            <button className="btn btn-success" onClick={this.toggleChangeRankDisplay}>
+              <span className="glyphicon glyphicon-arrow-up"></span>
+            </button>
+            <button className="btn btn-danger" onClick={this.toggleChangeRankDisplay}>
+              <span className="glyphicon glyphicon-arrow-down"></span>
+            </button>
+          </div>
           <div className="col-sm-2">
             <div className="movie-poster">
               <img src={this.props.singleItem.posterURL} style={{width: '100%', height: '100%'}} alt="[ Movie Poster Unavailable ]"></img>
             </div>
           </div>
 
-          <div className="col-sm-10">
+          <div className="col-sm-9">
             <div className="movie-info media-body">
               <div className="movie-head">
                 <span className="movie-name">{this.props.singleItem.movieName}</span>

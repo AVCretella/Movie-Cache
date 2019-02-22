@@ -74,11 +74,10 @@ var AddMovieForm = React.createClass({
           this.inputMoviePoster.value = json.Poster;
           this.inputMovieDirector.value = json.Director;
           this.inputMovieActors.value = json.Actors;
-          //TODO when we get genre we need to make  into an array, use comma as delimeter
           this.inputMovieGenre.value = json.Genre;
-          this.inputMovieReleaseDate.value = json.Year; //TODO need to change the format of released date, probably just turn into the year
+          this.inputMovieReleaseDate.value = json.Year;
           this.inputMovieSummary.value = json.Plot;
-          this.inputMovieDuration.value = json.Runtime; //TODO may want to save just the numbers
+          this.inputMovieDuration.value = json.Runtime;
 
           //TODO Run through the ratings array and find "Rotten Tomatoes"
           // for (i in json.Ratings){
@@ -100,7 +99,6 @@ var AddMovieForm = React.createClass({
 
     //When the Favorites list is being displayed, we need to send the viewCount and rank as well
     var tempItem = {};
-
     /*
       When storing numbers, if they are stored as strings, sorting does not
       work as intended. Need to store as actual ints

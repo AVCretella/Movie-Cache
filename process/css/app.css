@@ -142,20 +142,34 @@ body {
   color: #296B73;
 }
 
-/* So the buttons aren't on top of one another */
-/* .movies .export {
-  margin-left: .7em;
-  display: block;
+
+/* .col-xs-2, .col-xs-10 {
+    display: inline-block;
+    float: none;
+}
+.col-xs-10 {
+    vertical-align: middle;
 } */
 
-/* .movie-info .media-body{
-  position: relative;
+/* These will align all the information for a movie and the up and down arrows */
+/* =========================================================================== */
+.col-sm-1, .col-sm-2, .col-sm-9, .col-sm-10 {
+  display: inline-block;
+  float: none;
 }
 
-.movie-info .media-body .releaseDate{
-  position: absolute;
-  bottom: 0;
-} */
+.col-sm-2, .col-sm-9, .col-sm-10 {
+  vertical-align: middle;
+}
+/* =========================================================================== */
+
+.col-sm-1 .btn-up {
+  background-color: #18C1EF;
+}
+
+.col-sm-1 .btn .btn-down {
+  background-color: ##ff3399;
+}
 
 .item-list {
   margin: 0;
@@ -201,7 +215,6 @@ body {
 }
 
 */
-
 
 .item-list .movie-name { /*The color of the Title of the movie*/
   font-weight: bold;
