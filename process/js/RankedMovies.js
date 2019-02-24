@@ -30,12 +30,20 @@ var RankedMovies = React.createClass({
   },
 
   //Want to close and reset the changeRank modal
-  toggleChangeRankDisplay: function(){
+  toggleChangeRankDisplay: function() {
     var tempVisibility = !this.state.rankChangeVisible;
     this.setState({
       rankChangeVisible: tempVisibility
     }); //setState
     this.changeRankFormRef.reset();
+  },
+
+  moveRankUp: function() {
+    this.props.onRankUp(this.props.singleItem);
+  },
+
+  moveRankDown: function() {
+    this.props.onRankDown(this.props.singleItem);
   },
 
   //1 column for the poster image, 11 cols for the name, description .. stuff
@@ -52,6 +60,21 @@ var RankedMovies = React.createClass({
       style = {
         display: "none"
       };
+    }
+
+    if (this.props.sortField == 'rank') {
+      moveButtons = <div className="col-sm-1">
+                      <button className="btn btn-success" title="Move up one on the list" onClick={this.moveRankUp}>
+                        <span className="glyphicon glyphicon-arrow-up"></span>
+                      </button>
+                      <button className="btn btn-danger" title="Move down one on the list" onClick={this.moveRankDown}>
+                        <span className="glyphicon glyphicon-arrow-down"></span>
+                      </button>
+                    </div>;
+      posterStyle = "col-sm-2";
+    } else {
+      moveButtons = <div></div>;
+      posterStyle = "col-sm-3";
     }
 
     return(
@@ -89,15 +112,8 @@ var RankedMovies = React.createClass({
         </div>
 
         <li className="item-list movie-item media">
-          <div className="col-sm-1">
-            <button className="btn btn-success" onClick={this.toggleChangeRankDisplay}>
-              <span className="glyphicon glyphicon-arrow-up"></span>
-            </button>
-            <button className="btn btn-danger" onClick={this.toggleChangeRankDisplay}>
-              <span className="glyphicon glyphicon-arrow-down"></span>
-            </button>
-          </div>
-          <div className="col-sm-2">
+          {moveButtons}
+          <div className={posterStyle}>
             <div className="movie-poster">
               <img src={this.props.singleItem.posterURL} style={{width: '100%', height: '100%'}} alt="[ Movie Poster Unavailable ]"></img>
             </div>

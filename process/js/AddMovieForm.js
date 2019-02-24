@@ -23,7 +23,7 @@ var AddMovieForm = React.createClass({
 
   toggleMovieDisplay: function(submitEvent){
     console.log("should reset");
-    this.addMovieForm.reset();
+    this.resetForm();
     this.props.handleToggle();
   },
 
@@ -122,8 +122,12 @@ var AddMovieForm = React.createClass({
     }
 
     this.props.addMovie(tempItem); //pass the object to the function in the renderer process
-    this.addMovieForm.reset();
+    this.resetForm();
     // this.inputMovieRottenTomatoes.value = 'Rotten Tomatoes Rating',
+  },
+
+  resetForm: function(){
+    this.addMovieForm.reset();
   },
 
   render: function(){ //using bootstrap modal for the movie creation form. All proof of concept
@@ -259,9 +263,10 @@ var AddMovieForm = React.createClass({
 
               <div className="form-group">
                 <div className="col-sm-offset-3 col-sm-9">
+                  <button className="btn btn-reset" title="Click on me if things are feeling wonky and start over" onClick={this.resetForm} aria-label="Reset">Reset</button>&nbsp;
                   <div className="pull-right">
-                    <button type="submit" className="btn btn-default" onClick={this.toggleMovieDisplay} aria-label="Cancel">Cancel</button>&nbsp;
-                    <button type="submit" className="btn btn-primary">Add Movie</button>
+                    <button type="submit" className="btn btn-danger" title="don't let your dreams be dreams" onClick={this.toggleMovieDisplay} aria-label="Cancel">Cancel</button>&nbsp;
+                    <button type="submit" className="btn btn-primary" title="Add this boi to the list">Add Movie</button>
                   </div>
                 </div>
               </div>

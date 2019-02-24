@@ -40,6 +40,9 @@ h1, h2, h3, h4, h5, h6 {
 
 .navbar-default { /*This is the color for the headerNav*/
   background-color: #008BFF;
+  /* background: linear-gradient( 120deg,
+    rgba(57, 216, 234, 0.75),
+    rgba(81, 39, 165, 0.95)); */
   border: none;
 }
 
@@ -80,6 +83,9 @@ body {
 .interface {
   display: flex;
   background: #D8F2F0;
+  /* background: linear-gradient( 120deg,
+    rgba(57, 216, 234, 0.75),
+    rgba(81, 39, 165, 0.95)); */
 }
 
 .toolbar { /*This is the background color for the sidebar toolbar */
@@ -171,6 +177,10 @@ body {
   background-color: ##ff3399;
 }
 
+.btn-reset {
+  background-color: orange;
+}
+
 .item-list {
   margin: 0;
   padding: 0;
@@ -188,7 +198,7 @@ body {
 }
 
 .item-list .movie-item:nth-child(2n) {
-    background: rgba(255,255,255,.5);
+    background: rgba(255,255,255,.6);
     border-radius: 5px;
 }
 

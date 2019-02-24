@@ -10,7 +10,7 @@ var MovieList = React.createClass({
 
   //TODO really crappy search, but not the focus rn, and complexity isn't huge because lists will only be so big
   filterMovies: function(movieList, queryText) {
-    console.log("this is the query text: ", queryText);
+    // console.log("this is the query text: ", queryText);
     let filteredMovies = [];
 
     //we check if what they are typing matches anything in any of the movies, if it does, return that movie
@@ -39,7 +39,7 @@ var MovieList = React.createClass({
   */
   sortMovies: function(movieList, orderBy, orderDir) {
     let newMovies = _.orderBy(movieList, item => item[orderBy], orderDir);
-    console.log("this is genre rn: ", this.props.genre);
+    // console.log("this is genre rn: ", this.props.genre);
     if (this.props.genre != 'All') {
       newMovies = newMovies.filter((movie) =>
         movie.genres.includes(this.props.genre)
@@ -70,15 +70,40 @@ var MovieList = React.createClass({
     //TODO want to wait for the API calls to be done and then pop up a modal with the movies that weren't added
   },
 
-  renderListItems: function(movieList, deleteMovie, changeRank, moveToFavorites, MovieListItem) {
+  moveRankUp: function(item) {
+    console.log(this.props.movieList);
+    sortedMovies = this.sortMovies(this.props.movieList, this.props.orderBy, this.props.orderDir);
+    let indexMovieToChange = _.indexOf(sortedMovies, item);
+    console.log("TRYING TO GO UP");
+    console.log("this is the index of the movie that we clicked: ", indexMovieToChange);
+    if (indexMovieToChange != 0) {
+      item.rank = (this.props.movieList[indexMovieToChange - 1].rank - - .01).toFixed(2);
+      this.props.changeRank(item);
+    }
+  },
+
+  moveRankDown: function(item) {
+    console.log(this.props.movieList);
+    sortedMovies = this.sortMovies(this.props.movieList, this.props.orderBy, this.props.orderDir);
+    let indexMovieToChange = _.indexOf(sortedMovies, item);
+    console.log("TRYING TO GO DOWN");
+    console.log("this is the index of the movie that we clicked: ", indexMovieToChange);
+    item.rank = (this.props.movieList[indexMovieToChange + 1].rank - .01).toFixed(2);
+    this.props.changeRank(item);
+  },
+
+  renderListItems: function(movieList, orderBy, deleteMovie, changeRank, moveToFavorites, MovieListItem) {
     return movieList.map(function(item, index){ //send this data to MovieList to create a series of those tags
       return(
         <MovieListItem
           key = {index} //each index of the data.json file
           singleItem = {item} //each item at that index
+          sortField = {orderBy}
           onDelete = {deleteMovie} //calls the deleteMovie function in renderer.js
           onChangeRank = {changeRank} //calls the changeRank function in renderer.js
           onMoveToFavorites = {moveToFavorites} //calls the moveToFavorites function in renderer.js
+          onRankUp = {this.moveRankUp}
+          onRankDown = {this.moveRankDown}
         />
       ) //return
     }.bind(this));
@@ -98,7 +123,8 @@ var MovieList = React.createClass({
 
     movieList = this.filterMovies(movieList, queryText);
     movieList = this.sortMovies(movieList, orderBy, orderDir);
-    movieList = this.renderListItems(movieList, deleteMovie, changeRank, moveToFavorites, MovieListItem);
+    movieList = this.renderListItems(movieList, orderBy, deleteMovie, changeRank, moveToFavorites, MovieListItem);
+    console.log("this is movieList after it is all rendered: ", movieList);
 
     return (
       <div className="row">

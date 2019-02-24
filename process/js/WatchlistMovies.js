@@ -28,25 +28,13 @@ var WatchlistMovies = React.createClass({
     var tempItem = this.props.singleItem;
     tempItem.viewCount = this.inputTimesSeen.value;
     tempItem.rank = this.inputMovieRank.value;
-    //   movieName = this.props.singleItem.movieName,
-    //   this.props.singleItem.posterUrl,
-    //   this.props.singleItem.directorName,
-    //   this.props.singleItem.actors,
-    //   this.props.singleItem.genres,
-    //   this.props.singleItem.releaseDate,
-    //   this.props.singleItem.Summary,
-    //   this.props.singleItem.duration,
-    //   this.props.singleItem.duration,
-    //   this.inputTimesSeen.value,
-    //   this.inputMovieRank.value
-    // }
 
     console.log("trying to move movie", this.props.singleItem);
     this.props.onMoveToFavorites(tempItem);
 
     this.toggleMoveMovieDisplay();
     this.moveMovieFormRef.reset();
-    
+
     //TODO probably want a callback for this so that we dont delete it and then not end up moving, like if someone changes their mind
     // this.props.onDelete(this.props.singleItem); //lets the function know which movie has been selected for deletion
   },
@@ -80,17 +68,17 @@ var WatchlistMovies = React.createClass({
 
               <form className="modal-body add-movie form-horizontal" ref={(ref) => this.moveMovieFormRef = ref} onSubmit={this.moveToFavorites}>
                 <div className="form-group">
-                  <label className="col-sm-3 control-label" htmlFor="rank">Your Rating (out of 10):</label>
-                  <div className="col-sm-9">
-                    <input type="number" step=".01" min="0" max="9.99" className="form-control" placeholder={this.props.singleItem.rank}
+                  <label className="col-sm-10 control-label" htmlFor="rank">Your Rating (out of 10):</label>
+                  <div className="col-sm-2">
+                    <input type="number" step=".01" min="0" max="9.99" className="form-control" placeholder="8.5"
                       id="rank" ref={(ref) => this.inputMovieRank = ref}/>
                   </div>
                 </div>
 
                 <div className="form-group">
-                  <label className="col-sm-3 control-label" htmlFor="timesSeen">How many times have you seen {this.props.singleItem.movieName}?:</label>
-                  <div className="col-sm-9">
-                    <input type="number" step="1" min="1" max="100" className="form-control" placeholder="0"
+                  <label className="col-sm-10 control-label" htmlFor="timesSeen">How many times have you seen {this.props.singleItem.movieName}?:</label>
+                  <div className="col-sm-2">
+                    <input type="number" step="1" min="1" max="100" className="form-control" placeholder="1"
                       id="timesSeen" ref={(ref) => this.inputTimesSeen = ref}/>
                   </div>
                 </div>
@@ -99,7 +87,7 @@ var WatchlistMovies = React.createClass({
                   <div className="col-sm-offset-3 col-sm-9">
                     <div className="pull-right">
                       {/*<button type="submit" className="btn btn-default" onClick={this.toggleRankDisplay}>Cancel</button>&nbsp;*/}
-                      <button type="submit" className="btn btn-success">Change Rank</button>
+                      <button type="submit" className="btn btn-success">Move To Favorites List</button>
                     </div>
                   </div>
                 </div>
@@ -129,7 +117,7 @@ var WatchlistMovies = React.createClass({
                 </span>
                 <span className="pull-right">
                   <button className="movie-delete btn btn-xs btn-success" title="Move this movie to your ranked list" onClick={this.toggleMoveMovieDisplay}>
-                  <span className="glyphicon glyphicon-lamp"></span></button>
+                  <span className="glyphicon glyphicon-share-alt"></span></button>
                 </span>
               </div>
 

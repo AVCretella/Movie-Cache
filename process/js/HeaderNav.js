@@ -23,16 +23,16 @@ var HeaderNav = React.createClass({
     //Genre and Sort By buttons are now separate so you can filter genre and order at the same time :)
 
     //Generates the pre-determined Genres from renderer.js, the genre being displayed will have a checkmark next to it
-    let genreItems = this.props.genreItems.map((genre) =>
-      <li >
+    let genreItems = this.props.genreItems.map((genre, index) =>
+      <li key={index}>
         <a href="#" id={genre} onClick={this.handleGenre}>
         {(this.props.genre === genre) ? <span className="glyphicon glyphicon-ok"></span>:null} {genre}</a>
       </li>
     );
 
     //Generates the pre-determined sortFields for ranked/watchlist from renderer.js, the field being used will have a checkmark next to it
-    let sortFieldItems = this.props.sortFields.map((sortField) =>
-      <li>
+    let sortFieldItems = this.props.sortFields.map((sortField, index) =>
+      <li key={index}>
         <a href="#" id={sortField.field} onClick={this.handleSort}>
         {(this.props.orderBy === sortField.field) ? <span className="glyphicon glyphicon-ok"></span>:null} {sortField.displayName}</a>
       </li>

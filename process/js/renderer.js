@@ -39,7 +39,6 @@ var ImportedReportModal = require('./ImportedReportModal');
 //These are the fields that will populate the search bar when a specific list is being displayed
 let rankedSortFields = [
   { field: "movieName", displayName: "Movie Name" },
-  { field: "genres", displayName: "Genres" },
   { field: "releaseDate", displayName: "Release Date" },
   { field: "duration", displayName: "Duration" },
   { field: "rank", displayName: "Rank" }
@@ -47,7 +46,6 @@ let rankedSortFields = [
 
 let watchlistSortFields = [
   { field: "movieName", displayName: "Movie Name" },
-  { field: "genres", displayName: "Genres" },
   { field: "releaseDate", displayName: "Release Date" },
   { field: "duration", displayName: "Duration" }
 ];
@@ -280,12 +278,13 @@ var MainInterface = React.createClass({
     this.setState({
       myMovies: newMovies
     });
+
+    console.log("deleted: ", item.movieName);
     // console.log("NEW MOVIES: ", newMovies);
     // console.log("MY MOVIES: ", this.myMovies);
   },
 
   changeMovieRank: function(item) {
-    // console.log("We want to change the rank of this: ", item);
     var allMovies = this.state.myMovies;
     // console.log("this is movieName: ", item.movieName);
     var index = _.findIndex(allMovies, {movieName: item.movieName}); //index of the movie that we want to change rank of
@@ -297,11 +296,23 @@ var MainInterface = React.createClass({
     });
   },
 
+  moveUp: function(item) {
+
+  },
+
+  moveDown: function(item) {
+
+  },
+
   //Given an item with ranked format (all movie info + rank and timesSeen), write it directly to rankedDataLocation and then delete
   //the item from the watchlist
   moveMovieToFavorites: function(item){
-    rankedMovieData.push(item);
-    fs.writeFile(rankedDataLocation, JSON.stringify(rankedMovieData), 'utf8', function(err) {
+    console.log("rankedMovieData before the push: ", rankedMovieData);
+    newRanked = JSON.parse(fs.readFileSync(rankedDataLocation));
+    newRanked.push(item);
+    // rankedMovieData.push(item);
+    console.log("rankedMovieData after the push: ", rankedMovieData);
+    fs.writeFile(rankedDataLocation, JSON.stringify(newRanked), 'utf8', function(err) {
       if (err) {
         console.log(err);
       }
@@ -346,7 +357,7 @@ var MainInterface = React.createClass({
     var movieListTitle = this.state.movieListTitle;
     var sortFields = this.state.sortFields;
 
-    console.log(this.state);
+    // console.log(this.state);
 
     return(
       //a basic way to show one of the movies in that dataset, will turn into a list
@@ -401,56 +412,3 @@ function renderMainInterface() {
 }
 
 renderMainInterface();
-
-//===== Completely Separate Proof of Concept - stick a clock at the bottom, this is how I want to do things
-// function Clock(props) {
-//   return (
-//     <div>
-//       <h1>Hello Alex, Do Your Work!</h1>
-//       <h2>It is {props.date.toLocaleTimeString()}.</h2>
-//     </div>
-//   );
-// }
-
-//changing clock function into a function component
-//This is what an actual component looks like from the React Tutorial
-class Clock extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {date: new Date()}; //turns date into a component state
-  }
-
-  componentDidMount() {
-    this.timerID = setInterval(
-      () => this.tick(), 1000
-    );
-  }
-
-  componentWillUnmount() {
-    clearInterval(this.timerID);
-  }
-
-  tick() {
-    this.setState({ //setState is the only way to update the state once out of the constructor
-      date: new Date()
-    });
-  }
-
-  render() {
-    return(
-      <div>
-        <h1>Hello Alex, Do Your Work!</h1>
-        <h2>It is {this.state.date.toLocaleTimeString()}.</h2>
-      </div>
-    )
-  }
-}
-
-function renderClock() {
-  ReactDOM.render(
-    <Clock />,
-    document.getElementById('movieList')
-  );
-}
-
-// renderClock();
