@@ -112,13 +112,77 @@ var MainInterface = React.createClass({
     } else { // == "WatchList Movies"
       //we want to just get the movie title
       watchlistMovieData.forEach(function(movie, idx, watchlistMovieData){
-        // var movieObject = {
-        //   movieName: movie.movieName,
-        // };
         movieObject = movie.movieName; //TODO outputs just the array, want to put a title at each line of the csv
         exportMovies.push(movieObject);
       });
-      ipc.sendSync('exportList', exportMovies, 'watch');
+      let moviesToString = "";
+
+      //TODO turn exportMovies to a string
+      //Gross turning it into a god awful string out here but it works.
+      //Though movies with a comma in the title will be separate stragenly in the .csv
+      //TODO okay nvm, movies with commas fuck everything up
+
+      // var csv = exportMovies.map(function(movie){
+      //   while (movie.indexOf(",") != -1) { //replace all the commas with spaces
+      //     movie[movie.indexOf(",")] = " ";
+      //   }
+      //   csv = csv + movie + ",";
+      // }).join('\n');
+
+      var test_array2 = ["name1,2,3", "name2,4,5", "hello"];
+      exportMovies.forEach(function(movie, idx, exportMovies){ //scrub for commas, replace with spaces
+        // console.log("===========");
+        // console.log("this is the index of testArray2: -------------->", test_array2[idx]);
+        // console.log("movie.indexOf(\",\") ------------------------->", movie.indexOf(","));
+        // console.log("movie[movie.indexOf(\",\")] --------------------->", movie[movie.indexOf(",")]);
+        // console.log("test_array2[idx][movie.indexOf(\",\")] -------->", test_array2[idx][movie.indexOf(",")]);
+        // indexToReplace = movie.indexOf(",");
+        //
+        // //Need to update both of these to reflect the changes
+        // test_array2[idx] = movie.substr(0, indexToReplace) + "-" + movie.substr(indexToReplace + 1, movie.length);
+        // movie = movie.substr(0, indexToReplace) + "-" + movie.substr(indexToReplace + 1, movie.length);
+        // // return this.substr(0, index) + replacement+ this.substr(index + replacement.length);
+        // // test_array2[idx][movie.indexOf(",")] = "-";
+        // console.log("this is REPLACED VERSION: -------------------->", movie);
+        // console.log("this is REFLECTED VERSION: -------------------->", test_array2[idx]);
+        //
+        // console.log("===========");
+
+        //Replace any existing commas, so the csv can be parsed correctly
+        while (movie.indexOf(",") != -1) {
+          console.log("comma found, replacing, ", movie.indexOf(","));
+          // break;
+          indexToReplace = movie.indexOf(","); //get the index of the comma
+
+          //Need to update both of these to reflect the changes
+          exportMovies[idx] = movie.substr(0, indexToReplace) + "-" + movie.substr(indexToReplace + 1, movie.length);
+          movie = movie.substr(0, indexToReplace) + "-" + movie.substr(indexToReplace + 1, movie.length);
+        }
+      });
+      var csvFormat = exportMovies.join('\n');
+      console.log("this is csv format: ", csvFormat);
+
+      // var test_array = [["name1", 2, 3], ["name2", 4, 5], ["name3", 6, 7], ["name4", 8, 9], ["name5", 10, 11]];
+      // var csvFormat = test_array.map(function(d){
+      //   return d.join();
+      // }).join('\n');
+      // console.log("this is csv format: ", csvFormat);
+
+      // exportMovies.forEach(function(movie, idx, exportMovies){
+      //   let idxComma = movie.indexOf(",");
+      //   while (movie.indexOf(",") != -1) { //replace all the commas with spaces
+      //     movie[movie.indexOf(",")] = " ";
+      //   }
+      //   if (idx != exportMovies.length - 1) {
+      //     moviesToString = moviesToString + movie + ",\n";
+      //   } else {
+      //     moviesToString = moviesToString + movie;
+      //   }
+      // });
+
+      // console.log("moviesToString are equal to this: ", moviesToString);
+
+      ipc.sendSync('exportList', csvFormat, 'watch');
       console.log("we shouuld have opened the dialog for watchlist movies");
     }
   },

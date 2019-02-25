@@ -59,9 +59,20 @@ app.on('ready', function(){
 
   ipc.on('exportList', function(event, movieList, which){
     event.returnValue='';
-    let movies = JSON.stringify(movieList);
+    // let movies = JSON.stringify(movieList);
     const {dialog} = require('electron');
     const fs = require('fs');
+    let movies = movieList;
+
+    // var moviesAsString = Array.prototype.join.call(movies, ", \n");
+
+    // movies.forEach(function(movie, idx, movies){
+    //   if (idx != movies.length - 1) {
+    //     moviesAsString = moviesToString + movie + ",\n";
+    //   } else {
+    //     moviesAsString = moviesToString + movie;
+    //   }
+    // });
 
     if (which == 'ranked') {
       //title is just the title of the dialog, not the path

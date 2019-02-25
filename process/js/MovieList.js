@@ -71,25 +71,28 @@ var MovieList = React.createClass({
   },
 
   moveRankUp: function(item) {
-    console.log(this.props.movieList);
     sortedMovies = this.sortMovies(this.props.movieList, this.props.orderBy, this.props.orderDir);
+    console.log("sortedMovies: ", sortedMovies);
     let indexMovieToChange = _.indexOf(sortedMovies, item);
     console.log("TRYING TO GO UP");
     console.log("this is the index of the movie that we clicked: ", indexMovieToChange);
     if (indexMovieToChange != 0) {
-      item.rank = (this.props.movieList[indexMovieToChange - 1].rank - - .01).toFixed(2);
+      item.rank = (sortedMovies[indexMovieToChange - 1].rank - - .01).toFixed(2); //TODO should actually cast to int, keep to make ed the happy. (he does not want blame though if not the working goodly)
       this.props.changeRank(item);
     }
   },
 
   moveRankDown: function(item) {
-    console.log(this.props.movieList);
     sortedMovies = this.sortMovies(this.props.movieList, this.props.orderBy, this.props.orderDir);
+    console.log("sortedMovies: ", sortedMovies);
+
     let indexMovieToChange = _.indexOf(sortedMovies, item);
     console.log("TRYING TO GO DOWN");
     console.log("this is the index of the movie that we clicked: ", indexMovieToChange);
-    item.rank = (this.props.movieList[indexMovieToChange + 1].rank - .01).toFixed(2);
-    this.props.changeRank(item);
+    if (indexMovieToChange - 1 != sortedMovies.length) {
+      item.rank = (sortedMovies[indexMovieToChange + 1].rank - .01).toFixed(2);
+      this.props.changeRank(item);
+    }
   },
 
   renderListItems: function(movieList, orderBy, deleteMovie, changeRank, moveToFavorites, MovieListItem) {
@@ -124,7 +127,7 @@ var MovieList = React.createClass({
     movieList = this.filterMovies(movieList, queryText);
     movieList = this.sortMovies(movieList, orderBy, orderDir);
     movieList = this.renderListItems(movieList, orderBy, deleteMovie, changeRank, moveToFavorites, MovieListItem);
-    console.log("this is movieList after it is all rendered: ", movieList);
+    // console.log("this is movieList after it is all rendered: ", movieList);
 
     return (
       <div className="row">
