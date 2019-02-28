@@ -199,6 +199,7 @@ var AddMovieForm = React.createClass({
               {/* TODO eventually want to make this rank changeable without having to re-add movie */}
               {/* TODO want to make this only appear when the ranked list is used */}
               {rank}
+              {times_seen}
 
               <div className="form-group">
                 <label className="col-sm-3 control-label" htmlFor="director">Director</label>
@@ -247,9 +248,6 @@ var AddMovieForm = React.createClass({
                     id="Summary" ref={(ref) => this.inputMovieSummary = ref} placeholder={this.state.defaultSummary}></textarea>
                 </div>
               </div>
-
-              {/* TODO only show this if on the Ranked List */}
-              {times_seen}
 
                   {/* TODO want to add rotten tomatoes reviews here and have duration to the right */}
                   {/* TODO should I keep everything as amanual textbox in case they want to put in their own info? */}

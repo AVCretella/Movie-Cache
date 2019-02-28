@@ -101,12 +101,19 @@ var MainInterface = React.createClass({
     if (whichList == rankedListTitle){  //we want to get the movie title, the personal rank, and the times seen, just save those
       rankedMovieData.forEach(function(movie, idx, rankedMovieData){
         var movieObject = [];
-        // var movieObject = {
-        //   movieName: movie.movieName,
-        //   rank: movie.rank,
-        //   viewCount: movie.viewCount
-        // };
-        movieObject.push(movie.movieName);
+
+        var name = movie.movieName;
+        console.log("this is name: ", name);
+        // var nameFormatted = "";
+        while (name.indexOf(",") != -1) { //Replace any existing commas, so the csv can be parsed correctly
+          console.log("found , at index: ", name.indexOf(","));
+          indexToReplace = name.indexOf(","); //get the index of the comma
+
+          //Need to update both of these to reflect the changes
+          // nameFormatted = name.substr(0, indexToReplace) + "-" + name.substr(indexToReplace + 1, name.length);
+          name = name.substr(0, indexToReplace) + "-" + name.substr(indexToReplace + 1, name.length);
+        }
+        movieObject.push(name);
         movieObject.push(movie.rank);
         movieObject.push(movie.viewCount);
         exportMovies.push(movieObject);

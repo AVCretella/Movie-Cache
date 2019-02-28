@@ -157,7 +157,11 @@ var RankedMovies = React.createClass({
 
               <div className="reviews-times_seen">
                 {/*}<span className="label-item">Rotten Tomatoes: </span>{this.props.singleItem.rottenTomatoes}*/}
+
                 {/* TODO put a plus minus here that sends to handleViewCount change, pass the item and which button was pressed + update */}
+                {/* }<button className="pull-right btn btn-sm btn-danger" title="add 1 to the view count" onClick={this.removeFromList}>
+                  <span className="glyphicon glyphicon-arrow-up"></span>
+                </button> */}
                 <span className="pull-right">{this.props.singleItem.viewCount}</span>
                 <span className="label-item pull-right">Times Seen:</span>
               </div>
@@ -171,7 +175,3 @@ var RankedMovies = React.createClass({
 
 //everything will be exported from this file and sent to renderer.js
 module.exports = RankedMovies;
-//
-// export default RankedMovies;
-// export foo;
-// export bar;
