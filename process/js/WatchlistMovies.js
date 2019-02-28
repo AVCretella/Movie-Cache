@@ -27,9 +27,12 @@ var WatchlistMovies = React.createClass({
 
     var tempItem = this.props.singleItem;
     tempItem.viewCount = this.inputTimesSeen.value;
-    tempItem.rank = this.inputMovieRank.value;
-
-    console.log("trying to move movie", this.props.singleItem);
+    tempItem.rank = parseFloat(this.inputMovieRank.value);
+    // var rank = this.inputMovieRank.value
+    // console.log("this is the rank with parse: ", tempItem.rank );
+    // console.log("this is without, : ", rank);
+    //
+    // console.log("trying to move movie", this.props.singleItem.rank);
     this.props.onMoveToFavorites(tempItem);
 
     this.toggleMoveMovieDisplay();
@@ -70,7 +73,7 @@ var WatchlistMovies = React.createClass({
                 <div className="form-group">
                   <label className="col-sm-10 control-label" htmlFor="rank">Your Rating (out of 10):</label>
                   <div className="col-sm-2">
-                    <input type="number" step=".01" min="0" max="9.99" className="form-control" placeholder="8.5"
+                    <input type="number" step=".01" min="0" max="10" className="form-control" placeholder="8.5"
                       id="rank" ref={(ref) => this.inputMovieRank = ref}/>
                   </div>
                 </div>

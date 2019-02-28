@@ -94,6 +94,7 @@ var AddMovieForm = React.createClass({
 
     if (this.props.isDisplayingRanked) {
       var timesSeen = parseInt(this.inputMovieViewCount.value.match(/[0-9]+/g)[0]); //only in the ranked list
+      var rankFloat = parseFloat(this.inputMovieRank.value);
 
       tempItem = { //create an item with the values we want to add
         movieName: this.inputMovieName.value,
@@ -105,7 +106,7 @@ var AddMovieForm = React.createClass({
         Summary: this.inputMovieSummary.value,
         duration: durationMinutes,
         viewCount: timesSeen,
-        rank: this.inputMovieRank.value
+        rank: rankFloat
         // rottenTomatoes: this.inputMovieRottenTomatoes.value,
       }
     } else { //if just a wishlist movie, need less information
@@ -148,14 +149,14 @@ var AddMovieForm = React.createClass({
     if (this.props.isDisplayingRanked) { //if we are displaying the ranked, include these in the form
       //TODO figure out why we cant use 10 when comparing double vals!!
       rank =  <div className="form-group">
-                <label className="col-sm-3 control-label" htmlFor="rank">Your Rating:</label>
+                <label className="col-sm-3 control-label rankInput" htmlFor="rank">Your Rating:</label>
                 <div className="col-sm-9">
-                  <input type="number" step=".01" min="0" max="9.99" className="form-control" placeholder={this.state.defaultRank}
+                  <input type="number" step=".01" min="0" max="10" className="form-control" placeholder={this.state.defaultRank}
                     id="rank" ref={(ref) => this.inputMovieRank = ref} required/>
                 </div>
               </div>;
       times_seen =  <div className="form-group">
-                      <label className="col-sm-3 control-label" htmlFor="duration">Times Seen:</label>
+                      <label className="col-sm-3 control-label viewInput" htmlFor="duration">Times Seen:</label>
                       <div className="col-sm-9">
                         <input type="number" min="0" className="form-control" placeholder={this.state.defaultViewCount}
                           id="viewCount" ref={(ref) => this.inputMovieViewCount = ref} required/>

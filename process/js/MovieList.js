@@ -77,7 +77,7 @@ var MovieList = React.createClass({
     console.log("TRYING TO GO UP");
     console.log("this is the index of the movie that we clicked: ", indexMovieToChange);
     if (indexMovieToChange != 0) {
-      item.rank = (sortedMovies[indexMovieToChange - 1].rank - - .01).toFixed(2); //TODO should actually cast to int, keep to make ed the happy. (he does not want blame though if not the working goodly)
+      item.rank = parseFloat((sortedMovies[indexMovieToChange - 1].rank - - .01).toFixed(2)); //TODO should actually cast to int, keep to make ed the happy. (he does not want blame though if not the working goodly)
       this.props.changeRank(item);
     }
   },
@@ -90,7 +90,7 @@ var MovieList = React.createClass({
     console.log("TRYING TO GO DOWN");
     console.log("this is the index of the movie that we clicked: ", indexMovieToChange);
     if (indexMovieToChange - 1 != sortedMovies.length) {
-      item.rank = (sortedMovies[indexMovieToChange + 1].rank - .01).toFixed(2);
+      item.rank = parseFloat((sortedMovies[indexMovieToChange + 1].rank - .01).toFixed(2));
       this.props.changeRank(item);
     }
   },

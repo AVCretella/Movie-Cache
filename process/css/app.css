@@ -148,39 +148,8 @@ body {
   color: #296B73;
 }
 
-
-/* .col-xs-2, .col-xs-10 {
-    display: inline-block;
-    float: none;
-}
-.col-xs-10 {
-    vertical-align: middle;
-} */
-
-/* These will align all the information for a movie and the up and down arrows */
-/* =========================================================================== */
-.col-sm-1, .col-sm-2, .col-sm-9, .col-sm-10 {
-  display: inline-block;
-  float: none;
-}
-
-.col-sm-2, .col-sm-9, .col-sm-10 {
-  vertical-align: middle;
-}
-/* =========================================================================== */
-
-.col-sm-1 .btn-up {
-  background-color: #18C1EF;
-}
-
-.col-sm-1 .btn .btn-down {
-  background-color: ##ff3399;
-}
-
-.btn-reset {
-  background-color: orange;
-}
-
+/* ____________________Movie Tiles__________________ */
+/* _________________________________________________ */
 .item-list {
   margin: 0;
   padding: 0;
@@ -210,17 +179,6 @@ body {
           has the formatting that we Want
 */
 
-/* .item-list .movie-item .ranked-item:nth-child(2n) {
-    background: rgba(255,255,255,.5);
-    border-radius: 5px;
-} */
-
-/*
-.item-list .movie-item:nth-child(2n) {
-    background: rgba(255,255,255,.5);
-    border-radius: 5px;
-} */
-
 .item-list .movie-item:last-child {
   border-bottom: none;
 }
@@ -230,16 +188,8 @@ body {
   display: block;
 }
 
-/*
-
-.item-list  .movie-item:hover .movie-delete {
-  display: block;
-  opacity: 1;
-}
-
-*/
-
-.item-list .movie-name { /*The color of the Title of the movie*/
+/*The color of the Title of the movie*/
+.item-list .movie-name {
   font-weight: bold;
   color: #296B73;
   font-size: 1.5em;
@@ -249,7 +199,8 @@ body {
   font-style: italic;
 }
 
-.item-list .label-item { /*The color of the labels for movie information in the list*/
+/*The color of the labels for movie information in the list*/
+.item-list .label-item {
   font-weight: bold;
   color: #4CAEFF;
   padding-right: 10px;
@@ -259,8 +210,46 @@ body {
   font-style: italic;
 }
 
-/* Help Window Styling */
+/* These will center all movie info */
+.col-sm-1, .col-sm-2, .col-sm-9, .col-sm-10 {
+  display: inline-block;
+  float: none;
+}
 
+.col-sm-2, .col-sm-9, .col-sm-10 {
+  vertical-align: middle;
+}
+
+.col-sm-1 .btn-up {
+  background-color: #18C1EF;
+}
+
+.col-sm-1 .btn .btn-down {
+  background-color: ##ff3399;
+}
+/* _________________________________________________ */
+
+
+
+/* ________________Modal Formatting_________________ */
+/* _________________________________________________ */
+.rankInput, .viewInput{
+  color: #0bcbdf;
+}
+
+.form-control:focus {
+  border-color: #0bcbdf;
+}
+
+.btn-reset {
+  background-color: orange;
+}
+/* _________________________________________________ */
+
+
+
+/* _______________Info Window Styling_______________ */
+/* _________________________________________________ */
 #page-info {
   background: transparent;
   color: white;
@@ -327,3 +316,4 @@ body {
   width: 100px;
   opacity: .8;
 }
+/* _________________________________________________ */

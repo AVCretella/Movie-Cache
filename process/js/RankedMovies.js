@@ -19,12 +19,9 @@ var RankedMovies = React.createClass({
     //TODO need to send data to renderer process to update rankedmoviedata
     var tempItem = { //create an item with the value we want to add
       movieName: this.props.singleItem.movieName,
-      rank: this.inputMovieRank.value
-      // rottenTomatoes: this.inputMovieRottenTomatoes.value,
+      rank: parseFloat(this.inputMovieRank.value)
     }
-    this.props.onChangeRank(tempItem);
-    //
-    // this.props.changeMovieRank(tempItem); //pass the object to the function in the renderer process
+    this.props.onChangeRank(tempItem); //passed up to MovieList.js
     this.toggleChangeRankDisplay();
     this.changeRankFormRef.reset();
   },
@@ -72,9 +69,11 @@ var RankedMovies = React.createClass({
                       </button>
                     </div>;
       posterStyle = "col-sm-2";
+      movieInfoStyle = "col-sm-9";
     } else {
       moveButtons = <div></div>;
-      posterStyle = "col-sm-3";
+      posterStyle = "col-sm-2";
+      movieInfoStyle = "col-sm-10";
     }
 
     return(
@@ -92,7 +91,7 @@ var RankedMovies = React.createClass({
                 <div className="form-group">
                   <label className="col-sm-3 control-label" htmlFor="rank">Your Rating:</label>
                   <div className="col-sm-9">
-                    <input type="number" step=".01" min="0" max="9.99" className="form-control" placeholder={this.props.singleItem.rank}
+                    <input type="number" step=".01" min="0" max="10" className="form-control" placeholder={this.props.singleItem.rank}
                       id="rank" ref={(ref) => this.inputMovieRank = ref}/>
                   </div>
                 </div>
@@ -119,7 +118,7 @@ var RankedMovies = React.createClass({
             </div>
           </div>
 
-          <div className="col-sm-9">
+          <div className={movieInfoStyle}>
             <div className="movie-info media-body">
               <div className="movie-head">
                 <span className="movie-name">{this.props.singleItem.movieName}</span>
@@ -140,7 +139,7 @@ var RankedMovies = React.createClass({
                 <span className="label-item">Actors:</span>{this.props.singleItem.actors.join(", ")}
               </div>
 
-              <div className="cast">
+              <div className="genres">
                 <span className="label-item">Genre:</span>{this.props.singleItem.genres.join(", ")}
               </div>
 

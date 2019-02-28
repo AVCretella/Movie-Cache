@@ -79,7 +79,7 @@ app.on('ready', function(){
       dialog.showSaveDialog(
       {
         message: 'Save Your Ranked Movie List\n The name you give will be replaced by RankedList.txt, do not change this',
-        defaultPath: '~/RankedList.txt'
+        defaultPath: '~/RankedList.csv'
       }, (path) => {
         if (path != undefined) {
           fs.writeFile(path, movies, function(err) {

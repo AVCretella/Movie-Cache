@@ -305,7 +305,8 @@ var MainInterface = React.createClass({
 
   changeMovieRank: function(item) {
     var allMovies = this.state.myMovies;
-    // console.log("this is movieName: ", item.movieName);
+    //TODO could run into issues of movies with the same name
+        //may end up changing rank of diff one because it comes up first
     var index = _.findIndex(allMovies, {movieName: item.movieName}); //index of the movie that we want to change rank of
     // console.log("this is the index we found the movie at: ", index);
     allMovies[index].rank = item.rank;
@@ -313,14 +314,6 @@ var MainInterface = React.createClass({
     this.setState({
       myMovies: allMovies
     });
-  },
-
-  moveUp: function(item) {
-
-  },
-
-  moveDown: function(item) {
-
   },
 
   //Given an item with ranked format (all movie info + rank and timesSeen), write it directly to rankedDataLocation and then delete
