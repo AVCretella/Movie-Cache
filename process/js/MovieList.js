@@ -55,18 +55,13 @@ var MovieList = React.createClass({
 
   exportList: function(movieList){
     this.props.createMovieListFile(this.props.movieListTitle);
-    console.log("Sending ", this.props.movieListTitle, " to the renderer process");
   },
 
   //sends the list that is currently being shown so we know what to add to
   //actually i can just check the state of the main component for that
   importList: function(movieList){
     this.props.addMoviesFromFile(this.props.movieListTitle);
-    console.log("Button Pressed!!!!!!!!!!!!!");
-
-    console.log("Sending ", this.props.movieListTitle, " to the renderer process");
-    //make sure to check they've uploaded the correct file - says ranked or watchlist
-
+    console.log("this is the movies that had erorrs: ", this.props.errorMovies);//TODO get this too quickly, need to be passed the list that we just made
     //TODO want to wait for the API calls to be done and then pop up a modal with the movies that weren't added
   },
 
@@ -95,6 +90,22 @@ var MovieList = React.createClass({
     }
   },
 
+  calculateHoursRanked: function(movieList) {
+    let totalHours = 0;
+    movieList.forEach( function(movie, idx,movieList){
+      totalHours += (movie.duration * movie.viewCount);
+    });
+    return (totalHours / 60).toFixed(2);
+  },
+
+  calculateHoursWatchlist: function(movieList) {
+    let totalHours = 0;
+    movieList.forEach( function(movie, idx,movieList){
+      totalHours += movie.duration;
+    });
+    return (totalHours / 60).toFixed(2);
+  },
+
   renderListItems: function(movieList, orderBy, deleteMovie, changeRank, moveToFavorites, MovieListItem) {
     return movieList.map(function(item, index){ //send this data to MovieList to create a series of those tags
       return(
@@ -116,18 +127,25 @@ var MovieList = React.createClass({
     let {movieListTitle, movieList, queryText, orderBy, orderDir, deleteMovie, changeRank, moveToFavorites, MovieListItem} = this.props;
 
     if (movieListTitle == "Watchlist") {
+      let hoursWatchlist = this.calculateHoursWatchlist(movieList);
+      timeWatching =  <span className="pull-right import">
+                        <span>Hours needed to watch all of these movies: {hoursWatchlist}</span>
+                      </span>;
       importButton =  <span className="pull-right import">
                         <button className="btn btn-med btn-info" title="Import a movie list .csv from file" onClick={this.importList}>
-                        <span className="glyphicon glyphicon-open"></span></button>
-                      </span>
+                        <span className="glyphicon glyphicon-open"/></button>
+                      </span>;
     } else {
-      importButton = <div></div>;
+      let hoursRanked = this.calculateHoursRanked(movieList);
+      timeWatching =  <span className="pull-right">
+                        <span>Time Spent Watching Favorite Movies: {hoursRanked}</span>
+                      </span>;
+      importButton =  <span className="pull-right"/>;
     }
 
     movieList = this.filterMovies(movieList, queryText);
     movieList = this.sortMovies(movieList, orderBy, orderDir);
     movieList = this.renderListItems(movieList, orderBy, deleteMovie, changeRank, moveToFavorites, MovieListItem);
-    // console.log("this is movieList after it is all rendered: ", movieList);
 
     return (
       <div className="row">
@@ -142,8 +160,10 @@ var MovieList = React.createClass({
               <span className="glyphicon glyphicon-save"></span></button>
             </span>
 
-            {/* Button to import the movies. TODO will need to be able to identify whether it is a csv (to convert to object form for watchlist) or if it already in object form) */}
+            {/*TODO will need to be able to identify whether it is a csv (to convert to object form for watchlist) or if it already in object form) */}
             {importButton}
+
+            {timeWatching}
           </div>
 
           <ul className="item-list media-list">{movieList}</ul>

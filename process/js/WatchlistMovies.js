@@ -100,20 +100,21 @@ var WatchlistMovies = React.createClass({
           </div>
         </div>
 
+
         <li className="movie-item media">
 
-        {/* need to handle bad poster urls */}
-          <div className="col-sm-2">{/*where the poster will be displayed*/}
+          {/*where the poster will be displayed*/}
+          <div className="col-sm-2">
             <div className="movie-poster">
               <img src={this.props.singleItem.posterURL} style={{width: '100%', height: '100%'}} alt="[ Movie Poster Unavailable ]"></img>
             </div>
           </div>
 
-          <div className="col-sm-10">{/*where the movie information will be displayed*/}
+          {/*where the movie information will be displayed*/}
+          <div className="col-sm-10">
             <div className="movie-info media-body">
               <div className="movie-head">
                 <span className="movie-name">{this.props.singleItem.movieName}</span>
-                {/* TODO want another span for a movie to favorites button */}
                 <span className="pull-right">
                   <button className="movie-delete btn btn-xs btn-danger" title="Delete this movie from the list" onClick={this.removeFromList}>
                   <span className="glyphicon glyphicon-remove"></span></button>
@@ -146,7 +147,7 @@ var WatchlistMovies = React.createClass({
                 <span className="pull-right">{this.props.singleItem.duration} minutes</span>
                 <span className="label-item pull-right">Duration:</span>
               </div>
-              {/*<div className="release-date">
+              {/*<div className="reviews">
                 <span className="label-item">Rotten Tomatoes: </span>{this.props.singleItem.rottenTomatoes}
                 <span className="pull-right"><i>Duration: {this.props.singleItem.duration}</i></span>
               </div>*/}

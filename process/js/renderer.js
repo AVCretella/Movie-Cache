@@ -5,7 +5,7 @@
 */
 
 //copy and paste libraries here
-var $ = jQuery = require('jquery'); //TODO NO LONGER NEED JQUERY
+var $ = jQuery = require('jquery');
 var bootstrap = require('bootstrap');
 var _ = require('lodash');
 // var remote = eRequire('electron').remote;
@@ -35,7 +35,6 @@ var ImportedReportModal = require('./ImportedReportModal');
 /*==============================================================================
                                 Main Interface
 ==============================================================================*/
-//TODO maybe change ranked list to 'ranked' list
 //These are the fields that will populate the search bar when a specific list is being displayed
 let rankedSortFields = [
   { field: "movieName", displayName: "Movie Name" },
@@ -50,6 +49,7 @@ let watchlistSortFields = [
   { field: "duration", displayName: "Duration" }
 ];
 
+//Define all of the genres that we can choose from. Got them from IMDB list
 let genreItems = ["All", "Action","Adventure","Animation","Biography","Comedy","Crime","Documentary","Drama","Family","Fantasy","Film Noir",
 "History","Horror","Music","Musical","Mystery","Romance","Sci-Fi","Short","Sport","Superhero","Thriller","War","Western"];
 
@@ -70,7 +70,8 @@ var MainInterface = React.createClass({
       MovieListItem: RankedMovies,
       movieListTitle: rankedListTitle,
       sortFields: rankedSortFields,
-      fileLocation: rankedDataLocation
+      fileLocation: rankedDataLocation,
+      errorMovies: []
     } //return
   },
 
@@ -108,9 +109,6 @@ var MainInterface = React.createClass({
         while (name.indexOf(",") != -1) { //Replace any existing commas, so the csv can be parsed correctly
           console.log("found , at index: ", name.indexOf(","));
           indexToReplace = name.indexOf(","); //get the index of the comma
-
-          //Need to update both of these to reflect the changes
-          // nameFormatted = name.substr(0, indexToReplace) + "-" + name.substr(indexToReplace + 1, name.length);
           name = name.substr(0, indexToReplace) + "-" + name.substr(indexToReplace + 1, name.length);
         }
         movieObject.push(name);
@@ -121,16 +119,16 @@ var MainInterface = React.createClass({
       var csvFormat = exportMovies.join('\n');
       console.log("this is csv format for ranked: ", csvFormat);
       ipc.sendSync('exportList', csvFormat, 'ranked');
-    } else { // == "WatchList Movies"
-      //we want to just get the movie title
+    } else { // == "WatchList Movies", we just want to grab the title and make it into it's own line of a csv
       watchlistMovieData.forEach(function(movie, idx, watchlistMovieData){
-        movieObject = movie.movieName; //TODO outputs just the array, want to put a title at each line of the csv
+        movieObject = movie.movieName;
         exportMovies.push(movieObject);
       });
       exportMovies.forEach(function(movie, idx, exportMovies){ //scrub for commas, replace with - because search can disregard those
         while (movie.indexOf(",") != -1) { //Replace any existing commas, so the csv can be parsed correctly
           indexToReplace = movie.indexOf(","); //get the index of the comma
 
+          //TODO what we did above, we can probably do here,save to array, then push to exportMovies
           //Need to update both of these to reflect the changes
           exportMovies[idx] = movie.substr(0, indexToReplace) + "-" + movie.substr(indexToReplace + 1, movie.length);
           movie = movie.substr(0, indexToReplace) + "-" + movie.substr(indexToReplace + 1, movie.length);
@@ -172,9 +170,7 @@ var MainInterface = React.createClass({
         fetch(APIquery) //send the query to OMDB for searching
         .then(response => response.json())
         .then(json =>{
-          // console.log(JSON.stringify(json));
           if(json.Response != "False"){ //if we don't get an error from the API, store info
-
             //reformat duration and year to be saved as ints, not strings
             var durationMinutes = parseInt(json.Runtime.match(/[0-9]+/g)[0]);
             var releaseDateInt = parseInt(json.Year.match(/[0-9]+/g)[0]);
@@ -194,13 +190,14 @@ var MainInterface = React.createClass({
 
             currentMovies.push(tempMovieObject); //So that we check for duplicates even within our uploaded file
             boundAddMovieObject(tempMovieObject);
-            // console.log("this is what im stuffing in: ", tempMovieObject);
           } else {
             moviesNotFound.push(movieName);
+            // console.log("didnt find: ", movieName);
           }
         });
       } else {
         matchedMovies.push(movieName);
+        // console.log("found duplicate: ", movieName);
       }
     });
     console.log("=======");
@@ -210,6 +207,9 @@ var MainInterface = React.createClass({
     console.log("these titles didnt return anything, need to do manually: ", moviesNotFound);
     console.log("=======");
 
+    this.setState({
+      errorMovies: moviesNotFound
+    });
     /*
     TODO now that everything is added, let's create a popup modal with the movies that weren't added because the names were messed up, and the ones that were duplicates
     Making a modal popup should actually make the list render properly, rather than waiting for another action to happen First
@@ -281,12 +281,17 @@ var MainInterface = React.createClass({
   },
 
   //TODO THERE IS NO REASON THIS SHOULDNT BE HOOKED UP TO A DATABASE!!! HOOK IT UP BOI
+  //If the movie being added already exists, then don't add it
   addMovieObject: function(tempItem) { //receives object saves in form
     var tempMovies = this.state.myMovies;
-    tempMovies.push(tempItem);
-    this.setState({
-      myMovies: tempMovies
-    });
+    if (_.findIndex(tempMovies, {movieName: tempItem.movieName}) == -1) {
+      tempMovies.push(tempItem);
+      this.setState({
+        myMovies: tempMovies
+      });
+    } else {
+      console.log(tempItem.movieName, "not added because already on list");
+    }
   },
 
   deleteMovieObject: function(item) {
@@ -406,6 +411,7 @@ var MainInterface = React.createClass({
               moveToFavorites = {this.moveMovieToFavorites}
               createMovieListFile = {this.writeMovieListToFile}
               addMoviesFromFile = {this.importMoviesFromFile}
+              errorMovies = {this.state.errorMovies}
             />
           </div>{/* container */}
         </div>{/* interface */}

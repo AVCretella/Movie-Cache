@@ -148,6 +148,16 @@ body {
   color: #296B73;
 }
 
+.col-sm-12 {
+  display: inline-block;
+  float: none;
+}
+
+/* TODO want calculated hours to be centered */
+/* .col-sm-2, .col-sm-9, .col-sm-10 {
+  vertical-align: middle;
+} */
+
 /* ____________________Movie Tiles__________________ */
 /* _________________________________________________ */
 .item-list {
