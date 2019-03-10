@@ -5,7 +5,7 @@ var React = require('react');
 
   Maybe allow them to switch to manual mode, but probs no need for that*/
 var AddMovieForm = React.createClass({
-  getInitialState: function(){
+  getInitialState: function(){ //set all of the default placeholders
     return{
       defaultName: 'Type in a name and press Search!',
       defaultRank: 'Your rank for this movie out of 10.0',
@@ -79,7 +79,7 @@ var AddMovieForm = React.createClass({
     submitEvent.preventDefault(); //this is to prevent the page from reloading, we will handle manually with React
 
     //When the Favorites list is being displayed, we need to send the viewCount and rank as well
-    var tempItem = {};
+    var tempItem = {}; //will be used to store all necessary data about a movie
     /*
       When storing numbers, if they are stored as strings, sorting does not
       work as intended. Need to store as actual ints
@@ -109,7 +109,7 @@ var AddMovieForm = React.createClass({
         rank: rankFloat
         // rottenTomatoes: this.inputMovieRottenTomatoes.value,
       }
-    } else { //if just a wishlist movie, need less information
+    } else { //if just a wishlist movie, need don't need rank or viewCount
       tempItem = {
         movieName: this.inputMovieName.value,
         posterURL: this.inputMoviePoster.value,
@@ -122,7 +122,7 @@ var AddMovieForm = React.createClass({
       }
     }
 
-    this.props.addMovie(tempItem); //pass the object to the function in the renderer process
+    this.props.addMovie(tempItem); //pass the object to the function in the renderer process to be added to the list that is being displayed
     this.resetForm();
     // this.inputMovieRottenTomatoes.value = 'Rotten Tomatoes Rating',
   },
@@ -131,23 +131,17 @@ var AddMovieForm = React.createClass({
     this.addMovieForm.reset();
   },
 
-  render: function(){ //using bootstrap modal for the movie creation form. All proof of concept
+  render: function(){
     let style, className;
     if (this.props.isVisible) {
       className = "modal fade in";
-      style = {
-        display: "block",
-        paddingLeft: "0px"
-      };
+      style = { display: "block", paddingLeft: "0px" };
     } else {
       className = "modal fade";
-      style = {
-        display: "none"
-      };
+      style = { display: "none" };
     }
 
-    if (this.props.isDisplayingRanked) { //if we are displaying the ranked, include these in the form
-      //TODO figure out why we cant use 10 when comparing double vals!!
+    if (this.props.isDisplayingRanked) { //if we are displaying the ranked list, include rank and timesSeen in the form
       rank =  <div className="form-group">
                 <label className="col-sm-3 control-label rankInput" htmlFor="rank">Your Rating:</label>
                 <div className="col-sm-9">
@@ -190,16 +184,13 @@ var AddMovieForm = React.createClass({
                     id="movieName" ref={(ref) => this.inputMovieName = ref} placeholder={this.state.defaultName} />
                 </div>
                 {/* TODO if we sendTitleToAPI with an argument, we czn modularize, send with this.inputMovieName*/}
-                {/* TODO need to execute two functions on this single click *
-                    If you want it to be real jank, you can send the title and that it's from the form and have a conditional in the function */}
                 <div className="col-sm-3">
                   <button type="button" className="btn btn-success" onClick={this.sendTitleToAPI}>Search</button>
                 </div>
               </div>
 
-              {/* TODO eventually want to make this rank changeable without having to re-add movie */}
-              {/* TODO want to make this only appear when the ranked list is used */}
               {rank}
+              
               {times_seen}
 
               <div className="form-group">

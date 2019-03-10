@@ -13,7 +13,7 @@ var WatchlistMovies = React.createClass({
     this.props.onDelete(this.props.singleItem); //lets the function know which movie has been selected for deletion
   },
 
-  //Want to close and reset the changeRank modal
+  //Open the 'move to favorites' modal if not open already, close if it is
   toggleMoveMovieDisplay: function(){
     var tempVisibility = !this.state.moveModalVisible;
     this.setState({
@@ -22,6 +22,7 @@ var WatchlistMovies = React.createClass({
     this.moveMovieFormRef.reset();
   },
 
+  //Takes new rank and viewCount, sends move data to the renderer, closes the 'move to favorites' modal
   moveToFavorites: function(submitEvent){
     submitEvent.preventDefault();
 

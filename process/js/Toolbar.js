@@ -4,34 +4,38 @@ var AddMovie = require('./AddMovieForm.js')
 var Toolbar = React.createClass({
   getInitialState: function(){
     return {
-      isAddModalVisible: false,
+      isAddModalVisible: false, //controls the addMovie modal visibility
       isShowingRankedList: true
     }
   },
 
+  //Switch to Ranked List
   displayTheRankedList: function(){
-    console.log("ranked list being displayed");
+    // console.log("ranked list being displayed");
     this.setState({
       isShowingRankedList: true
     });
     this.props.displayRanked();
   },
 
+  //Switch to Watchist
   displayTheWatchlist: function(){
-    console.log("ranked list being displayed");
+    // console.log("ranked list being displayed");
     this.setState({
       isShowingRankedList: false
     });
     this.props.displayWatchlist();
   },
 
-  toggleMovieDisplay: function(){ //this will allow us to add a movie to a list
+  //Open the addMovie modal if it is not already open, close it if it is
+  toggleMovieDisplay: function(){
     var tempVisibility = !this.state.isAddModalVisible;
     this.setState({
       isAddModalVisible: tempVisibility
     }); //setState
   }, //toggleMovieDisplay
 
+  //Once movie information has been passed to the renderer, close the modal
   addMovieAndCloseMyModalPlease: function(tempItem) {
     this.props.addMovie(tempItem);
     this.setState({
@@ -39,12 +43,12 @@ var Toolbar = React.createClass({
     });
   },
 
-  showAbout: function(){ //we want to display the show about on the toolbar
+  //Pulls up the window with information about the app and its usage
+  showAbout: function(){
     console.log("we've been clicked and should be displaying the about")
     this.props.handleAbout();
   },
 
-  //INCOMP - add list buttons to this render function and figure out how to change the main page
   render: function() { //when the about icon is clicked, it will send an event notification through above func
     return(
       <div>

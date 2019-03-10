@@ -207,9 +207,10 @@ var MainInterface = React.createClass({
     console.log("these titles didnt return anything, need to do manually: ", moviesNotFound);
     console.log("=======");
 
-    this.setState({
-      errorMovies: moviesNotFound
-    });
+    // return true;
+    // this.setState({
+    //   errorMovies: moviesNotFound
+    // });
     /*
     TODO now that everything is added, let's create a popup modal with the movies that weren't added because the names were messed up, and the ones that were duplicates
     Making a modal popup should actually make the list render properly, rather than waiting for another action to happen First

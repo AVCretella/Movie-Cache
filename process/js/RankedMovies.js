@@ -16,7 +16,6 @@ var RankedMovies = React.createClass({
   handleChangeRank: function(submitEvent){
     submitEvent.preventDefault(); //this is to prevent the page from reloading, we will handle manually with React
 
-    //TODO need to send data to renderer process to update rankedmoviedata
     var tempItem = { //create an item with the value we want to add
       movieName: this.props.singleItem.movieName,
       rank: parseFloat(this.inputMovieRank.value)

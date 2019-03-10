@@ -60,7 +60,10 @@ var MovieList = React.createClass({
   //sends the list that is currently being shown so we know what to add to
   //actually i can just check the state of the main component for that
   importList: function(movieList){
-    this.props.addMoviesFromFile(this.props.movieListTitle);
+    if(this.props.addMoviesFromFile(this.props.movieListTitle)){
+      console.log(":::::::::::::::::::::::::::shit it's already true");
+    }
+
     console.log("this is the movies that had erorrs: ", this.props.errorMovies);//TODO get this too quickly, need to be passed the list that we just made
     //TODO want to wait for the API calls to be done and then pop up a modal with the movies that weren't added
   },
@@ -160,7 +163,6 @@ var MovieList = React.createClass({
               <span className="glyphicon glyphicon-save"></span></button>
             </span>
 
-            {/*TODO will need to be able to identify whether it is a csv (to convert to object form for watchlist) or if it already in object form) */}
             {importButton}
 
             {timeWatching}

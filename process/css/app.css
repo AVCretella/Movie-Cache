@@ -243,11 +243,11 @@ body {
 
 /* ________________Modal Formatting_________________ */
 /* _________________________________________________ */
-.rankInput, .viewInput{
+.rankInput, .viewInput{ /* Highlight rank and viewCount to show user they need to fill them out */
   color: #0bcbdf;
 }
 
-.form-control:focus {
+.form-control:focus { /* Highlight the box you're currently typing in */
   border-color: #0bcbdf;
 }
 
