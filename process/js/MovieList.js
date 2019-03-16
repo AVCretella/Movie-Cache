@@ -129,6 +129,10 @@ var MovieList = React.createClass({
   render: function() {
     let {movieListTitle, movieList, queryText, orderBy, orderDir, deleteMovie, changeRank, moveToFavorites, MovieListItem} = this.props;
 
+    movieList = this.filterMovies(movieList, queryText);
+    movieList = this.sortMovies(movieList, orderBy, orderDir);
+    movieList = this.renderListItems(movieList, orderBy, deleteMovie, changeRank, moveToFavorites, MovieListItem);
+
     if (movieListTitle == "Watchlist") {
       let hoursWatchlist = this.calculateHoursWatchlist(movieList);
       timeWatching =  <span className="pull-right import">
@@ -145,10 +149,6 @@ var MovieList = React.createClass({
                       </span>;
       importButton =  <span className="pull-right"/>;
     }
-
-    movieList = this.filterMovies(movieList, queryText);
-    movieList = this.sortMovies(movieList, orderBy, orderDir);
-    movieList = this.renderListItems(movieList, orderBy, deleteMovie, changeRank, moveToFavorites, MovieListItem);
 
     return (
       <div className="row">

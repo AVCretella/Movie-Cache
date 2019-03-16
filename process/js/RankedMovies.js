@@ -126,7 +126,7 @@ var RankedMovies = React.createClass({
                   <span className="glyphicon glyphicon-remove"></span></button>
                 </span>
                 <button className="btn btn-primary btn-sm pull-right" onClick={this.toggleChangeRankDisplay}>
-                  <span className="rank">{this.props.singleItem.rank} / 10</span>
+                  <span className="rank">{this.props.singleItem.position}</span>
                 </button>
               </div>
 
@@ -149,20 +149,18 @@ var RankedMovies = React.createClass({
 
               <div className="release-date">
                 <span className="label-item">Release Year:</span>{this.props.singleItem.releaseDate}
-                <span className="pull-right">{this.props.singleItem.duration} minutes</span>
-                <span className="label-item pull-right">Duration:</span>
-              </div>
-
-              <div className="reviews-times_seen">
-                {/*}<span className="label-item">Rotten Tomatoes: </span>{this.props.singleItem.rottenTomatoes}*/}
-
-                {/* TODO put a plus minus here that sends to handleViewCount change, pass the item and which button was pressed + update */}
-                {/* }<button className="pull-right btn btn-sm btn-danger" title="add 1 to the view count" onClick={this.removeFromList}>
-                  <span className="glyphicon glyphicon-arrow-up"></span>
-                </button> */}
                 <span className="pull-right">{this.props.singleItem.viewCount}</span>
                 <span className="label-item pull-right">Times Seen:</span>
               </div>
+
+              <div className="personal-rating">
+                <span className="label-item">Duration:</span>
+                <span>{this.props.singleItem.duration} minutes</span>
+
+                <span className="pull-right">{this.props.singleItem.rank}</span>
+                <span className="label-item pull-right">Your Rating:</span>
+              </div>
+
             </div>
           </div>
         </li>
