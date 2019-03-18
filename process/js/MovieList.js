@@ -68,8 +68,20 @@ var MovieList = React.createClass({
     //TODO want to wait for the API calls to be done and then pop up a modal with the movies that weren't added
   },
 
+//TODO the rendere process should handle this
+  adjustRanksAndDelete: function(item) {
+    console.log(this.props.movieList);
+    // var sortedMovies = _.orderBy(this.props.movieList, ['rank'], ['asc']);
+    // console.log("these are the movies in rank order", sortedMovies);
+    // let startIndex = item.rank - 1; //index of movie being removed in the movieList
+    // for (currentIndex = startIndex; currentIndex <= sortedMovies.length; currentIndex++) {
+    //   this.props.movieList[currentIndex][rank] = this.props.movieList[currentIndex][rank] - 1;
+    // }
+    this.props.deleteMovie(item);
+  },
+
   moveRankUp: function(item) {
-    sortedMovies = this.sortMovies(this.props.movieList, this.props.orderBy, this.props.orderDir);
+    let sortedMovies = this.sortMovies(this.props.movieList, this.props.orderBy, this.props.orderDir);
     console.log("sortedMovies: ", sortedMovies);
     let indexMovieToChange = _.indexOf(sortedMovies, item);
     console.log("TRYING TO GO UP");
@@ -81,7 +93,7 @@ var MovieList = React.createClass({
   },
 
   moveRankDown: function(item) {
-    sortedMovies = this.sortMovies(this.props.movieList, this.props.orderBy, this.props.orderDir);
+    let sortedMovies = this.sortMovies(this.props.movieList, this.props.orderBy, this.props.orderDir);
     console.log("sortedMovies: ", sortedMovies);
 
     let indexMovieToChange = _.indexOf(sortedMovies, item);
@@ -116,7 +128,7 @@ var MovieList = React.createClass({
           key = {index} //each index of the data.json file
           singleItem = {item} //each item at that index
           sortField = {orderBy}
-          onDelete = {deleteMovie} //calls the deleteMovie function in renderer.js
+          onDelete = {this.adjustRanksAndDelete} //calls the deleteMovie function in renderer.js
           onChangeRank = {changeRank} //calls the changeRank function in renderer.js
           onMoveToFavorites = {moveToFavorites} //calls the moveToFavorites function in renderer.js
           onRankUp = {this.moveRankUp}
@@ -128,10 +140,6 @@ var MovieList = React.createClass({
 
   render: function() {
     let {movieListTitle, movieList, queryText, orderBy, orderDir, deleteMovie, changeRank, moveToFavorites, MovieListItem} = this.props;
-
-    movieList = this.filterMovies(movieList, queryText);
-    movieList = this.sortMovies(movieList, orderBy, orderDir);
-    movieList = this.renderListItems(movieList, orderBy, deleteMovie, changeRank, moveToFavorites, MovieListItem);
 
     if (movieListTitle == "Watchlist") {
       let hoursWatchlist = this.calculateHoursWatchlist(movieList);
@@ -149,6 +157,10 @@ var MovieList = React.createClass({
                       </span>;
       importButton =  <span className="pull-right"/>;
     }
+
+    movieList = this.filterMovies(movieList, queryText);
+    movieList = this.sortMovies(movieList, orderBy, orderDir);
+    movieList = this.renderListItems(movieList, orderBy, deleteMovie, changeRank, moveToFavorites, MovieListItem);
 
     return (
       <div className="row">

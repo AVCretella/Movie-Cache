@@ -8,7 +8,8 @@ var AddMovieForm = React.createClass({
   getInitialState: function(){ //set all of the default placeholders
     return{
       defaultName: 'Type in a name and press Search!',
-      defaultRank: 'Your rank for this movie out of 10.0',
+      defaultRank: 'If no rank is given, this movie will be on the bottom of the list',
+      defaultPersonalRating: 'Your rating for this movie out of 10.0',
       defaultDirector : 'Director\'s Name',
       defaultActors: 'Actors / Actresses',
       defaultGenre: 'Genre of the movie',
@@ -78,7 +79,7 @@ var AddMovieForm = React.createClass({
   handleAdd: function(submitEvent){ //pass the fact that the submitEvent has happened from the form
     submitEvent.preventDefault(); //this is to prevent the page from reloading, we will handle manually with React
 
-    //When the Favorites list is being displayed, we need to send the viewCount and rank as well
+    //When the Favorites list is being displayed, we need to send the viewCount and personalRating as well
     var tempItem = {}; //will be used to store all necessary data about a movie
     /*
       When storing numbers, if they are stored as strings, sorting does not
@@ -94,7 +95,9 @@ var AddMovieForm = React.createClass({
 
     if (this.props.isDisplayingRanked) {
       var timesSeen = parseInt(this.inputMovieViewCount.value.match(/[0-9]+/g)[0]); //only in the ranked list
-      var rankFloat = parseFloat(this.inputMovieRank.value);
+      var personalRatingFloat = parseFloat(this.inputMoviePersonalRating.value);
+      var rankInt = parseInt(this.inputMovieRank.value.match(/[0-9]+/g)[0]); //only in the ranked list
+
 
       tempItem = { //create an item with the values we want to add
         movieName: this.inputMovieName.value,
@@ -106,10 +109,11 @@ var AddMovieForm = React.createClass({
         Summary: this.inputMovieSummary.value,
         duration: durationMinutes,
         viewCount: timesSeen,
-        rank: rankFloat
+        personalRating: personalRatingFloat,
+        rank: rankInt
         // rottenTomatoes: this.inputMovieRottenTomatoes.value,
       }
-    } else { //if just a wishlist movie, need don't need rank or viewCount
+    } else { //if just a wishlist movie, need don't need personalRating, rank, or viewCount
       tempItem = {
         movieName: this.inputMovieName.value,
         posterURL: this.inputMoviePoster.value,
@@ -142,23 +146,31 @@ var AddMovieForm = React.createClass({
     }
 
     if (this.props.isDisplayingRanked) { //if we are displaying the ranked list, include rank and timesSeen in the form
-      rank =  <div className="form-group">
-                <label className="col-sm-3 control-label rankInput" htmlFor="rank">Your Rating:</label>
+      personalRating =  <div className="form-group">
+                <label className="col-sm-3 control-label personalRatingInput" htmlFor="personalRating">Your Rating:</label>
                 <div className="col-sm-9">
-                  <input type="number" step=".01" min="0" max="10" className="form-control" placeholder={this.state.defaultRank}
-                    id="rank" ref={(ref) => this.inputMovieRank = ref} required/>
+                  <input type="number" step=".01" min="0" max="10" className="form-control" placeholder={this.state.defaultPersonalRating}
+                    id="rank" ref={(ref) => this.inputMoviePersonalRating = ref} required/>
                 </div>
               </div>;
       times_seen =  <div className="form-group">
-                      <label className="col-sm-3 control-label viewInput" htmlFor="duration">Times Seen:</label>
+                      <label className="col-sm-3 control-label viewInput" htmlFor="times_seen">Times Seen:</label>
                       <div className="col-sm-9">
                         <input type="number" min="0" className="form-control" placeholder={this.state.defaultViewCount}
                           id="viewCount" ref={(ref) => this.inputMovieViewCount = ref} required/>
                       </div>
                     </div>;
+      rank =  <div className="form-group">
+                      <label className="col-sm-3 control-label rankInput" htmlFor="position">Rank:</label>
+                      <div className="col-sm-9">
+                        <input type="number" min="1" className="form-control" placeholder={this.state.defaultRank}
+                          id="position" ref={(ref) => this.inputMovieRank = ref} required/>
+                      </div>
+                    </div>;
     } else { //otherwise leave them empty
-      rank = <div></div>;
+      personalRating = <div></div>;
       times_seen = <div></div>;
+      rank = <div></div>;
     }
 
     /*
@@ -190,7 +202,9 @@ var AddMovieForm = React.createClass({
               </div>
 
               {rank}
-              
+
+              {personalRating}
+
               {times_seen}
 
               <div className="form-group">
@@ -236,7 +250,7 @@ var AddMovieForm = React.createClass({
               <div className="form-group">
                 <label className="col-sm-3 control-label" htmlFor="Summary">Summary</label>
                 <div className="col-sm-9">
-                  <textarea className="form-control" rows="4" cols="50"
+                  <textarea className="form-control" rows="3" cols="50"
                     id="Summary" ref={(ref) => this.inputMovieSummary = ref} placeholder={this.state.defaultSummary}></textarea>
                 </div>
               </div>

@@ -83,14 +83,14 @@ var RankedMovies = React.createClass({
             <div className="modal-content">
               <div className="modal-header">
                 <button type="submit" className="close" onClick={this.toggleChangeRankDisplay} aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 className="modal-title">Change The Rank of {this.props.singleItem.movieName}</h4>
+                <h4 className="modal-title">Changing The Rank of {this.props.singleItem.movieName}</h4>
               </div>
 
               <form className="modal-body add-movie form-horizontal" ref={(ref) => this.changeRankFormRef = ref} onSubmit={this.handleChangeRank}>
                 <div className="form-group">
-                  <label className="col-sm-3 control-label" htmlFor="rank">Your Rating:</label>
-                  <div className="col-sm-9">
-                    <input type="number" step=".01" min="0" max="10" className="form-control" placeholder={this.props.singleItem.rank}
+                  <label className="col-sm-5 control-label" htmlFor="rank">New Rank For This Movie:</label>
+                  <div className="col-sm-7">
+                    <input type="number" step="1" min="1" className="form-control" placeholder={this.props.singleItem.rank}
                       id="rank" ref={(ref) => this.inputMovieRank = ref}/>
                   </div>
                 </div>
@@ -126,7 +126,7 @@ var RankedMovies = React.createClass({
                   <span className="glyphicon glyphicon-remove"></span></button>
                 </span>
                 <button className="btn btn-primary btn-sm pull-right" onClick={this.toggleChangeRankDisplay}>
-                  <span className="rank">{this.props.singleItem.position}</span>
+                  <span className="rank">{this.props.singleItem.rank}</span>
                 </button>
               </div>
 
@@ -157,7 +157,7 @@ var RankedMovies = React.createClass({
                 <span className="label-item">Duration:</span>
                 <span>{this.props.singleItem.duration} minutes</span>
 
-                <span className="pull-right">{this.props.singleItem.rank}</span>
+                <span className="pull-right">{this.props.singleItem.personalRating}</span>
                 <span className="label-item pull-right">Your Rating:</span>
               </div>
 

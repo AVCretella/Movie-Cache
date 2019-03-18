@@ -63,7 +63,7 @@ var MainInterface = React.createClass({
     return {
       movieFormVisible: false,
       orderBy: 'rank',
-      orderDir: 'desc',
+      orderDir: 'asc',
       genre: 'All',
       queryText: '',
       myMovies: rankedMovieData,
@@ -260,7 +260,7 @@ var MainInterface = React.createClass({
       movieListTitle: rankedListTitle,
       sortFields: rankedSortFields,
       orderBy:'rank',
-      orderDir:'desc',
+      orderDir:'asc',
       genre:'All', //reset genre on list change
       fileLocation: rankedDataLocation
     });
@@ -281,23 +281,52 @@ var MainInterface = React.createClass({
     });
   },
 
+  addRankedObject: function(tempItem) {
+    let tempMovies = this.state.myMovies;
+    if (tempItem.rank > ((JSON.parse(fs.readFileSync(rankedDataLocation))).length)) { //if it is from the ranked list, it'll have a rank
+      tempItem.rank = (JSON.parse(fs.readFileSync(rankedDataLocation))).length; //should be myMovies.length because the 0 index is #1, so myMovies.length index is #myMovies.length
+      tempMovies.push(tempItem);
+    } else { //it was given a valid rank that was within the range of the list, insert it where it should go
+      tempMovies.splice(tempItem.rank - 1, 0, tempItem); //add the item to it's rightful spot
+      let startIndex = tempItem.rank;
+      let currentIndex;
+      for (currentIndex = startIndex; currentIndex >= tempMovies.length; currentIndex++) {
+        console.log("current index");
+        tempMovies[currentIndex].rank = tempMovies[currentIndex].rank + 1; //add one to the existing ranks below the newly inserted
+      }
+      //TODO splice one into the right spot, and push the others down the list
+      // tempMovies.splice(atIndex, how many to remove, what to put in);
+    }
+    this.setState({
+      myMovies: tempMovies
+    });
+  },
+
   //TODO THERE IS NO REASON THIS SHOULDNT BE HOOKED UP TO A DATABASE!!! HOOK IT UP BOI
   //If the movie being added already exists, then don't add it
   addMovieObject: function(tempItem) { //receives object saves in form
     var tempMovies = this.state.myMovies;
-    if (_.findIndex(tempMovies, {movieName: tempItem.movieName}) == -1) {
-      tempMovies.push(tempItem);
-      this.setState({
-        myMovies: tempMovies
-      });
+    if (_.findIndex(tempMovies, {movieName: tempItem.movieName}) == -1) { //check for duplicates
+      if (tempItem.rank != undefined) { //if we are working with a ranked object
+        this.addRankedObject(tempItem);
+      } else {
+        //TODO splice one into the right spot, and push the others down the list
+        tempMovies.push(tempItem);
+        this.setState({
+          myMovies: tempMovies
+        });
+      }
     } else {
       console.log(tempItem.movieName, "not added because already on list");
     }
   },
 
+//TODO should split into delete watchlistobject and rankedobject, but for now, just an if statement wil do
   deleteMovieObject: function(item) {
     // console.log("We should have deleted this movie: ", item);
     var allMovies = this.state.myMovies;
+
+    //TODO instead!!! we should add movies in order to the ranked data so it is already sorted. instead of sorting every time
     var newMovies = _.without(allMovies, item); //return array without the one movie passed
     // console.log("ALL MOVIES: ", allMovies);
     this.setState({

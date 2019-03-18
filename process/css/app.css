@@ -243,7 +243,7 @@ body {
 
 /* ________________Modal Formatting_________________ */
 /* _________________________________________________ */
-.rankInput, .viewInput{ /* Highlight rank and viewCount to show user they need to fill them out */
+.rankInput, .viewInput, .personalRatingInput{ /* Highlight rank and viewCount to show user they need to fill them out */
   color: #0bcbdf;
 }
 
