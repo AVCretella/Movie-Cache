@@ -287,15 +287,13 @@ var MainInterface = React.createClass({
       tempItem.rank = (JSON.parse(fs.readFileSync(rankedDataLocation))).length; //should be myMovies.length because the 0 index is #1, so myMovies.length index is #myMovies.length
       tempMovies.push(tempItem);
     } else { //it was given a valid rank that was within the range of the list, insert it where it should go
+      console.log("a valid rank was given")
       tempMovies.splice(tempItem.rank - 1, 0, tempItem); //add the item to it's rightful spot
       let startIndex = tempItem.rank;
       let currentIndex;
-      for (currentIndex = startIndex; currentIndex >= tempMovies.length; currentIndex++) {
-        console.log("current index");
+      for (currentIndex = startIndex; currentIndex < tempMovies.length; currentIndex++) {
         tempMovies[currentIndex].rank = tempMovies[currentIndex].rank + 1; //add one to the existing ranks below the newly inserted
       }
-      //TODO splice one into the right spot, and push the others down the list
-      // tempMovies.splice(atIndex, how many to remove, what to put in);
     }
     this.setState({
       myMovies: tempMovies
@@ -306,7 +304,7 @@ var MainInterface = React.createClass({
   //If the movie being added already exists, then don't add it
   addMovieObject: function(tempItem) { //receives object saves in form
     var tempMovies = this.state.myMovies;
-    if (_.findIndex(tempMovies, {movieName: tempItem.movieName}) == -1) { //check for duplicates
+    if (_.findIndex(tempMovies, {movieName: tempItem.movieName}) == -1) { //check for duplicates, if there aren't any, execute
       if (tempItem.rank != undefined) { //if we are working with a ranked object
         this.addRankedObject(tempItem);
       } else {
