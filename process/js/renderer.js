@@ -281,6 +281,7 @@ var MainInterface = React.createClass({
     });
   },
 
+  //This needs to accomodate the moving function
   addRankedObject: function(tempItem) {
     let tempMovies = this.state.myMovies;
     if (tempItem.rank > ((JSON.parse(fs.readFileSync(rankedDataLocation))).length)) { //if it is from the ranked list, it'll have a rank
@@ -304,7 +305,7 @@ var MainInterface = React.createClass({
   //If the movie being added already exists, then don't add it
   addMovieObject: function(tempItem) { //receives object saves in form
     var tempMovies = this.state.myMovies;
-    if (_.findIndex(tempMovies, {movieName: tempItem.movieName}) == -1) { //check for duplicates, if there aren't any, execute
+    if (_.findIndex(tempMovies, {movieName: tempItem.movieName}) == -1) { //if this is a duplicate item, stop processing
       if (tempItem.rank != undefined) { //if we are working with a ranked object
         this.addRankedObject(tempItem);
       } else {
@@ -319,31 +320,81 @@ var MainInterface = React.createClass({
     }
   },
 
-//TODO should split into delete watchlistobject and rankedobject, but for now, just an if statement wil do
-  deleteMovieObject: function(item) {
-    // console.log("We should have deleted this movie: ", item);
-    var allMovies = this.state.myMovies;
+  //When an item is identified to be in the ranked list, we will need to adjust all the other items below to reflect the deletion
+  deleteRankedObject: function(item) {
+    let tempMovies = this.state.myMovies;
+    console.log("deleting the item: ", item.movieName);
+    tempMovies.splice(item.rank - 1, 1); //delete the item. It's index is = rank-1
+    console.log("this is tempMovies: ", tempMovies);
 
-    //TODO instead!!! we should add movies in order to the ranked data so it is already sorted. instead of sorting every time
-    var newMovies = _.without(allMovies, item); //return array without the one movie passed
-    // console.log("ALL MOVIES: ", allMovies);
+    //now adjust all of the movies that were ranked below the one removed
+    let startIndex = item.rank - 1; //the first affected movie will have shifted into the removed item's index
+    let currentIndex;
+    for (currentIndex = startIndex; currentIndex < tempMovies.length; currentIndex++) {
+      tempMovies[currentIndex].rank = tempMovies[currentIndex].rank - 1; //add one to the existing ranks below the newly inserted
+    }
     this.setState({
-      myMovies: newMovies
+      myMovies: tempMovies
     });
-
-    console.log("deleted: ", item.movieName);
-    // console.log("NEW MOVIES: ", newMovies);
-    // console.log("MY MOVIES: ", this.myMovies);
   },
 
-  changeMovieRank: function(item) {
+//TODO should split into delete watchlistobject and rankedobject, but for now, just an if statement wil do
+  deleteMovieObject: function(item) {
+    if (item.rank != undefined) { //if we are working with a ranked object
+      this.deleteRankedObject(item);
+    } else {
+      var allMovies = this.state.myMovies;
+      var newMovies = _.without(allMovies, item); //return array without the one movie passed
+      this.setState({
+        myMovies: newMovies
+      });
+      console.log("deleted: ", item.movieName);
+    }
+  },
+
+  /*
+    TODO the only issue is that we are basically doing a special delete and add now because of how we stored the ranked list.
+      but it's either that or make the add and delete function sort the ranked data on every single addition and deletion.
+      but since addition and deletion are used so much more often, i dont think this is a terrible solution.
+  */
+  //When changing rank, we need to adjust the range of indexes a movie has moved
+  changeMovieRank: function(newRank, oldRank) {
     var allMovies = this.state.myMovies;
     //TODO could run into issues of movies with the same name
         //may end up changing rank of diff one because it comes up first
-    var index = _.findIndex(allMovies, {movieName: item.movieName}); //index of the movie that we want to change rank of
-    // console.log("this is the index we found the movie at: ", index);
-    allMovies[index].rank = item.rank;
-    // console.log("this is new movies: ", allMovies);
+    //TODO changing this ---> storing movies in order, can just delete the rank - 1 (it will be the index of the movie)
+      // var index = _.findIndex(allMovies, {movieName: item.movieName}); //index of the movie that we want to change rank of
+
+    let startIndex, endIndex, currIndex;
+    // let newRank = item.rank;
+
+    //SINCE EVERYTHING IS STORED IN ORDER IN THE RANKED DATALIST, WE CAN DO IT THIS WAY
+    if (newRank != oldRank) { //first check that we actually have to do anything
+      if (newRank < oldRank) { //moving to a better rank on the movie list
+        let item = allMovies[oldRank - 1]; //save our item to re-insert later
+        item.rank = newRank;
+        startIndex = newRank - 1; //want to start at the index the movie will move to             | These two depend of when we delete the movie item |
+        endIndex = oldRank - 2; //finish at the index prior to where the movie used to be         | _________________________________________________ |
+        allMovies.splice(oldRank - 1, 1) //remove the item with the old rank
+        for(currIndex = startIndex; currIndex <= endIndex; currIndex++) { //increments each of the movie items that are now below the item that previously were not
+          allMovies[currIndex].rank++;
+        }
+        allMovies.splice(startIndex, 0, item); //adds the item to the new rank position
+      } else { //this means that the new rank is worse than the old one, need to bump up the movies that will now be above this one
+        let item = allMovies[oldRank - 1]; //save our item to re-insert later
+        item.rank = newRank;
+        startIndex = oldRank - 1; //want to start at the index the movie is leaving               | These two depend of when we delete the movie item |
+        endIndex = newRank - 2; //finish at the index prior to where the movie will to be         | _________________________________________________ |
+        allMovies.splice(oldRank - 1, 1) //remove the item with the old rank
+        for(currIndex = startIndex; currIndex <= endIndex; currIndex++) { //decrements each of the movie items that are now above the item that previously were not
+          allMovies[currIndex].rank--;
+        }
+        allMovies.splice(endIndex, 0, item); //adds the item to the new rank position
+      }
+    }
+
+    // allMovies[index].rank = item.rank;
+
     this.setState({
       myMovies: allMovies
     });
@@ -351,6 +402,8 @@ var MainInterface = React.createClass({
 
   //Given an item with ranked format (all movie info + rank and timesSeen), write it directly to rankedDataLocation and then delete
   //the item from the watchlist
+
+  //TODO holy shit this needs a rework, need to add to rankedDataLocation correctly, like in order, fuck
   moveMovieToFavorites: function(item){
     console.log("rankedMovieData before the push: ", rankedMovieData);
     newRanked = JSON.parse(fs.readFileSync(rankedDataLocation));
