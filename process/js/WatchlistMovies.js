@@ -67,20 +67,20 @@ var WatchlistMovies = React.createClass({
             <div className="modal-content">
               <div className="modal-header">
                 <button type="submit" className="close" onClick={this.toggleMoveMovieDisplay} aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 className="modal-title">Move {this.props.singleItem.movieName} To Your Favorites List</h4>
+                <h4 className="modal-title">Move &quot;{this.props.singleItem.movieName}&quot; To Your Favorites List</h4>
               </div>
 
               <form className="modal-body add-movie form-horizontal" ref={(ref) => this.moveMovieFormRef = ref} onSubmit={this.moveToFavorites}>
                 <div className="form-group">
-                  <label className="col-sm-10 control-label" htmlFor="rank">Your Rating (out of 10):</label>
+                  <label className="col-sm-10 control-label" htmlFor="rank">Your Rank</label>
                   <div className="col-sm-2">
-                    <input type="number" step=".01" min="0" max="10" className="form-control" placeholder="8.5"
+                    <input type="number" min="1" className="form-control" placeholder="15"
                       id="rank" ref={(ref) => this.inputMovieRank = ref}/>
                   </div>
                 </div>
 
                 <div className="form-group">
-                  <label className="col-sm-10 control-label" htmlFor="timesSeen">How many times have you seen {this.props.singleItem.movieName}?:</label>
+                  <label className="col-sm-10 control-label" htmlFor="timesSeen">How many times have you seen &quot;{this.props.singleItem.movieName}&quot;?</label>
                   <div className="col-sm-2">
                     <input type="number" step="1" min="1" max="100" className="form-control" placeholder="1"
                       id="timesSeen" ref={(ref) => this.inputTimesSeen = ref}/>

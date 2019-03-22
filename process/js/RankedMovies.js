@@ -39,12 +39,16 @@ var RankedMovies = React.createClass({
     this.changeRankFormRef.reset();
   },
 
-  moveRankUp: function() {
-    this.props.onRankUp(this.props.singleItem);
+  rankUp: function() {
+    let oldRank = this.props.singleItem.rank;
+    let newRank = this.props.singleItem.rank - 1;
+    this.props.onMoveRankByOne(oldRank, newRank);
   },
 
-  moveRankDown: function() {
-    this.props.onRankDown(this.props.singleItem);
+  rankDown: function() {
+    let oldRank = this.props.singleItem.rank;
+    let newRank = this.props.singleItem.rank + 1;
+    this.props.onMoveRankByOne(oldRank, newRank);
   },
 
   //1 column for the poster image, 11 cols for the name, description .. stuff
@@ -65,10 +69,10 @@ var RankedMovies = React.createClass({
 
     if (this.props.sortField == 'rank') {
       moveButtons = <div className="col-sm-1">
-                      <button className="btn btn-success" title="Move up one on the list" onClick={this.moveRankUp}>
+                      <button className="btn btn-success" title="Move up one on the list" onClick={this.rankUp}>
                         <span className="glyphicon glyphicon-arrow-up"></span>
                       </button>
-                      <button className="btn btn-danger" title="Move down one on the list" onClick={this.moveRankDown}>
+                      <button className="btn btn-danger" title="Move down one on the list" onClick={this.rankDown}>
                         <span className="glyphicon glyphicon-arrow-down"></span>
                       </button>
                     </div>;

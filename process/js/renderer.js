@@ -400,6 +400,10 @@ var MainInterface = React.createClass({
     });
   },
 
+  swapperoniRanks: function(fromIndex, toIndex) {
+
+  },
+
   //Given an item with ranked format (all movie info + rank and timesSeen), write it directly to rankedDataLocation and then delete
   //the item from the watchlist
 

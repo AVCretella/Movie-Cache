@@ -80,29 +80,34 @@ var MovieList = React.createClass({
     this.props.deleteMovie(item);
   },
 
-  moveRankUp: function(item) {
-    let sortedMovies = this.sortMovies(this.props.movieList, this.props.orderBy, this.props.orderDir);
-    console.log("sortedMovies: ", sortedMovies);
-    let indexMovieToChange = _.indexOf(sortedMovies, item);
-    console.log("TRYING TO GO UP");
-    console.log("this is the index of the movie that we clicked: ", indexMovieToChange);
-    if (indexMovieToChange != 0) {
-      item.rank = parseFloat((sortedMovies[indexMovieToChange - 1].rank - - .01).toFixed(2)); //TODO should actually cast to int, keep to make ed the happy. (he does not want blame though if not the working goodly)
-      this.props.changeRank(item);
-    }
-  },
+  //Rather than just changing the rank, which was easy before, making everything complicated by working directly with the orders
+  // moveRankUp: function(item) {
+  //   let sortedMovies = this.sortMovies(this.props.movieList, this.props.orderBy, this.props.orderDir);
+  //   console.log("sortedMovies: ", sortedMovies);
+  //   let indexMovieToChange = _.indexOf(sortedMovies, item);
+  //   console.log("TRYING TO GO UP");
+  //   console.log("this is the index of the movie that we clicked: ", indexMovieToChange);
+  //   if (indexMovieToChange != 0) {
+  //     item.rank = parseFloat((sortedMovies[indexMovieToChange - 1].rank - - .01).toFixed(2)); //TODO should actually cast to int, keep to make ed the happy. (he does not want blame though if not the working goodly)
+  //     this.props.changeRank(item);
+  //   }
+  // },
+  //
+  // moveRankDown: function(item) {
+  //   let sortedMovies = this.sortMovies(this.props.movieList, this.props.orderBy, this.props.orderDir);
+  //   console.log("sortedMovies: ", sortedMovies);
+  //
+  //   let indexMovieToChange = _.indexOf(sortedMovies, item);
+  //   console.log("TRYING TO GO DOWN");
+  //   console.log("this is the index of the movie that we clicked: ", indexMovieToChange);
+  //   if (indexMovieToChange - 1 != sortedMovies.length) {
+  //     item.rank = parseFloat((sortedMovies[indexMovieToChange + 1].rank - .01).toFixed(2));
+  //     this.props.changeRank(item);
+  //   }
+  // },
 
-  moveRankDown: function(item) {
-    let sortedMovies = this.sortMovies(this.props.movieList, this.props.orderBy, this.props.orderDir);
-    console.log("sortedMovies: ", sortedMovies);
-
-    let indexMovieToChange = _.indexOf(sortedMovies, item);
-    console.log("TRYING TO GO DOWN");
-    console.log("this is the index of the movie that we clicked: ", indexMovieToChange);
-    if (indexMovieToChange - 1 != sortedMovies.length) {
-      item.rank = parseFloat((sortedMovies[indexMovieToChange + 1].rank - .01).toFixed(2));
-      this.props.changeRank(item);
-    }
+  moveRankByOne: function(oldRank, newRank) {
+    this.props.changeRank(oldRank, newRank);
   },
 
   calculateHoursRanked: function(movieList) {
@@ -131,8 +136,7 @@ var MovieList = React.createClass({
           onDelete = {this.adjustRanksAndDelete} //calls the deleteMovie function in renderer.js
           onChangeRank = {changeRank} //calls the changeRank function in renderer.js
           onMoveToFavorites = {moveToFavorites} //calls the moveToFavorites function in renderer.js
-          onRankUp = {this.moveRankUp}
-          onRankDown = {this.moveRankDown}
+          onMoveRankByOne = {this.moveRankByOne}
         />
       ) //return
     }.bind(this));
