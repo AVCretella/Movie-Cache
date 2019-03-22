@@ -140,6 +140,7 @@ var MainInterface = React.createClass({
     }
   },
 
+  //TODO still need to write this one and convert the old format for austen
   addToRankedFromFile: function(movieList) {
     console.log("hello we've arrived in add to ranked");
   },
@@ -206,11 +207,6 @@ var MainInterface = React.createClass({
     console.log("matched movie in list already, deal with these yourself you filthy animal: ", matchedMovies);
     console.log("these titles didnt return anything, need to do manually: ", moviesNotFound);
     console.log("=======");
-
-    // return true;
-    // this.setState({
-    //   errorMovies: moviesNotFound
-    // });
     /*
     TODO now that everything is added, let's create a popup modal with the movies that weren't added because the names were messed up, and the ones that were duplicates
     Making a modal popup should actually make the list render properly, rather than waiting for another action to happen First
@@ -286,7 +282,7 @@ var MainInterface = React.createClass({
     let tempMovies = this.state.myMovies;
     let rankedListLength = (JSON.parse(fs.readFileSync(rankedDataLocation))).length;
     if (tempItem.rank > rankedListLength) { //if it is from the ranked list, it'll have a rank
-      tempItem.rank = rankedListLength; //should be myMovies.length because the 0 index is #1, so myMovies.length index is #myMovies.length
+      tempItem.rank = rankedListLength + 1; //should be myMovies.length because the 0 index is #1, so myMovies.length index is #myMovies.length
       tempMovies.push(tempItem);
     } else { //it was given a valid rank that was within the range of the list, insert it where it should go
       console.log("a valid rank was given")
@@ -396,13 +392,9 @@ var MainInterface = React.createClass({
         for(currIndex = startIndex; currIndex < endIndex; currIndex++) { //decrements each of the movie items that are now above the item that previously were not
           allMovies[currIndex].rank--;
         }
-
         allMovies.splice(endIndex, 0, item); //adds the item to the new rank position
       }
     }
-
-    // allMovies[index].rank = item.rank;
-
     this.setState({
       myMovies: allMovies
     });
@@ -411,18 +403,45 @@ var MainInterface = React.createClass({
   //Given an item with ranked format (all movie info + rank and timesSeen), write it directly to rankedDataLocation and then delete
   //the item from the watchlist
 
+  //Needs to behave a little differently than just adding a ranked movie object because we cannot access the state because we are on the wrong list
+    //We need to directly access the ranked data to modify correctly
   //TODO holy shit this needs a rework, need to add to rankedDataLocation correctly, like in order, fuck
   moveMovieToFavorites: function(item){
-    console.log("rankedMovieData before the push: ", rankedMovieData);
-    newRanked = JSON.parse(fs.readFileSync(rankedDataLocation));
-    newRanked.push(item);
-    // rankedMovieData.push(item);
-    console.log("rankedMovieData after the push: ", rankedMovieData);
-    fs.writeFile(rankedDataLocation, JSON.stringify(newRanked), 'utf8', function(err) {
+
+    let rankedMovies = JSON.parse(fs.readFileSync(rankedDataLocation));
+    let rankedListLength = (JSON.parse(fs.readFileSync(rankedDataLocation))).length;
+    if (item.rank > rankedListLength) { //if it is from the ranked list, it'll have a rank
+      item.rank = rankedListLength + 1; //should be myMovies.length because the 0 index is #1, so myMovies.length index is #myMovies.length
+      rankedMovies.push(item);
+    } else { //it was given a valid rank that was within the range of the list, insert it where it should go
+      console.log("a valid rank was given")
+      rankedMovies.splice(item.rank - 1, 0, item); //add the item to it's rightful spot
+      let startIndex = item.rank;
+      let currentIndex;
+      for (currentIndex = startIndex; currentIndex < rankedMovies.length; currentIndex++) {
+        rankedMovies[currentIndex].rank = rankedMovies[currentIndex].rank + 1; //add one to the existing ranks below the newly inserted
+      }
+    }
+
+    //TODO THIS IS GARBAGE POOPOO WAY TO DO THIS, ED WOULD RIP MY NUTS OFF
+    //Force the update to the ranked list because we don't have accept to it through state right now because we are displaying the watchlist
+    fs.writeFile(rankedDataLocation, JSON.stringify(rankedMovies), 'utf8', function(err) {
       if (err) {
         console.log(err);
       }
     }); //will go to the file location that our data is at and change it
+
+
+    // console.log("rankedMovieData before the push: ", rankedMovieData);
+    // newRanked = JSON.parse(fs.readFileSync(rankedDataLocation));
+    // newRanked.push(item);
+    // // rankedMovieData.push(item);
+    // console.log("rankedMovieData after the push: ", rankedMovieData);
+    // fs.writeFile(rankedDataLocation, JSON.stringify(newRanked), 'utf8', function(err) {
+    //   if (err) {
+    //     console.log(err);
+    //   }
+    // }); //will go to the file location that our data is at and change it
 
     //pulls the rank and timesSeen fields out of the object so it can be recognized by the deleteMovieObject function
     delete item.rank;
