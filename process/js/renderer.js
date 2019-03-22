@@ -284,8 +284,9 @@ var MainInterface = React.createClass({
   //This needs to accomodate the moving function
   addRankedObject: function(tempItem) {
     let tempMovies = this.state.myMovies;
-    if (tempItem.rank > ((JSON.parse(fs.readFileSync(rankedDataLocation))).length)) { //if it is from the ranked list, it'll have a rank
-      tempItem.rank = (JSON.parse(fs.readFileSync(rankedDataLocation))).length; //should be myMovies.length because the 0 index is #1, so myMovies.length index is #myMovies.length
+    let rankedListLength = (JSON.parse(fs.readFileSync(rankedDataLocation))).length;
+    if (tempItem.rank > rankedListLength) { //if it is from the ranked list, it'll have a rank
+      tempItem.rank = rankedListLength; //should be myMovies.length because the 0 index is #1, so myMovies.length index is #myMovies.length
       tempMovies.push(tempItem);
     } else { //it was given a valid rank that was within the range of the list, insert it where it should go
       console.log("a valid rank was given")
@@ -369,26 +370,33 @@ var MainInterface = React.createClass({
     // let newRank = item.rank;
 
     //SINCE EVERYTHING IS STORED IN ORDER IN THE RANKED DATALIST, WE CAN DO IT THIS WAY
+    //The rank is reflective of -[ index + 1 ]- for a movie
     if (newRank != oldRank) { //first check that we actually have to do anything
-      if (newRank < oldRank) { //moving to a better rank on the movie list
-        let item = allMovies[oldRank - 1]; //save our item to re-insert later
-        item.rank = newRank;
-        startIndex = newRank - 1; //want to start at the index the movie will move to             | These two depend of when we delete the movie item |
-        endIndex = oldRank - 2; //finish at the index prior to where the movie used to be         | _________________________________________________ |
+      let item = allMovies[oldRank - 1]; //save our item to re-insert later
+      item.rank = newRank;
+      if (newRank < oldRank) { //moving to a better rank on the movie list (higher on list, lower number)
+        startIndex = item.rank - 1; //want to start at the index the movie will move to             | These two depend of when we delete the movie item |
+        endIndex = oldRank - 2; //finish at the index prior to where the movie used to be           | _________________________________________________ |
         allMovies.splice(oldRank - 1, 1) //remove the item with the old rank
         for(currIndex = startIndex; currIndex <= endIndex; currIndex++) { //increments each of the movie items that are now below the item that previously were not
           allMovies[currIndex].rank++;
         }
         allMovies.splice(startIndex, 0, item); //adds the item to the new rank position
-      } else { //this means that the new rank is worse than the old one, need to bump up the movies that will now be above this one
-        let item = allMovies[oldRank - 1]; //save our item to re-insert later
-        item.rank = newRank;
-        startIndex = oldRank - 1; //want to start at the index the movie is leaving               | These two depend of when we delete the movie item |
-        endIndex = newRank - 2; //finish at the index prior to where the movie will to be         | _________________________________________________ |
+      } else {  //this means that the new rank is worse than the old one, need to bump up the movies that will now be above this one
+                //Also need to check if the new rank is out of bounds now, set the movie to the last index
+        if (item.rank > allMovies.length) {
+          console.log("GREATER THAN LENGTH");
+          item.rank = allMovies.length;
+        }
+        startIndex = oldRank - 1; //want to start at the index the movie is leaving                 | These two depend of when we delete the movie item |
+        endIndex = item.rank - 1; //finish at the index prior to where the movie will to be         | _________________________________________________ |
+        console.log("start index : ", startIndex);
+        console.log("end index: ", endIndex);
         allMovies.splice(oldRank - 1, 1) //remove the item with the old rank
-        for(currIndex = startIndex; currIndex <= endIndex; currIndex++) { //decrements each of the movie items that are now above the item that previously were not
+        for(currIndex = startIndex; currIndex < endIndex; currIndex++) { //decrements each of the movie items that are now above the item that previously were not
           allMovies[currIndex].rank--;
         }
+
         allMovies.splice(endIndex, 0, item); //adds the item to the new rank position
       }
     }
