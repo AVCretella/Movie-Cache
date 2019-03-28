@@ -116,6 +116,7 @@ app.on('ready', function(){
     var importedList = [];
 
     dialog.showOpenDialog({title: 'Select the movie file that you would like to import'}, (filePath) => {
+      event.sender.send('filePath', filePath);
       if (filePath != undefined) {
         if (which == 'watchlist') { //just need the movie titles
           fs.createReadStream(filePath[0])
@@ -126,18 +127,29 @@ app.on('ready', function(){
                importedList.push(data[0]);
                event.sender.send('numtimes', 'pushed a movie');
               }
-            }
-            catch(err) {
-              console.log(err);
-            }
+            } catch(err) { console.log(err); }
           })
           .on('end',function(){
             event.sender.send('pathReply', importedList);
           });
         } else {
-          console.log("hello this wont print");
+          fs.createReadStream(filePath[0])
+          .pipe(csv())
+          .on('data', function(data){
+            try { //push the first element into the array
+              // importList.push(data);
+
+              if (data[0] != ""){
+               importedList.push(data[0]);
+               event.sender.send('numtimes', 'pushed a movie');
+              }
+            } catch(err) { console.log(err); }
+          })
+          .on('end',function(){
+            event.sender.send('pathReply', importedList);
+          });
+          console.log("hello this is from the ranked list wont print");
         }
-        // event.sender.send('pathReply', filePath[0]); //if you send this over you will make the foreach loop unhappy
       }
     });
   }); //importList

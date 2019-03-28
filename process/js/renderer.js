@@ -141,6 +141,7 @@ var MainInterface = React.createClass({
   },
 
   //TODO still need to write this one and convert the old format for austen
+        //He is currently still on the personal rank patch, so we need to read in the "rank" as personal rank, and then change that to rank, fuck how am i going to test this??
   addToRankedFromFile: function(movieList) {
     console.log("hello we've arrived in add to ranked");
   },
@@ -224,6 +225,7 @@ var MainInterface = React.createClass({
     */
 
     if(this.state.movieListTitle == rankedListTitle){ //call the method in main.js
+      console.log("now we are in renderer and want to import ranked list");
       var importedMovies = ipc.sendSync('importList', 'ranked');
     } else {
       var importedMovies = ipc.sendSync('importList', 'watchlist');
@@ -233,10 +235,21 @@ var MainInterface = React.createClass({
       // console.log(arg);
       importedMovieList = arg;
       // console.log('this is imported list from renderer: ', importedMovieList);
-      this.addToWatchlistFromFile(importedMovieList);
+      if(this.state.movieListTitle == rankedListTitle){
+        console.log("hello we should add to ranked, we are in 'pathReply rn'", importedMovieList);
+        this.addToRankedFromFile(importedMovieList);
+      } else {
+        console.log("hello we should add to wishlist, we are in 'pathReply rn'", importedMovieList);
+        this.addToWatchlistFromFile(importedMovieList);
+      }
     });
 
     ipc.on('numtimes', (event, arg) => {
+      console.log(arg);
+    });
+
+    ipc.on('filePath', (event, arg) => {
+      console.log("in filepath================================");
       console.log(arg);
     });
   },
@@ -413,7 +426,7 @@ var MainInterface = React.createClass({
   moveMovieToFavorites: function(item){
 
     let rankedMovies = JSON.parse(fs.readFileSync(rankedDataLocation));
-    let rankedListLength = (JSON.parse(fs.readFileSync(rankedDataLocation))).length;
+    let rankedListLength = rankedMovies.length;
     if (item.rank > rankedListLength) { //if it is from the ranked list, it'll have a rank
       item.rank = rankedListLength + 1; //should be myMovies.length because the 0 index is #1, so myMovies.length index is #myMovies.length
       rankedMovies.push(item);
@@ -486,8 +499,6 @@ var MainInterface = React.createClass({
     var movieListTitle = this.state.movieListTitle;
     var sortFields = this.state.sortFields;
 
-    // console.log(this.state);
-
     return(
       //a basic way to show one of the movies in that dataset, will turn into a list
       <div className="application">
@@ -523,7 +534,7 @@ var MainInterface = React.createClass({
               moveToFavorites = {this.moveMovieToFavorites}
               createMovieListFile = {this.writeMovieListToFile}
               addMoviesFromFile = {this.importMoviesFromFile}
-              errorMovies = {this.state.errorMovies}
+              errorMovies = {this.state.errorMovies} //Need to get this to work
             />
           </div>{/* container */}
         </div>{/* interface */}

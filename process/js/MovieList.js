@@ -60,10 +60,11 @@ var MovieList = React.createClass({
   //sends the list that is currently being shown so we know what to add to
   //actually i can just check the state of the main component for that
   importList: function(movieList){
-    if(this.props.addMoviesFromFile(this.props.movieListTitle)){
+    if(this.props.addMoviesFromFile(this.props.movieListTitle)){ //tell renderer which list to add this file to
       console.log(":::::::::::::::::::::::::::shit it's already true");
     }
 
+    console.log("exporting ", this.props.movieListTitle);
     console.log("this is the movies that had erorrs: ", this.props.errorMovies);//TODO get this too quickly, need to be passed the list that we just made
     //TODO want to wait for the API calls to be done and then pop up a modal with the movies that weren't added
   },
@@ -107,7 +108,10 @@ var MovieList = React.createClass({
   // },
 
   moveRankByOne: function(oldRank, newRank) {
-    this.props.changeRank(oldRank, newRank);
+    console.log("newrank: ", newRank, " and old: ", oldRank);
+    if (newRank != 0 && newRank != this.props.movieList.length + 1) {
+      this.props.changeRank(oldRank, newRank);
+    }
   },
 
   calculateHoursRanked: function(movieList) {
@@ -159,7 +163,11 @@ var MovieList = React.createClass({
       timeWatching =  <span className="pull-right">
                         <span>Time Spent Watching Favorite Movies: {hoursRanked}</span>
                       </span>;
-      importButton =  <span className="pull-right"/>;
+      // importButton =  <span className="pull-right"/>;
+      importButton =  <span className="pull-right import">
+                        <button className="btn btn-med btn-info" title="Import a movie list .csv from file" onClick={this.importList}>
+                        <span className="glyphicon glyphicon-open"/></button>
+                      </span>;
     }
 
     movieList = this.filterMovies(movieList, queryText);
