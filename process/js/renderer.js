@@ -142,8 +142,85 @@ var MainInterface = React.createClass({
 
   //TODO still need to write this one and convert the old format for austen
         //He is currently still on the personal rank patch, so we need to read in the "rank" as personal rank, and then change that to rank, fuck how am i going to test this??
-  addToRankedFromFile: function(movieList) {
-    console.log("hello we've arrived in add to ranked");
+  addToRankedFromFile: function(rankedFileMovieList) {
+    let moviesNotFound = []; //TODO movies that weren't formatted correctly, return to user so they can try manually
+    let matchedMovies = []; //TODO tell the user which movies in the uploaded list matched existing ones
+    let currentMovies = this.state.myMovies.slice();
+    let tempMovieObject = {}; //where we will save the responses to each of the API calls
+    let addedMovies = []; //The movies we've sent to the API and stored information and want to add to the list
+
+    const baseQuery = 'http://www.omdbapi.com/?t=';
+    const APIkey = '&apikey=2d5be971';
+    const longPlot = '&plot=full';
+    const shortPlot = '&plot=short';
+
+    const boundAddMovieObject = this.addMovieObject;
+      /* we need to check if a movie already exists
+      TODO there are still some cases that will get by this. Like if you have 'Tomb' it won't match with the existing 'Tomb Raider',
+      but the query will get 'Tomb Raider' and then add a duplicate anyway even though you tried to stop it.
+      */
+
+    // console.log("this is what ed wants", fileMovieList);
+    rankedFileMovieList.forEach(function(movieInfo, idx, rankedFileMovieList){
+      let movieTitle = movieInfo[0];
+      let listRank = movieInfo[1];
+      let timesSeen = movieInfo[2];
+      //TODO currentMovies never updates, so if it wasn't there to begin with, wont find a duplicate
+      if (!currentMovies.find(x => x.movieName.toLowerCase() === movieTitle.toLowerCase())) { //if already in watchlist, don't waste time on duplicate query + addition
+        let APIquery = baseQuery + movieName + shortPlot + APIkey;
+        fetch(APIquery) //send the query to OMDB for searching
+        .then(response => response.json())
+        .then(json =>{
+          if(json.Response != "False"){ //if we don't get an error from the API, store info
+            //reformat duration and year to be saved as ints, not strings
+            var durationMinutes = parseInt(json.Runtime.match(/[0-9]+/g)[0]);
+            var releaseDateInt = parseInt(json.Year.match(/[0-9]+/g)[0]);
+            let formattedGenres = json.Genre.split(', ');
+            let formattedActors = json.Actors.split(', ');
+
+            tempMovieObject = {
+              movieName: json.Title,
+              posterURL: json.Poster,
+              directorName: json.Director,
+              actors: formattedActors,
+              genres: formattedGenres,
+              releaseDate: releaseDateInt,
+              Summary: json.Plot,
+              duration: durationMinutes,
+              viewCount: times_seen,
+              rank: listRank
+            };
+
+            currentMovies.push(tempMovieObject); //So that we check for duplicates even within our uploaded file
+            boundAddMovieObject(tempMovieObject);
+          } else {
+            moviesNotFound.push(movieName);
+            // console.log("didnt find: ", movieName);
+          }
+        });
+      } else {
+        matchedMovies.push(movieName);
+        // console.log("found duplicate: ", movieName);
+      }
+    });
+    console.log("=======");
+    // console.log("this is added movies: ", addedMovies);
+    // console.log("this is currentMovies and what the wishlist should be: ", currentMovies);
+    console.log("matched movie in list already, deal with these yourself you filthy animal: ", matchedMovies);
+    console.log("these titles didnt return anything, need to do manually: ", moviesNotFound);
+    console.log("=======");
+    /*
+    TODO now that everything is added, let's create a popup modal with the movies that weren't added because the names were messed up, and the ones that were duplicates
+    Making a modal popup should actually make the list render properly, rather than waiting for another action to happen First
+    */
+
+    console.log("hello we've arrived in add to ranked", movieList);
+    movieList.forEach((movie) => { //need to make each index an object and add it to the movieList
+      var movieObject = {
+        movieName ="";
+      };
+      this.addMovieObject(movieObject)
+    });
   },
 
   addToWatchlistFromFile: function(fileMovieList) {
@@ -411,10 +488,6 @@ var MainInterface = React.createClass({
     this.setState({
       myMovies: allMovies
     });
-  },
-
-  swapperoniRanks: function(fromIndex, toIndex) {
-
   },
 
   //Given an item with ranked format (all movie info + rank and timesSeen), write it directly to rankedDataLocation and then delete

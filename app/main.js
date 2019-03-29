@@ -140,7 +140,8 @@ app.on('ready', function(){
               // importList.push(data);
 
               if (data[0] != ""){
-               importedList.push(data[0]);
+                var movieInfo = [data[0],data[1],data[2]];
+               importedList.push(movieInfo);
                event.sender.send('numtimes', 'pushed a movie');
               }
             } catch(err) { console.log(err); }
