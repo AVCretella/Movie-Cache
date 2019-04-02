@@ -146,28 +146,34 @@ var MainInterface = React.createClass({
     let moviesNotFound = []; //TODO movies that weren't formatted correctly, return to user so they can try manually
     let matchedMovies = []; //TODO tell the user which movies in the uploaded list matched existing ones
     let currentMovies = this.state.myMovies.slice();
+    // let addedMovies = []; //The movies we've sent to the API and stored information and want to add to the list
     let tempMovieObject = {}; //where we will save the responses to each of the API calls
-    let addedMovies = []; //The movies we've sent to the API and stored information and want to add to the list
+
+    console.log("THIS THE LIST BOI: ", rankedFileMovieList);
 
     const baseQuery = 'http://www.omdbapi.com/?t=';
     const APIkey = '&apikey=2d5be971';
-    const longPlot = '&plot=full';
+    const longPlot = '&plot=full'; //The long plot is really long and i think not worth getting, very filling of the app
     const shortPlot = '&plot=short';
 
     const boundAddMovieObject = this.addMovieObject;
-      /* we need to check if a movie already exists
-      TODO there are still some cases that will get by this. Like if you have 'Tomb' it won't match with the existing 'Tomb Raider',
-      but the query will get 'Tomb Raider' and then add a duplicate anyway even though you tried to stop it.
-      */
 
-    // console.log("this is what ed wants", fileMovieList);
+    //TODO i can just sort the rankedFileMovieList by the first index, that'll put them in order, then just tack on the ranks when adding
     rankedFileMovieList.forEach(function(movieInfo, idx, rankedFileMovieList){
       let movieTitle = movieInfo[0];
-      let listRank = movieInfo[1];
-      let timesSeen = movieInfo[2];
+      let listRank  = parseInt(movieInfo[1].match(/[0-9]+/g)[0]); //only in the ranked list
+      let timesSeen = parseInt(movieInfo[2].match(/[0-9]+/g)[0]);
+
+      let userRating = 8.7; //TODO need to make sure to use this number to generate the ranks for austen. Make sure it is an int btw
+
+
       //TODO currentMovies never updates, so if it wasn't there to begin with, wont find a duplicate
       if (!currentMovies.find(x => x.movieName.toLowerCase() === movieTitle.toLowerCase())) { //if already in watchlist, don't waste time on duplicate query + addition
-        let APIquery = baseQuery + movieName + shortPlot + APIkey;
+      console.log("++++++++++++++");
+      console.log("currentmovies check: ", currentMovies);
+      console.log("starting fetch for: ", movieTitle);
+      console.log("----------------");
+        let APIquery = baseQuery + movieTitle + shortPlot + APIkey;
         fetch(APIquery) //send the query to OMDB for searching
         .then(response => response.json())
         .then(json =>{
@@ -187,40 +193,35 @@ var MainInterface = React.createClass({
               releaseDate: releaseDateInt,
               Summary: json.Plot,
               duration: durationMinutes,
-              viewCount: times_seen,
+              viewCount: timesSeen,
+              personalRating: userRating,
               rank: listRank
             };
-
+            // console.log(tempMovieObject);
             currentMovies.push(tempMovieObject); //So that we check for duplicates even within our uploaded file
+            console.log("ending fetch for: ", tempMovieObject.movieName);
             boundAddMovieObject(tempMovieObject);
           } else {
-            moviesNotFound.push(movieName);
+            moviesNotFound.push(movieTitle);
             // console.log("didnt find: ", movieName);
           }
         });
       } else {
-        matchedMovies.push(movieName);
-        // console.log("found duplicate: ", movieName);
+        matchedMovies.push(movieTitle);
+        console.log("found duplicate in addToRankedFromFile: ", movieTitle);
       }
     });
-    console.log("=======");
-    // console.log("this is added movies: ", addedMovies);
-    // console.log("this is currentMovies and what the wishlist should be: ", currentMovies);
-    console.log("matched movie in list already, deal with these yourself you filthy animal: ", matchedMovies);
-    console.log("these titles didnt return anything, need to do manually: ", moviesNotFound);
-    console.log("=======");
+    // console.log("=======");
+    // // console.log("this is added movies: ", addedMovies);
+    // // console.log("this is currentMovies and what the wishlist should be: ", currentMovies);
+    // // console.log("matched movie in list already, deal with these yourself you filthy animal: ", matchedMovies);
+    // // console.log("these titles didnt return anything, need to do manually: ", moviesNotFound);
+    // console.log("=======");
+
     /*
     TODO now that everything is added, let's create a popup modal with the movies that weren't added because the names were messed up, and the ones that were duplicates
     Making a modal popup should actually make the list render properly, rather than waiting for another action to happen First
     */
-
-    console.log("hello we've arrived in add to ranked", movieList);
-    movieList.forEach((movie) => { //need to make each index an object and add it to the movieList
-      var movieObject = {
-        movieName ="";
-      };
-      this.addMovieObject(movieObject)
-    });
   },
 
   addToWatchlistFromFile: function(fileMovieList) {
@@ -234,12 +235,7 @@ var MainInterface = React.createClass({
     const APIkey = '&apikey=2d5be971';
     const longPlot = '&plot=full';
     const shortPlot = '&plot=short';
-
-    const boundAddMovieObject = this.addMovieObject;
-      /* we need to check if a movie already exists
-      TODO there are still some cases that will get by this. Like if you have 'Tomb' it won't match with the existing 'Tomb Raider',
-      but the query will get 'Tomb Raider' and then add a duplicate anyway even though you tried to stop it.
-      */
+    const boundAddMovieObject = this.addMovieObject; //A call to a function cannot be made from inside the fetch, need to bind to the function call
 
     // console.log("this is what ed wants", fileMovieList);
     fileMovieList.forEach(function(movieName, idx, fileMovieList){
@@ -256,6 +252,7 @@ var MainInterface = React.createClass({
             let formattedGenres = json.Genre.split(', ');
             let formattedActors = json.Actors.split(', ');
 
+            //Generate a movie object and send it to be added to the rankedList
             tempMovieObject = {
               movieName: json.Title,
               posterURL: json.Poster,
@@ -276,94 +273,50 @@ var MainInterface = React.createClass({
         });
       } else {
         matchedMovies.push(movieName);
-        // console.log("found duplicate: ", movieName);
+        console.log("found duplicate in add to ranked from file: ", movieName);
       }
     });
-    console.log("=======");
-    // console.log("this is added movies: ", addedMovies);
-    // console.log("this is currentMovies and what the wishlist should be: ", currentMovies);
-    console.log("matched movie in list already, deal with these yourself you filthy animal: ", matchedMovies);
-    console.log("these titles didnt return anything, need to do manually: ", moviesNotFound);
-    console.log("=======");
-    /*
-    TODO now that everything is added, let's create a popup modal with the movies that weren't added because the names were messed up, and the ones that were duplicates
-    Making a modal popup should actually make the list render properly, rather than waiting for another action to happen First
-    */
+    // console.log("=======");
+    // // console.log("this is added movies: ", addedMovies);
+    // // console.log("this is currentMovies and what the wishlist should be: ", currentMovies);
+    // // console.log("matched movie in list already, deal with these yourself you filthy animal: ", matchedMovies);
+    // // console.log("these titles didnt return anything, need to do manually: ", moviesNotFound);
+    // console.log("=======");
   },
 
-  //up arrow button on movieList interface clicked, want to select a file from machine and import the list of movies
+  /*
+  TODO Also, we need to check if we are adding to the ranked list and make sure that the movies have a rank and stuff too,
+  or we can save the ones that don't and ask the user to give a personal rank and times seen to each.
+  Could be a lot of initial work for a user but very owrth it, and much quicker than searching for everything beforehand
+  */
+  //Up arrow button on movieList interface clicked, want to select a file from machine and import the list of movies
   importMoviesFromFile: function(whichList) {
     var importedMovieList = [];
-
-    /*
-    TODO Also, we need to check if we are adding to the ranked list and make sure that the movies have a rank and stuff too,
-    or we can save the ones that don't and ask the user to give a personal rank and times seen to each.
-    Could be a lot of initial work for a user but very owrth it, and much quicker than searching for everything beforehand
-    */
-
     if(this.state.movieListTitle == rankedListTitle){ //call the method in main.js
-      console.log("now we are in renderer and want to import ranked list");
       var importedMovies = ipc.sendSync('importList', 'ranked');
     } else {
       var importedMovies = ipc.sendSync('importList', 'watchlist');
     }
 
     ipc.on('pathReply', (event, arg) => {
-      // console.log(arg);
       importedMovieList = arg;
       // console.log('this is imported list from renderer: ', importedMovieList);
       if(this.state.movieListTitle == rankedListTitle){
-        console.log("hello we should add to ranked, we are in 'pathReply rn'", importedMovieList);
         this.addToRankedFromFile(importedMovieList);
+        // console.log("hello we should add to ranked, we are in 'pathReply rn'", importedMovieList);
       } else {
-        console.log("hello we should add to wishlist, we are in 'pathReply rn'", importedMovieList);
         this.addToWatchlistFromFile(importedMovieList);
+        // console.log("hello we should add to wishlist, we are in 'pathReply rn'", importedMovieList);
       }
     });
 
-    ipc.on('numtimes', (event, arg) => {
-      console.log(arg);
+    ipc.on('numtimes', (event, arg) => { //just to track the number of times a movie is added
+      console.log("xxxx ",arg);
     });
 
-    ipc.on('filePath', (event, arg) => {
-      console.log("in filepath================================");
-      console.log(arg);
-    });
-  },
-
-  toggleAddMovieForm: function() { //this will pull up the form to add movies
-    var tempVisibility = !this.state.movieFormVisible;
-    this.setState({
-      movieFormVisible: tempVisibility
-    }); //setState
-  }, //toggleAddMovieForm
-
-  displayRanked: function() {
-    rankedMovieData = JSON.parse(fs.readFileSync(rankedDataLocation));
-    this.setState({
-      myMovies: rankedMovieData,
-      MovieListItem: RankedMovies,
-      movieListTitle: rankedListTitle,
-      sortFields: rankedSortFields,
-      orderBy:'rank',
-      orderDir:'asc',
-      genre:'All', //reset genre on list change
-      fileLocation: rankedDataLocation
-    });
-  },
-
-  displayWatchlist: function() {
-    watchlistMovieData = JSON.parse(fs.readFileSync(watchlistDataLocation));
-    //if rank is being used to sort right now, change that because the watchlist doesn't use rank
-    let orderBy = (this.state.orderBy == "rank") ? "movieName" : this.state.orderBy; //otherwise, stick with the sorting we were using
-    this.setState({
-      myMovies: watchlistMovieData,
-      MovieListItem: WatchlistMovies,
-      movieListTitle: watchlistTitle,
-      sortFields: watchlistSortFields,
-      orderBy: orderBy,
-      genre:'All', //reset genre
-      fileLocation: watchlistDataLocation
+    ipc.on('filePath', (event, arg) => { //just to see we are grabbing the right file
+      // console.log("in filepath================================");
+      console.log(">>>> ", arg);
     });
   },
 
@@ -371,11 +324,13 @@ var MainInterface = React.createClass({
   addRankedObject: function(tempItem) {
     let tempMovies = this.state.myMovies;
     let rankedListLength = (JSON.parse(fs.readFileSync(rankedDataLocation))).length;
+    console.log("rankedlistlength rn: ", rankedListLength);
+    console.log("====", tempItem.movieName, "rank given ", tempItem.rank)
+    //TODO no check for below 0 because it isn't supposed to happen, but i should have the check
     if (tempItem.rank > rankedListLength) { //if it is from the ranked list, it'll have a rank
       tempItem.rank = rankedListLength + 1; //should be myMovies.length because the 0 index is #1, so myMovies.length index is #myMovies.length
       tempMovies.push(tempItem);
     } else { //it was given a valid rank that was within the range of the list, insert it where it should go
-      console.log("a valid rank was given")
       tempMovies.splice(tempItem.rank - 1, 0, tempItem); //add the item to it's rightful spot
       let startIndex = tempItem.rank;
       let currentIndex;
@@ -383,6 +338,7 @@ var MainInterface = React.createClass({
         tempMovies[currentIndex].rank = tempMovies[currentIndex].rank + 1; //add one to the existing ranks below the newly inserted
       }
     }
+    console.log("====" ,tempItem.movieName, " rank end", tempItem.rank);
     this.setState({
       myMovies: tempMovies
     });
@@ -405,6 +361,7 @@ var MainInterface = React.createClass({
     } else {
       console.log(tempItem.movieName, "not added because already on list");
     }
+    console.log("movie item added: ", tempItem);
   },
 
   //When an item is identified to be in the ranked list, we will need to adjust all the other items below to reflect the deletion
@@ -538,6 +495,42 @@ var MainInterface = React.createClass({
     delete item.timesSeen;
     this.deleteMovieObject(item);
     // watchlistMovieData = _.remove(item.movieName);
+  },
+
+  toggleAddMovieForm: function() { //this will pull up the form to add movies
+    var tempVisibility = !this.state.movieFormVisible;
+    this.setState({
+      movieFormVisible: tempVisibility
+    }); //setState
+  }, //toggleAddMovieForm
+
+  displayRanked: function() {
+    rankedMovieData = JSON.parse(fs.readFileSync(rankedDataLocation));
+    this.setState({
+      myMovies: rankedMovieData,
+      MovieListItem: RankedMovies,
+      movieListTitle: rankedListTitle,
+      sortFields: rankedSortFields,
+      orderBy:'rank',
+      orderDir:'asc',
+      genre:'All', //reset genre on list change
+      fileLocation: rankedDataLocation
+    });
+  },
+
+  displayWatchlist: function() {
+    watchlistMovieData = JSON.parse(fs.readFileSync(watchlistDataLocation));
+    //if rank is being used to sort right now, change that because the watchlist doesn't use rank
+    let orderBy = (this.state.orderBy == "rank") ? "movieName" : this.state.orderBy; //otherwise, stick with the sorting we were using
+    this.setState({
+      myMovies: watchlistMovieData,
+      MovieListItem: WatchlistMovies,
+      movieListTitle: watchlistTitle,
+      sortFields: watchlistSortFields,
+      orderBy: orderBy,
+      genre:'All', //reset genre
+      fileLocation: watchlistDataLocation
+    });
   },
 
   searchMovies: function(query) { //query is what user typed into search bar

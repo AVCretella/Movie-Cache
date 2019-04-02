@@ -125,7 +125,7 @@ app.on('ready', function(){
             try { //push the first element into the array
               if ( (data[0] != "") && (!importedList.includes(data[0])) ){ //try to get rid of duplicates
                importedList.push(data[0]);
-               event.sender.send('numtimes', 'pushed a movie');
+               // event.sender.send('numtimes', 'pushed a movie');
               }
             } catch(err) { console.log(err); }
           })
@@ -140,16 +140,18 @@ app.on('ready', function(){
               // importList.push(data);
 
               if (data[0] != ""){
+                //First field of csv is the name
+                //Second column of the csv is the rank
+                //Third column is the number of times seen
                 var movieInfo = [data[0],data[1],data[2]];
                importedList.push(movieInfo);
-               event.sender.send('numtimes', 'pushed a movie');
+               // event.sender.send('numtimes', 'pushed a movie');
               }
             } catch(err) { console.log(err); }
           })
           .on('end',function(){
             event.sender.send('pathReply', importedList);
           });
-          console.log("hello this is from the ranked list wont print");
         }
       }
     });
