@@ -1,5 +1,5 @@
 var React = require('react');
-var AddMovie = require('./AddMovieForm.js')
+var AddMovie = require('./AddMovieForm.js');
 
 var Toolbar = React.createClass({
   getInitialState: function(){

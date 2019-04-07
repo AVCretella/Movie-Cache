@@ -8,11 +8,9 @@
 var $ = jQuery = require('jquery');
 var bootstrap = require('bootstrap');
 var _ = require('lodash');
-// var remote = eRequire('electron').remote;
 var dialog = eRequire('electron').remote;
-console.log("hthis is dialgo, ",dialog);
-
 var fs = eRequire('fs');//eRequire to show that we are working with node now
+
 var watchlistMovieData = JSON.parse(fs.readFileSync(watchlistDataLocation));//Will go to the dataLocation defined in index.html and create a proper data file from the file there
 var rankedMovieData = JSON.parse(fs.readFileSync(rankedDataLocation));//Will go to the dataLocation defined in index.html and create a proper data file from the file there
 // var watchlistMovieData = require('../../data/watchlist_data.json');
@@ -145,12 +143,8 @@ var MainInterface = React.createClass({
   addToRankedFromFile: function(rankedFileMovieList) {
     let moviesNotFound = []; //TODO movies that weren't formatted correctly, return to user so they can try manually
     let matchedMovies = []; //TODO tell the user which movies in the uploaded list matched existing ones
-    let currentMovies = this.state.myMovies.slice();
-    // let addedMovies = []; //The movies we've sent to the API and stored information and want to add to the list
-    let tempMovieObject = {}; //where we will save the responses to each of the API calls
-
+    let currentMovies = this.state.myMovies.slice
     console.log("THIS THE LIST BOI: ", rankedFileMovieList);
-
     const baseQuery = 'http://www.omdbapi.com/?t=';
     const APIkey = '&apikey=2d5be971';
     const longPlot = '&plot=full'; //The long plot is really long and i think not worth getting, very filling of the app
@@ -238,9 +232,9 @@ var MainInterface = React.createClass({
     const boundAddMovieObject = this.addMovieObject; //A call to a function cannot be made from inside the fetch, need to bind to the function call
 
     // console.log("this is what ed wants", fileMovieList);
-    fileMovieList.forEach(function(movieName, idx, fileMovieList){
+    fileMovieList.forEach(function(checkingMovieName, idx, fileMovieList){
       //TODO currentMovies never updates, so if it wasn't there to begin with, wont find a duplicate
-      if (!currentMovies.find(x => x.movieName.toLowerCase() === movieName.toLowerCase())) { //if already in watchlist, don't waste time on duplicate query + addition
+      if (!currentMovies.find(x => x.movieName.toLowerCase() === checkingMovieName.toLowerCase())) { //if already in watchlist, don't waste time on duplicate query + addition
         let APIquery = baseQuery + movieName + shortPlot + APIkey;
         fetch(APIquery) //send the query to OMDB for searching
         .then(response => response.json())
@@ -267,21 +261,21 @@ var MainInterface = React.createClass({
             currentMovies.push(tempMovieObject); //So that we check for duplicates even within our uploaded file
             boundAddMovieObject(tempMovieObject);
           } else {
-            moviesNotFound.push(movieName);
+            moviesNotFound.push(checkingMovieName);
             // console.log("didnt find: ", movieName);
           }
         });
       } else {
-        matchedMovies.push(movieName);
-        console.log("found duplicate in add to ranked from file: ", movieName);
+        matchedMovies.push(checkingMovieName);
+        // console.log("found duplicate in add to ranked from file: ", movieName);
       }
     });
-    // console.log("=======");
+    console.log("=======");
     // // console.log("this is added movies: ", addedMovies);
     // // console.log("this is currentMovies and what the wishlist should be: ", currentMovies);
     // // console.log("matched movie in list already, deal with these yourself you filthy animal: ", matchedMovies);
-    // // console.log("these titles didnt return anything, need to do manually: ", moviesNotFound);
-    // console.log("=======");
+    console.log("these titles didnt return anything, need to do manually: ", moviesNotFound);
+    console.log("=======");
   },
 
   /*

@@ -158,6 +158,12 @@ var RankedMovies = React.createClass({
 
               <div className="release-date">
                 <span className="label-item">Release Year:</span>{this.props.singleItem.releaseDate}
+
+                {/*
+                <button className="btn btn-success btn-xs pull-right" onClick={this.toggleChangeRankDisplay}>
+                  <span className="glyphicon glyphicon-plus"></span>
+                </button>
+                */}
                 <span className="pull-right">{this.props.singleItem.viewCount}</span>
                 <span className="label-item pull-right">Times Seen:</span>
               </div>
@@ -166,6 +172,11 @@ var RankedMovies = React.createClass({
                 <span className="label-item">Duration:</span>
                 <span>{this.props.singleItem.duration} minutes</span>
 
+                {/*
+                <button className="btn btn-success btn-xs pull-right" onClick={this.toggleChangeRankDisplay}>
+                  <span className="glyphicon glyphicon-plus"></span>
+                </button>
+                */}
                 <span className="pull-right">{this.props.singleItem.personalRating}</span>
                 <span className="label-item pull-right">Your Rating:</span>
               </div>
