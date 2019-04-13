@@ -100,7 +100,6 @@ var MainInterface = React.createClass({
     if (whichList == rankedListTitle){  //we want to get the movie title, the personal rank, and the times seen, just save those
       rankedMovieData.forEach(function(movie, idx, rankedMovieData){
         var movieObject = [];
-
         var name = movie.movieName;
         console.log("this is name: ", name);
         // var nameFormatted = "";
@@ -125,7 +124,6 @@ var MainInterface = React.createClass({
       exportMovies.forEach(function(movie, idx, exportMovies){ //scrub for commas, replace with - because search can disregard those
         while (movie.indexOf(",") != -1) { //Replace any existing commas, so the csv can be parsed correctly
           indexToReplace = movie.indexOf(","); //get the index of the comma
-
           //TODO what we did above, we can probably do here,save to array, then push to exportMovies
           //Need to update both of these to reflect the changes
           exportMovies[idx] = movie.substr(0, indexToReplace) + "-" + movie.substr(indexToReplace + 1, movie.length);
@@ -143,7 +141,8 @@ var MainInterface = React.createClass({
   addToRankedFromFile: function(rankedFileMovieList) {
     let moviesNotFound = []; //TODO movies that weren't formatted correctly, return to user so they can try manually
     let matchedMovies = []; //TODO tell the user which movies in the uploaded list matched existing ones
-    let currentMovies = this.state.myMovies.slice
+    let currentMovies = this.state.myMovies.slice();
+    console.log("this is currentmovies: ", currentMovies);
     console.log("THIS THE LIST BOI: ", rankedFileMovieList);
     const baseQuery = 'http://www.omdbapi.com/?t=';
     const APIkey = '&apikey=2d5be971';
@@ -451,7 +450,7 @@ var MainInterface = React.createClass({
 
     let rankedMovies = JSON.parse(fs.readFileSync(rankedDataLocation));
     let rankedListLength = rankedMovies.length;
-    if (item.rank > rankedListLength) { //if it is from the ranked list, it'll have a rank
+    if (item.rank > rankedListLength) { //if the given rank is greater than the list's length, just append it to the end
       item.rank = rankedListLength + 1; //should be myMovies.length because the 0 index is #1, so myMovies.length index is #myMovies.length
       rankedMovies.push(item);
     } else { //it was given a valid rank that was within the range of the list, insert it where it should go
@@ -484,7 +483,8 @@ var MainInterface = React.createClass({
     //   }
     // }); //will go to the file location that our data is at and change it
 
-    //pulls the rank and timesSeen fields out of the object so it can be recognized by the deleteMovieObject function
+    //Pulls the rank and timesSeen fields out of the object so it can be recognized by the deleteMovieObject function
+        //All data has been written already and won't be ruined by doing this
     delete item.rank;
     delete item.timesSeen;
     this.deleteMovieObject(item);

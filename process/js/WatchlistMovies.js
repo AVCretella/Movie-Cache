@@ -29,6 +29,7 @@ var WatchlistMovies = React.createClass({
     var tempItem = this.props.singleItem;
     tempItem.viewCount = this.inputTimesSeen.value;
     tempItem.rank = parseFloat(this.inputMovieRank.value);
+    tempItem.personalRating = parseFloat(this.inputMoviePersonalRating.value);
     // var rank = this.inputMovieRank.value
     // console.log("this is the rank with parse: ", tempItem.rank );
     // console.log("this is without, : ", rank);
@@ -72,7 +73,15 @@ var WatchlistMovies = React.createClass({
 
               <form className="modal-body add-movie form-horizontal" ref={(ref) => this.moveMovieFormRef = ref} onSubmit={this.moveToFavorites}>
                 <div className="form-group">
-                  <label className="col-sm-10 control-label" htmlFor="rank">Your Rank</label>
+                  <label className="col-sm-10 control-label" htmlFor="rank">Your Rating for &quot;{this.props.singleItem.movieName}&quot;</label>
+                  <div className="col-sm-2">
+                    <input type="number" min="0" step=".1" className="form-control" placeholder="9.4"
+                      id="personal-rating" ref={(ref) => this.inputMoviePersonalRating = ref}/>
+                  </div>
+                </div>
+
+                <div className="form-group">
+                  <label className="col-sm-10 control-label" htmlFor="rank">Rank on Your Favorites List</label>
                   <div className="col-sm-2">
                     <input type="number" min="1" className="form-control" placeholder="15"
                       id="rank" ref={(ref) => this.inputMovieRank = ref}/>
