@@ -123,8 +123,7 @@ var WatchlistMovies = React.createClass({
           {/*where the movie information will be displayed*/}
           <div className="col-sm-10">
             <div className="movie-info media-body">
-              <div className="movie-head">
-                <span className="movie-name">{this.props.singleItem.movieName}</span>
+              <div className="moveAndDelete">
                 <span className="pull-right">
                   <button className="movie-delete btn btn-xs btn-danger" title="Delete this movie from the list" onClick={this.removeFromList}>
                   <span className="glyphicon glyphicon-remove"></span></button>
@@ -133,6 +132,10 @@ var WatchlistMovies = React.createClass({
                   <button className="movie-delete btn btn-xs btn-success" title="Move this movie to your ranked list" onClick={this.toggleMoveMovieDisplay}>
                   <span className="glyphicon glyphicon-share-alt"></span></button>
                 </span>
+              </div>
+
+              <div className="movie-head">
+                <span className="movie-name">{this.props.singleItem.movieName}</span>
               </div>
 
               <div className="director-name">

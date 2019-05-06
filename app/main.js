@@ -5,7 +5,7 @@ var app = electron.app;
 var ipc = electron.ipcMain;
 var myAppMenu, menuTemplate;
 
-var appWindow, infoWindow;
+var appWindow, infoWindow, notAddedWindow;
 
 function toggleWindow(whichWindow){
   if(whichWindow.isVisible()){
@@ -15,7 +15,7 @@ function toggleWindow(whichWindow){
   }
 }
 
-app.on('window-all-closed', function() {
+app.on('window-all-closed', () => {
   // Mac OS X - close is done explicitly with Cmd + Q, not just closing windows
     app.quit();
 });
@@ -30,9 +30,9 @@ function createWindow(){
   appWindow.loadURL('file://' + __dirname + '/index.html'); //load index.html into appWindow
 };
 
-app.on('ready', function(){
+app.on('ready', () => {
 
-  createWindow()
+  createWindow();
 
   infoWindow = new BrowserWindow({
     width: 400,
@@ -43,36 +43,39 @@ app.on('ready', function(){
   }); //infoWindow
   infoWindow.loadURL('file://' + __dirname + '/info.html'); //load info.html into a smaller window
 
-  appWindow.once('ready-to-show', function(){
+  ipc.on('showNotAdded', (event, arg) => {
+    event.returnValue='';
+    notAddedWindow = new BrowserWindow({
+      width: 400,
+      height: 300,
+      transparent: true,
+      show: false,
+      frame: false
+    }); //infoWindow
+    notAddedWindow.loadURL('file://' + __dirname + '/notAddedDialog.html'); //load info.html into a smaller window
+    notAddedWindow.show();
+  }); //showNotAdded
+
+  appWindow.once('ready-to-show', () => {
     appWindow.show();
   }); //ready-to-show
 
-  ipc.on('openInfoWindow', function(event, arg){
+  ipc.on('openInfoWindow', (event, arg) => {
     event.returnValue='';
     infoWindow.show();
   }); //closeInfoWindow
 
-  ipc.on('closeInfoWindow', function(event, arg){
+  ipc.on('closeInfoWindow', (event, arg) => {
     event.returnValue='';
     infoWindow.hide();
   }); //closeInfoWindow
 
-  ipc.on('exportList', function(event, movieList, which){
+  ipc.on('exportList', (event, movieList, which) => {
     event.returnValue='';
     // let movies = JSON.stringify(movieList);
     const {dialog} = require('electron');
     const fs = require('fs');
     let movies = movieList;
-
-    // var moviesAsString = Array.prototype.join.call(movies, ", \n");
-
-    // movies.forEach(function(movie, idx, movies){
-    //   if (idx != movies.length - 1) {
-    //     moviesAsString = moviesToString + movie + ",\n";
-    //   } else {
-    //     moviesAsString = moviesToString + movie;
-    //   }
-    // });
 
     if (which == 'ranked') {
       //title is just the title of the dialog, not the path
@@ -106,7 +109,7 @@ app.on('ready', function(){
     }
   }); //exportList
 
-  ipc.on('importList', function(event, which, arg){
+  ipc.on('importList', (event, which, arg) => {
     event.returnValue='';
     const {dialog} = require('electron');
     const fs = require('fs');
@@ -223,7 +226,7 @@ app.on('ready', function(){
   myAppMenu = Menu.buildFromTemplate(menuTemplate);
   Menu.setApplicationMenu(myAppMenu);
 
-  appWindow.on('closed', function() {
+  appWindow.on('closed', () =>  {
     appWindow = null;
     app.quit();
   });

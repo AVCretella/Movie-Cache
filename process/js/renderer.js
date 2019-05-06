@@ -275,6 +275,8 @@ var MainInterface = React.createClass({
     // // console.log("matched movie in list already, deal with these yourself you filthy animal: ", matchedMovies);
     console.log("these titles didnt return anything, need to do manually: ", moviesNotFound);
     console.log("=======");
+    ipc.sendSync('showNotAdded', moviesNotFound);
+    /*TODO at the end of the addition operation, popup a little window that says - we couldn't add these ones for some reasons*/
   },
 
   /*
@@ -387,6 +389,15 @@ var MainInterface = React.createClass({
       });
       console.log("deleted: ", item.movieName);
     }
+  },
+
+  changeMoviePersonalRating: function(passedName, newPersonal) {
+    var allMovies = this.state.myMovies;
+    let movieIndex = allMovies.findIndex(movie => movie.movieName === passedName); //TODO issue with the same name, worth bothering with?
+    allMovies[movieIndex].personalRating = newPersonal;
+    this.setState({
+      myMovies: allMovies
+    });
   },
 
   /*
@@ -591,6 +602,7 @@ var MainInterface = React.createClass({
               MovieListItem = {this.state.MovieListItem}
               deleteMovie = {this.deleteMovieObject}
               changeRank = {this.changeMovieRank}
+              changePersonalRating = {this.changeMoviePersonalRating}
               moveToFavorites = {this.moveMovieToFavorites}
               createMovieListFile = {this.writeMovieListToFile}
               addMoviesFromFile = {this.importMoviesFromFile}
