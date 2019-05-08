@@ -5,7 +5,7 @@ var app = electron.app;
 var ipc = electron.ipcMain;
 var myAppMenu, menuTemplate;
 
-var appWindow, infoWindow, notAddedWindow;
+var appWindow, infoWindow, notAddedWindow, trailerWindow;
 
 function toggleWindow(whichWindow){
   if(whichWindow.isVisible()){
@@ -56,6 +56,20 @@ app.on('ready', () => {
     notAddedWindow.show();
   }); //showNotAdded
 
+  ipc.on('showTrailerOnYoutube', (event, arg) => {
+    event.returnValue='';
+    trailerWindow = new BrowserWindow({
+      width: 800,
+      height: 600,
+      transparent: false,
+      show: false
+    }); //infoWindow
+    let youtubeBaseUrl = 'https://www.youtube.com/results?search_query=';
+    let searchTitle = arg;
+    trailerWindow.loadURL(youtubeBaseUrl + searchTitle + '+trailer'); //load the url to the trailer for the movie
+    trailerWindow.show();
+  }); //showNotAdded
+
   appWindow.once('ready-to-show', () => {
     appWindow.show();
   }); //ready-to-show
@@ -68,6 +82,11 @@ app.on('ready', () => {
   ipc.on('closeInfoWindow', (event, arg) => {
     event.returnValue='';
     infoWindow.hide();
+  }); //closeInfoWindow
+
+  ipc.on('closeTrailerWindow', (event, arg) => {
+    event.returnValue='';
+    trailerWindow.hide();
   }); //closeInfoWindow
 
   ipc.on('exportList', (event, movieList, which) => {

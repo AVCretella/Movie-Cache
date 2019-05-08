@@ -410,14 +410,11 @@ var MainInterface = React.createClass({
     var allMovies = this.state.myMovies;
     //TODO could run into issues of movies with the same name
         //may end up changing rank of diff one because it comes up first
-    //TODO changing this ---> storing movies in order, can just delete the rank - 1 (it will be the index of the movie)
-      // var index = _.findIndex(allMovies, {movieName: item.movieName}); //index of the movie that we want to change rank of
 
     let startIndex, endIndex, currIndex;
-    // let newRank = item.rank;
 
-    //SINCE EVERYTHING IS STORED IN ORDER IN THE RANKED DATALIST, WE CAN DO IT THIS WAY
-    //The rank is reflective of -[ index + 1 ]- for a movie
+    //SINCE EVERYTHING IS STORED IN ORDER IN THE RANKED DATALIST, WE CAN DO IT THIS WAY <------ IMPORTANT
+    //The rank is reflective of     ->>[ index + 1 ]<<-    for a movie
     if (newRank != oldRank) { //first check that we actually have to do anything
       let item = allMovies[oldRank - 1]; //save our item to re-insert later
       item.rank = newRank;
@@ -557,6 +554,12 @@ var MainInterface = React.createClass({
     });
   },
 
+  showTrailerWindow: function(trailerTitle){
+    console.log(trailerTitle);
+    let titleFormatted = trailerTitle.replace(/ /g, '+');
+    ipc.sendSync('showTrailerOnYoutube', titleFormatted);
+  },
+
   showHelp: function() { //we want to display the show about on the toolbar
     console.log('we got an event call, we should now display!');
     ipc.sendSync('openInfoWindow'); //sends event notification to main process
@@ -604,6 +607,7 @@ var MainInterface = React.createClass({
               changeRank = {this.changeMovieRank}
               changePersonalRating = {this.changeMoviePersonalRating}
               moveToFavorites = {this.moveMovieToFavorites}
+              showTrailer = {this.showTrailerWindow}
               createMovieListFile = {this.writeMovieListToFile}
               addMoviesFromFile = {this.importMoviesFromFile}
               errorMovies = {this.state.errorMovies} //Need to get this to work
