@@ -130,7 +130,7 @@ var MovieList = React.createClass({
     return (totalHours / 60).toFixed(2);
   },
 
-  renderListItems: function(movieList, orderBy, deleteMovie, changeRank, moveToFavorites, MovieListItem) {
+  renderListItems: function(movieList, orderBy, deleteMovie, changeRank, changePersonalRating, moveToFavorites, showTrailer, MovieListItem) {
     return movieList.map(function(item, index){ //send this data to MovieList to create a series of those tags
       return(
         <MovieListItem
@@ -139,7 +139,9 @@ var MovieList = React.createClass({
           sortField = {orderBy}
           onDelete = {this.adjustRanksAndDelete} //calls the deleteMovie function in renderer.js
           onChangeRank = {changeRank} //calls the changeRank function in renderer.js
+          onChangePersonalRating = {changePersonalRating}
           onMoveToFavorites = {moveToFavorites} //calls the moveToFavorites function in renderer.js
+          onViewTrailer = {showTrailer} //pull up the trailer of the movie being clicked in a separate window
           onMoveRankByOne = {this.moveRankByOne}
         />
       ) //return
@@ -147,7 +149,7 @@ var MovieList = React.createClass({
   },
 
   render: function() {
-    let {movieListTitle, movieList, queryText, orderBy, orderDir, deleteMovie, changeRank, moveToFavorites, MovieListItem} = this.props;
+    let {movieListTitle, movieList, queryText, orderBy, orderDir, deleteMovie, changeRank, changePersonalRating, moveToFavorites, showTrailer, MovieListItem} = this.props;
 
     if (movieListTitle == "Watchlist") {
       let hoursWatchlist = this.calculateHoursWatchlist(movieList);
@@ -172,7 +174,7 @@ var MovieList = React.createClass({
 
     movieList = this.filterMovies(movieList, queryText);
     movieList = this.sortMovies(movieList, orderBy, orderDir);
-    movieList = this.renderListItems(movieList, orderBy, deleteMovie, changeRank, moveToFavorites, MovieListItem);
+    movieList = this.renderListItems(movieList, orderBy, deleteMovie, changeRank, changePersonalRating, moveToFavorites, showTrailer, MovieListItem);
 
     return (
       <div className="row">

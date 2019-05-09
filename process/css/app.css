@@ -216,6 +216,10 @@ body {
   padding-right: 10px;
 }
 
+.personal-rating a{
+  cursor: pointer;
+}
+
 .item-list .movie-release {
   font-style: italic;
 }

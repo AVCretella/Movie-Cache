@@ -9,6 +9,10 @@ var WatchlistMovies = React.createClass({
     }
   },
 
+  viewTrailer: function(){ //send the name to the renderer and it'll open a window with the youtube link
+    this.props.onViewTrailer(this.props.singleItem.movieName);
+  },
+
   removeFromList: function(){
     this.props.onDelete(this.props.singleItem); //lets the function know which movie has been selected for deletion
   },
@@ -123,8 +127,7 @@ var WatchlistMovies = React.createClass({
           {/*where the movie information will be displayed*/}
           <div className="col-sm-10">
             <div className="movie-info media-body">
-              <div className="movie-head">
-                <span className="movie-name">{this.props.singleItem.movieName}</span>
+              <div className="moveAndDelete">
                 <span className="pull-right">
                   <button className="movie-delete btn btn-xs btn-danger" title="Delete this movie from the list" onClick={this.removeFromList}>
                   <span className="glyphicon glyphicon-remove"></span></button>
@@ -133,6 +136,14 @@ var WatchlistMovies = React.createClass({
                   <button className="movie-delete btn btn-xs btn-success" title="Move this movie to your ranked list" onClick={this.toggleMoveMovieDisplay}>
                   <span className="glyphicon glyphicon-share-alt"></span></button>
                 </span>
+                <span className="pull-right">
+                  <button className="movie-delete view-trailer btn btn-xs btn-success" title="View this trailer on youtube" onClick={this.viewTrailer}>
+                  <span className="glyphicon glyphicon-play-circle"></span></button>
+                </span>
+              </div>
+
+              <div className="movie-head">
+                <span className="movie-name">{this.props.singleItem.movieName}</span>
               </div>
 
               <div className="director-name">

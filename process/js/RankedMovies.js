@@ -5,7 +5,8 @@ var React = require('react');
 var RankedMovies = React.createClass({
   getInitialState: function(){
     return{
-      rankChangeVisible: false
+      rankChangeVisible: false,
+      personalRatingChangeVisible: false
     }
   },
 
@@ -13,17 +14,25 @@ var RankedMovies = React.createClass({
     this.props.onDelete(this.props.singleItem); //lets the function know which movie has been selected for deletion
   },
 
+  toggleChangePersonalRatingDisplay: function() {
+    var tempVisibility = !this.state.personalRatingChangeVisible;
+    this.setState({
+      personalRatingChangeVisible: tempVisibility
+    }); //setState
+    this.changePersonalRatingFormRef.reset();
+  },
+
+  handleChangePersonalRating: function(submitEvent){
+    submitEvent.preventDefault(); //this is to prevent the page from reloading, we will handle manually with React
+    let newPersonalRating = parseFloat(this.inputMoviePersonalRating.value);
+    this.props.onChangePersonalRating(this.props.singleItem.movieName, newPersonalRating);
+    this.toggleChangePersonalRatingDisplay();
+    this.changePersonalRatingFormRef.reset();
+  },
+
   handleChangeRank: function(submitEvent){
     submitEvent.preventDefault(); //this is to prevent the page from reloading, we will handle manually with React
-
     let oldRank = this.props.singleItem.rank;
-
-    // var tempItem = { //create an item with the value we want to add
-    //   movieName: this.props.singleItem.movieName,
-    //   rank: parseFloat(this.inputMovieRank.value)
-    // }
-    // this.props.onChangeRank(tempItem, oldRank); //passed up to MovieList.js
-
     let newRank = parseInt(this.inputMovieRank.value);
     this.props.onChangeRank(newRank, oldRank);
     this.toggleChangeRankDisplay();
@@ -53,16 +62,30 @@ var RankedMovies = React.createClass({
 
   //1 column for the poster image, 11 cols for the name, description .. stuff
   render: function(){
-    let style, className;
+    let styleRank, classNameRank;
     if (this.state.rankChangeVisible) {
-      className = "modal fade in";
-      style = {
+      classNameRank = "modal fade in";
+      styleRank = {
         display: "block",
         paddingLeft: "0px"
       };
     } else {
-      className = "modal fade";
-      style = {
+      classNameRank = "modal fade";
+      styleRank = {
+        display: "none"
+      };
+    }
+
+    let stylePersonal, classNamePersonal;
+    if (this.state.personalRatingChangeVisible) {
+      classNamePersonal = "modal fade in";
+      stylePersonal = {
+        display: "block",
+        paddingLeft: "0px"
+      };
+    } else {
+      classNamePersonal = "modal fade";
+      stylePersonal = {
         display: "none"
       };
     }
@@ -86,8 +109,9 @@ var RankedMovies = React.createClass({
 
     return(
       <div>
+        {/*TODO want these modals to popup in the center of the screen wherever you are, not bring you up to the top of the page again */}
         {/* Modal for the changerank functionality */}
-        <div className={className} id="changeRank" tabIndex="-1" role="dialog" style = {style}>
+        <div className={classNameRank} id="changeRank" tabIndex="-1" role="dialog" style = {styleRank}>
           <div className="modal-dialog" role="document">
             <div className="modal-content">
               <div className="modal-header">
@@ -117,6 +141,39 @@ var RankedMovies = React.createClass({
             </div>
           </div>
         </div>
+
+        {/* Modal for the changePersonalRating functionality */}
+        <div className={classNamePersonal} id="changePersonalRating" tabIndex="-1" role="dialog" style = {stylePersonal}>
+          <div className="modal-dialog" role="document">
+            <div className="modal-content">
+              <div className="modal-header">
+                <button type="submit" className="close" onClick={this.toggleChangePersonalRatingDisplay} aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 className="modal-title">Changing Your Personal Rating of {this.props.singleItem.movieName}</h4>
+              </div>
+
+              <form className="modal-body add-movie form-horizontal" ref={(ref) => this.changePersonalRatingFormRef = ref} onSubmit={this.handleChangePersonalRating}>
+                <div className="form-group">
+                  <label className="col-sm-5 control-label" htmlFor="rank">New Rating For This Movie:</label>
+                  <div className="col-sm-7">
+                    <input type="number" step="0.1" min="0" max="10" className="form-control" placeholder={this.props.singleItem.personalRating}
+                      id="personalRating" ref={(ref) => this.inputMoviePersonalRating = ref}/>
+                  </div>
+                </div>
+
+                <div className="form-group">
+                  <div className="col-sm-offset-3 col-sm-9">
+                    <div className="pull-right">
+                      <button type="submit" className="btn btn-success">Change Rating</button>
+                    </div>
+                  </div>
+                </div>
+              </form>
+
+            </div>
+          </div>
+        </div>
+
+        <div> </div> {/* here so that the child:2n will show correctly */}
 
         <li className="item-list movie-item media">
           {moveButtons}
@@ -168,7 +225,7 @@ var RankedMovies = React.createClass({
                 <span>{this.props.singleItem.duration} minutes</span>
 
                 <span className="pull-right">{this.props.singleItem.personalRating}</span>
-                <span className="label-item pull-right">Your Rating:</span>
+                <span className="label-item personal-rating pull-right" onClick={this.toggleChangePersonalRatingDisplay}><a href="#">Your Rating:</a></span>
               </div>
 
             </div>

@@ -275,6 +275,8 @@ var MainInterface = React.createClass({
     // // console.log("matched movie in list already, deal with these yourself you filthy animal: ", matchedMovies);
     console.log("these titles didnt return anything, need to do manually: ", moviesNotFound);
     console.log("=======");
+    ipc.sendSync('showNotAdded', moviesNotFound);
+    /*TODO at the end of the addition operation, popup a little window that says - we couldn't add these ones for some reasons*/
   },
 
   /*
@@ -389,6 +391,15 @@ var MainInterface = React.createClass({
     }
   },
 
+  changeMoviePersonalRating: function(passedName, newPersonal) {
+    var allMovies = this.state.myMovies;
+    let movieIndex = allMovies.findIndex(movie => movie.movieName === passedName); //TODO issue with the same name, worth bothering with?
+    allMovies[movieIndex].personalRating = newPersonal;
+    this.setState({
+      myMovies: allMovies
+    });
+  },
+
   /*
     TODO the only issue is that we are basically doing a special delete and add now because of how we stored the ranked list.
       but it's either that or make the add and delete function sort the ranked data on every single addition and deletion.
@@ -399,14 +410,11 @@ var MainInterface = React.createClass({
     var allMovies = this.state.myMovies;
     //TODO could run into issues of movies with the same name
         //may end up changing rank of diff one because it comes up first
-    //TODO changing this ---> storing movies in order, can just delete the rank - 1 (it will be the index of the movie)
-      // var index = _.findIndex(allMovies, {movieName: item.movieName}); //index of the movie that we want to change rank of
 
     let startIndex, endIndex, currIndex;
-    // let newRank = item.rank;
 
-    //SINCE EVERYTHING IS STORED IN ORDER IN THE RANKED DATALIST, WE CAN DO IT THIS WAY
-    //The rank is reflective of -[ index + 1 ]- for a movie
+    //SINCE EVERYTHING IS STORED IN ORDER IN THE RANKED DATALIST, WE CAN DO IT THIS WAY <------ IMPORTANT
+    //The rank is reflective of     ->>[ index + 1 ]<<-    for a movie
     if (newRank != oldRank) { //first check that we actually have to do anything
       let item = allMovies[oldRank - 1]; //save our item to re-insert later
       item.rank = newRank;
@@ -546,6 +554,12 @@ var MainInterface = React.createClass({
     });
   },
 
+  showTrailerWindow: function(trailerTitle){
+    console.log(trailerTitle);
+    let titleFormatted = trailerTitle.replace(/ /g, '+');
+    ipc.sendSync('showTrailerOnYoutube', titleFormatted);
+  },
+
   showHelp: function() { //we want to display the show about on the toolbar
     console.log('we got an event call, we should now display!');
     ipc.sendSync('openInfoWindow'); //sends event notification to main process
@@ -591,7 +605,9 @@ var MainInterface = React.createClass({
               MovieListItem = {this.state.MovieListItem}
               deleteMovie = {this.deleteMovieObject}
               changeRank = {this.changeMovieRank}
+              changePersonalRating = {this.changeMoviePersonalRating}
               moveToFavorites = {this.moveMovieToFavorites}
+              showTrailer = {this.showTrailerWindow}
               createMovieListFile = {this.writeMovieListToFile}
               addMoviesFromFile = {this.importMoviesFromFile}
               errorMovies = {this.state.errorMovies} //Need to get this to work

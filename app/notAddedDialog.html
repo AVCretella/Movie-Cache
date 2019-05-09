@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- TODO what if I ended up turning this info window into a movie info box, that you could expand
+      a movie's info into this separate window, that'd be neat -->
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Movie Cache</title>
+  <link rel="stylesheet" href="css/app.css">
+  <script type="text/javascript">
+    var electron = require('electron');
+    var shell = electron.shell;
+    var ipc = electron.ipcRenderer;
+  </script>
+</head>
+<body id="page-info">
+  <main class="info-content">
+    <div>
+      <h3 class="page-headline">User Information</h3>
+    </div>
+    <p>
+      <strong>not added dialog</strong><br>
+      <small>
+        you did it yay
+      </small>
+    </p>
+    <p>
+      <strong>Deleting a Movie</strong><br>
+      <small>
+        Pressing the red 'X' button in the top right corner of a movie block will remove that movie from the list
+      </small>
+    </p>
+    <p>
+      <strong>Sorting a Movie List</strong><br>
+      <small>
+        On both the 'Favorites' and 'Watchlist' movie lists, by using the search bar in the top right corner and clicking 'Sort by:', you are able to choose the layout of the movies in that list. <br>
+        Additionally, you can sort by genre by clicking the 'Genre:' button
+      </small>
+    </p>
+    <!-- this will send a notification to the main process that an event has happened -->
+    <!-- 'closeInfoWindow' will be sent to main -->
+    <p>
+      <a href="#" onclick="ipc.sendSync('closeInfoWindow')">close window</a>
+    </p>
+  </main>
+</body>
+</html>
