@@ -129,15 +129,15 @@ var WatchlistMovies = React.createClass({
             <div className="movie-info media-body">
               <div className="moveAndDelete">
                 <span className="pull-right">
-                  <button className="movie-delete btn btn-xs btn-danger" title="Delete this movie from the list" onClick={this.removeFromList}>
+                  <button className="movie-delete btn btn-sm btn-danger" title="Delete this movie from the list" onClick={this.removeFromList}>
                   <span className="glyphicon glyphicon-remove"></span></button>
                 </span>
                 <span className="pull-right">
-                  <button className="movie-delete btn btn-xs btn-success" title="Move this movie to your ranked list" onClick={this.toggleMoveMovieDisplay}>
+                  <button className="movie-delete btn btn-sm btn-success" title="Move this movie to your ranked list" onClick={this.toggleMoveMovieDisplay}>
                   <span className="glyphicon glyphicon-share-alt"></span></button>
                 </span>
                 <span className="pull-right">
-                  <button className="movie-delete view-trailer btn btn-xs btn-success" title="View this trailer on youtube" onClick={this.viewTrailer}>
+                  <button className="movie-delete view-trailer btn btn-sm btn-success" title="View this trailer on youtube" onClick={this.viewTrailer}>
                   <span className="glyphicon glyphicon-play-circle"></span></button>
                 </span>
               </div>

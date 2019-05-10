@@ -218,6 +218,7 @@ var MainInterface = React.createClass({
   },
 
   addToWatchlistFromFile: function(fileMovieList) {
+    // console.log("now we are adding to watchlist from file and we have these movies: ", fileMovieList);
     let moviesNotFound = []; //TODO movies that weren't formatted correctly, return to user so they can try manually
     let matchedMovies = []; //TODO tell the user which movies in the uploaded list matched existing ones
     let currentMovies = this.state.myMovies.slice();
@@ -232,19 +233,27 @@ var MainInterface = React.createClass({
 
     // console.log("this is what ed wants", fileMovieList);
     fileMovieList.forEach(function(checkingMovieName, idx, fileMovieList){
+      // console.log("inside the foreach");
+      // console.log("this is the name we are checking: ", checkingMovieName);
       //TODO currentMovies never updates, so if it wasn't there to begin with, wont find a duplicate
       if (!currentMovies.find(x => x.movieName.toLowerCase() === checkingMovieName.toLowerCase())) { //if already in watchlist, don't waste time on duplicate query + addition
-        let APIquery = baseQuery + movieName + shortPlot + APIkey;
+        console.log("we in");
+        let APIquery = baseQuery + checkingMovieName + shortPlot + APIkey;
         fetch(APIquery) //send the query to OMDB for searching
         .then(response => response.json())
         .then(json =>{
           if(json.Response != "False"){ //if we don't get an error from the API, store info
             //reformat duration and year to be saved as ints, not strings
+            // console.log("movie found :) happ boi");
+            // console.log("here is the object too! ", JSON.stringify(json));
             var durationMinutes = parseInt(json.Runtime.match(/[0-9]+/g)[0]);
             var releaseDateInt = parseInt(json.Year.match(/[0-9]+/g)[0]);
             let formattedGenres = json.Genre.split(', ');
             let formattedActors = json.Actors.split(', ');
-
+            console.log(durationMinutes);
+            console.log(releaseDateInt);
+            console.log(formattedGenres);
+            console.log(formattedActors);
             //Generate a movie object and send it to be added to the rankedList
             tempMovieObject = {
               movieName: json.Title,
@@ -256,15 +265,19 @@ var MainInterface = React.createClass({
               Summary: json.Plot,
               duration: durationMinutes
             };
-
+            // console.log("this is the object we generate for a movie: ", tempMovieObject);
             currentMovies.push(tempMovieObject); //So that we check for duplicates even within our uploaded file
             boundAddMovieObject(tempMovieObject);
           } else {
+            // console.log("movie not found :( sad boi");
+            // console.log("BAD here is the object too! ", JSON.stringify(json));
+
             moviesNotFound.push(checkingMovieName);
             // console.log("didnt find: ", movieName);
           }
         });
       } else {
+        // console.log("we out");
         matchedMovies.push(checkingMovieName);
         // console.log("found duplicate in add to ranked from file: ", movieName);
       }
@@ -275,8 +288,9 @@ var MainInterface = React.createClass({
     // // console.log("matched movie in list already, deal with these yourself you filthy animal: ", matchedMovies);
     console.log("these titles didnt return anything, need to do manually: ", moviesNotFound);
     console.log("=======");
-    ipc.sendSync('showNotAdded', moviesNotFound);
+
     /*TODO at the end of the addition operation, popup a little window that says - we couldn't add these ones for some reasons*/
+    // ipc.sendSync('showNotAdded', moviesNotFound);
   },
 
   /*
@@ -295,19 +309,19 @@ var MainInterface = React.createClass({
 
     ipc.on('pathReply', (event, arg) => {
       importedMovieList = arg;
-      // console.log('this is imported list from renderer: ', importedMovieList);
+      console.log('this is imported list from renderer: ', importedMovieList);
       if(this.state.movieListTitle == rankedListTitle){
         this.addToRankedFromFile(importedMovieList);
         // console.log("hello we should add to ranked, we are in 'pathReply rn'", importedMovieList);
       } else {
         this.addToWatchlistFromFile(importedMovieList);
-        // console.log("hello we should add to wishlist, we are in 'pathReply rn'", importedMovieList);
+        console.log("hello we should add to wishlist, we are in 'pathReply rn'", importedMovieList);
       }
     });
 
-    ipc.on('numtimes', (event, arg) => { //just to track the number of times a movie is added
-      console.log("xxxx ",arg);
-    });
+    // ipc.on('numtimes', (event, arg) => { //just to track the number of times a movie is added
+    //   console.log("xxxx ",arg);
+    // });
 
     ipc.on('filePath', (event, arg) => { //just to see we are grabbing the right file
       // console.log("in filepath================================");
