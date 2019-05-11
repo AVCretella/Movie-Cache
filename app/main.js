@@ -49,9 +49,8 @@ app.on('ready', () => {
       width: 400,
       height: 300,
       transparent: true,
-      show: false,
-      frame: false
-    }); //infoWindow
+      show: false
+    }); //notAddedWindow
     notAddedWindow.loadURL('file://' + __dirname + '/notAddedDialog.html'); //load info.html into a smaller window
     notAddedWindow.show();
   }); //showNotAdded
@@ -154,12 +153,13 @@ app.on('ready', () => {
           .on('end',function(){
             event.sender.send('pathReply', importedList);
           });
-        } else {
+        } else {  //Dealing with the RankedList, need the title, personalRating, and timesSeen
           fs.createReadStream(filePath[0])
           .pipe(csv())
           .on('data', function(data){
             try { //push the first element into the array
               // importList.push(data);
+              event.sender.send('rankedTestData', data[0]);
 
               if (data[0] != ""){
                 //First field of csv is the name

@@ -136,6 +136,101 @@ var MainInterface = React.createClass({
     }
   },
 
+
+  //TODO so for austen i am given the csv format of -----> movieName, personalRating, timesSeen
+      //From this information I need to give each movie it's proper index and actual rank (corresponding to other movies)
+      //So I need to read it in
+          //send title to api to get normal Information
+            //save personalRating as personalRating
+                //generate correct indices for all movies
+                    //save timesSeen as normal
+
+  //Ugh this works, just not the first time, have to do it multiple times. So yes, i guess you could say it doesnt really work, fuck off AAAAAAAAH
+  addToRankedFromFileForAusten: function(rankedFileMovieList) {
+    let moviesNotFound = []; //TODO movies that weren't formatted correctly, return to user so they can try manually
+    let matchedMovies = []; //TODO tell the user which movies in the uploaded list matched existing ones
+    let currentMovies = this.state.myMovies.slice();
+
+    //movies being passed correctly
+    // console.log("this is currentmovies from austen: ", currentMovies);
+    // console.log("THIS THE LIST BOI from austen: ", rankedFileMovieList);
+    const baseQuery = 'http://www.omdbapi.com/?t=';
+    const APIkey = '&apikey=2d5be971';
+    const longPlot = '&plot=full'; //The long plot is really long and i think not worth getting, very filling of the app
+    const shortPlot = '&plot=short';
+
+    const boundAddMovieObject = this.addMovieObject;
+
+    //TODO i can just sort the rankedFileMovieList by the first index, that'll put them in order, then just tack on the ranks when adding
+    rankedFileMovieList.forEach(function(movieInfo, idx, rankedFileMovieList){
+      let movieTitle = movieInfo[0].replace(/ /g, '+');
+      // let titleFormatted = trailerTitle.replace(/ /g, '+');
+      console.log(movieTitle.toLowerCase());
+      let listRank  = parseInt(movieInfo[1].match(/[0-9]+/g)[0]); //only in the ranked list
+      let timesSeen = parseInt(movieInfo[2].match(/[0-9]+/g)[0]);
+
+      let userRating = 8.7; //TODO need to make sure to use this number to generate the ranks for austen. Make sure it is an int btw
+
+
+      //TODO currentMovies never updates, so if it wasn't there to begin with, wont find a duplicate
+      if (!currentMovies.find(x => x.movieName.toLowerCase() === movieTitle.toLowerCase())) { //if already in watchlist, don't waste time on duplicate query + addition
+      let APIquery = baseQuery + movieTitle + shortPlot + APIkey;
+      console.log("_________________________________________________");
+      console.log("||||||                                    ||||||||");
+      console.log("currentmovies check: ", currentMovies);
+      console.log("starting fetch for: ", movieTitle);
+      console.log("full query: ", APIquery);
+      console.log("||||||____________________________________||||||||");
+        fetch(APIquery) //send the query to OMDB for searching
+        .then(response => response.json())
+        .then(json =>{
+          if(json.Response != "False"){ //if we don't get an error from the API, store info
+            //reformat duration and year to be saved as ints, not strings
+            var durationMinutes = parseInt(json.Runtime.match(/[0-9]+/g)[0]);
+            var releaseDateInt = parseInt(json.Year.match(/[0-9]+/g)[0]);
+            let formattedGenres = json.Genre.split(', ');
+            let formattedActors = json.Actors.split(', ');
+
+            tempMovieObject = {
+              movieName: json.Title,
+              posterURL: json.Poster,
+              directorName: json.Director,
+              actors: formattedActors,
+              genres: formattedGenres,
+              releaseDate: releaseDateInt,
+              Summary: json.Plot,
+              duration: durationMinutes,
+              viewCount: timesSeen,
+              personalRating: userRating,
+              rank: listRank
+            };
+            // console.log(tempMovieObject);
+            currentMovies.push(tempMovieObject); //So that we check for duplicates even within our uploaded file
+            console.log("_________________________________________________");
+            console.log("||||||                                    ||||||||");
+            console.log("ending fetch for: ", tempMovieObject.movieName);
+            console.log("should now send it to 'addmovieobject'");
+            console.log("||||||____________________________________||||||||");
+            boundAddMovieObject(tempMovieObject);
+          } else {
+            moviesNotFound.push(movieTitle);
+            // console.log("didnt find: ", movieName);
+          }
+        });
+      } else {
+        matchedMovies.push(movieTitle);
+        console.log("found duplicate in addToRankedFromFile: ", movieTitle);
+        console.log("mathced movies now: ", matchedMovies);
+      }
+    });
+    // console.log("=======");
+    // // console.log("this is added movies: ", addedMovies);
+    // // console.log("this is currentMovies and what the wishlist should be: ", currentMovies);
+    // // console.log("matched movie in list already, deal with these yourself you filthy animal: ", matchedMovies);
+    // // console.log("these titles didnt return anything, need to do manually: ", moviesNotFound);
+    // console.log("=======");
+  },
+
   //TODO still need to write this one and convert the old format for austen
         //He is currently still on the personal rank patch, so we need to read in the "rank" as personal rank, and then change that to rank, fuck how am i going to test this??
   addToRankedFromFile: function(rankedFileMovieList) {
@@ -290,7 +385,9 @@ var MainInterface = React.createClass({
     console.log("=======");
 
     /*TODO at the end of the addition operation, popup a little window that says - we couldn't add these ones for some reasons*/
-    // ipc.sendSync('showNotAdded', moviesNotFound);
+    if (moviesNotFound.length != 0 || matchedMovies.length != 0) {
+      ipc.sendSync('showNotAdded', moviesNotFound);
+    }
   },
 
   /*
@@ -311,7 +408,7 @@ var MainInterface = React.createClass({
       importedMovieList = arg;
       console.log('this is imported list from renderer: ', importedMovieList);
       if(this.state.movieListTitle == rankedListTitle){
-        this.addToRankedFromFile(importedMovieList);
+        this.addToRankedFromFileForAusten(importedMovieList);
         // console.log("hello we should add to ranked, we are in 'pathReply rn'", importedMovieList);
       } else {
         this.addToWatchlistFromFile(importedMovieList);
@@ -322,6 +419,10 @@ var MainInterface = React.createClass({
     // ipc.on('numtimes', (event, arg) => { //just to track the number of times a movie is added
     //   console.log("xxxx ",arg);
     // });
+    ipc.on('rankedTestData', (event, arg) => { //just to see we are grabbing the right file
+      // console.log("in filepath================================");
+      console.log("rankedTestData >>>> ", arg);
+    });
 
     ipc.on('filePath', (event, arg) => { //just to see we are grabbing the right file
       // console.log("in filepath================================");
@@ -332,7 +433,9 @@ var MainInterface = React.createClass({
   //This needs to accomodate the moving function
   addRankedObject: function(tempItem) {
     let tempMovies = this.state.myMovies;
-    let rankedListLength = (JSON.parse(fs.readFileSync(rankedDataLocation))).length;
+    // let rankedListLength = (JSON.parse(fs.readFileSync(rankedDataLocation))).length; //turns into a perfectly healthy json object array
+    let rankedListLength = tempMovies.length; //since tempMovies reflects rankedMovieData, why go through the trouble of accessing, parsing, then taking length, just use the info we have
+
     console.log("rankedlistlength rn: ", rankedListLength);
     console.log("====", tempItem.movieName, "rank given ", tempItem.rank)
     //TODO no check for below 0 because it isn't supposed to happen, but i should have the check
@@ -348,15 +451,18 @@ var MainInterface = React.createClass({
       }
     }
     console.log("====" ,tempItem.movieName, " rank end", tempItem.rank);
-    this.setState({
+    this.setState({ //TODO i think the issue is that it isnt being written to the file fast enough, but that shouldnt be an issue even if happening???
       myMovies: tempMovies
     });
+    // rankedListLength = (JSON.parse(fs.readFileSync(rankedDataLocation))).length;
+    // console.log("rankedlistlength rn: ", rankedListLength);
   },
 
   //TODO THERE IS NO REASON THIS SHOULDNT BE HOOKED UP TO A DATABASE!!! HOOK IT UP BOI
   //If the movie being added already exists, then don't add it
   addMovieObject: function(tempItem) { //receives object saves in form
     var tempMovies = this.state.myMovies;
+    // console.log("here we are in addMovie object like i said i would be --------------------------: ", tempMovies);
     if (_.findIndex(tempMovies, {movieName: tempItem.movieName}) == -1) { //if this is a duplicate item, stop processing
       if (tempItem.rank != undefined) { //if we are working with a ranked object
         this.addRankedObject(tempItem);
