@@ -150,6 +150,7 @@ var MainInterface = React.createClass({
     let moviesNotFound = []; //TODO movies that weren't formatted correctly, return to user so they can try manually
     let matchedMovies = []; //TODO tell the user which movies in the uploaded list matched existing ones
     let currentMovies = this.state.myMovies.slice();
+    console.log("current movies in beginning: ", currentMovies);
 
     //movies being passed correctly
     // console.log("this is currentmovies from austen: ", currentMovies);
@@ -165,22 +166,12 @@ var MainInterface = React.createClass({
     rankedFileMovieList.forEach(function(movieInfo, idx, rankedFileMovieList){
       let movieTitle = movieInfo[0].replace(/ /g, '+');
       // let titleFormatted = trailerTitle.replace(/ /g, '+');
-      console.log(movieTitle.toLowerCase());
-      let listRank  = parseInt(movieInfo[1].match(/[0-9]+/g)[0]); //only in the ranked list
+      let personal = parseFloat(movieInfo[1]); //only in the ranked list
       let timesSeen = parseInt(movieInfo[2].match(/[0-9]+/g)[0]);
-
-      let userRating = 8.7; //TODO need to make sure to use this number to generate the ranks for austen. Make sure it is an int btw
-
 
       //TODO currentMovies never updates, so if it wasn't there to begin with, wont find a duplicate
       if (!currentMovies.find(x => x.movieName.toLowerCase() === movieTitle.toLowerCase())) { //if already in watchlist, don't waste time on duplicate query + addition
       let APIquery = baseQuery + movieTitle + shortPlot + APIkey;
-      console.log("_________________________________________________");
-      console.log("||||||                                    ||||||||");
-      console.log("currentmovies check: ", currentMovies);
-      console.log("starting fetch for: ", movieTitle);
-      console.log("full query: ", APIquery);
-      console.log("||||||____________________________________||||||||");
         fetch(APIquery) //send the query to OMDB for searching
         .then(response => response.json())
         .then(json =>{
@@ -201,17 +192,10 @@ var MainInterface = React.createClass({
               Summary: json.Plot,
               duration: durationMinutes,
               viewCount: timesSeen,
-              personalRating: userRating,
-              rank: listRank
+              personalRating: personal
             };
-            // console.log(tempMovieObject);
+            console.log("being pushed ----->: ", tempMovieObject);
             currentMovies.push(tempMovieObject); //So that we check for duplicates even within our uploaded file
-            console.log("_________________________________________________");
-            console.log("||||||                                    ||||||||");
-            console.log("ending fetch for: ", tempMovieObject.movieName);
-            console.log("should now send it to 'addmovieobject'");
-            console.log("||||||____________________________________||||||||");
-            boundAddMovieObject(tempMovieObject);
           } else {
             moviesNotFound.push(movieTitle);
             // console.log("didnt find: ", movieName);
@@ -223,12 +207,38 @@ var MainInterface = React.createClass({
         console.log("mathced movies now: ", matchedMovies);
       }
     });
-    // console.log("=======");
-    // // console.log("this is added movies: ", addedMovies);
-    // // console.log("this is currentMovies and what the wishlist should be: ", currentMovies);
-    // // console.log("matched movie in list already, deal with these yourself you filthy animal: ", matchedMovies);
-    // // console.log("these titles didnt return anything, need to do manually: ", moviesNotFound);
-    // console.log("=======");
+    console.log("=======");
+    console.log("before sort: ",currentMovies);
+
+
+    //TODO sisnce this isn't waiting the the fetches to finish, we don't actually have an array, we have undefined, so can't run operations on it
+        //so we need to force this is be synchronous so we actually have the information we need before we start working
+
+    console.log("length of currmovie: ", currentMovies.length);
+    // while(currentMovies.length != rankedFileMovieList.length){
+    //   console.log(currentMovies.length);
+    // }
+
+
+    for(var k in currentMovies) {
+      console.log(k, currentMovies[k]);
+    }
+
+    // console.log("0 ", JSON.stringify(currentMovies));
+    // console.log("1 ", JSON.stringify(currentMovies));
+    // currentMovies = currentMovies.sort(function(a, b) {
+    //   console.log("movie a", a, " and movie b: ", b);
+    //   return parseFloat(a.personalRating) - parseFloat(b.personalRating);
+    // });
+
+    console.log("after sort", currentMovies);
+    console.log("=======");
+
+    // currentMovies.forEach(function(movie, idx){
+    //   console.log("in the foreach");
+    //   movie.rank = idx + 1;
+    //   boundAddMovieObject(movie);
+    // });
   },
 
   //TODO still need to write this one and convert the old format for austen
