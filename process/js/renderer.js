@@ -147,9 +147,11 @@ var MainInterface = React.createClass({
 
   //Ugh this works, just not the first time, have to do it multiple times. So yes, i guess you could say it doesnt really work, fuck off AAAAAAAAH
   addToRankedFromFileForAusten: function(rankedFileMovieList) {
+    let moviesAdded = [];
     let moviesNotFound = []; //TODO movies that weren't formatted correctly, return to user so they can try manually
     let matchedMovies = []; //TODO tell the user which movies in the uploaded list matched existing ones
     let currentMovies = this.state.myMovies.slice();
+    let numProcessed = 0;
     console.log("current movies in beginning: ", currentMovies);
 
     //movies being passed correctly
@@ -169,7 +171,9 @@ var MainInterface = React.createClass({
       let personal = parseFloat(movieInfo[1]); //only in the ranked list
       let timesSeen = parseInt(movieInfo[2].match(/[0-9]+/g)[0]);
 
+      console.log("sending in: ", movieTitle);
       //TODO currentMovies never updates, so if it wasn't there to begin with, wont find a duplicate
+      //TODO should ask ed how a callback would be done correctly even though I dont need it in this situation, should be common knowledge
       if (!currentMovies.find(x => x.movieName.toLowerCase() === movieTitle.toLowerCase())) { //if already in watchlist, don't waste time on duplicate query + addition
       let APIquery = baseQuery + movieTitle + shortPlot + APIkey;
         fetch(APIquery) //send the query to OMDB for searching
@@ -179,9 +183,14 @@ var MainInterface = React.createClass({
             //reformat duration and year to be saved as ints, not strings
             var durationMinutes = parseInt(json.Runtime.match(/[0-9]+/g)[0]);
             var releaseDateInt = parseInt(json.Year.match(/[0-9]+/g)[0]);
+
+            //Save Genres and Actors as arrays for now, and .join them when displayed
             let formattedGenres = json.Genre.split(', ');
             let formattedActors = json.Actors.split(', ');
 
+            //A movie's rank is determined by its place in the inputted file
+              //Though the fetches will not complete in sequence, the correct rank will be assigned to the object
+                //Therefore, it will be handled correctly (placed at the correct rank) when sent to the addRankedObject method
             tempMovieObject = {
               movieName: json.Title,
               posterURL: json.Poster,
@@ -192,10 +201,15 @@ var MainInterface = React.createClass({
               Summary: json.Plot,
               duration: durationMinutes,
               viewCount: timesSeen,
-              personalRating: personal
+              personalRating: personal,
+              rank: (idx + 1)
             };
-            console.log("being pushed ----->: ", tempMovieObject);
-            currentMovies.push(tempMovieObject); //So that we check for duplicates even within our uploaded file
+            // console.log("being pushed ----->: ", tempMovieObject);
+            moviesAdded.push(tempMovieObject); //So that we check for duplicates even within our uploaded file
+            // console.log("rank -> idx + 1: ", idx + 1);
+            // console.log("num processed: ", numProcessed);
+            // console.log(moviesAdded[numProcessed - 1]);
+            boundAddMovieObject(tempMovieObject);
           } else {
             moviesNotFound.push(movieTitle);
             // console.log("didnt find: ", movieName);
@@ -206,33 +220,41 @@ var MainInterface = React.createClass({
         console.log("found duplicate in addToRankedFromFile: ", movieTitle);
         console.log("mathced movies now: ", matchedMovies);
       }
+      // console.log("processed:", movieTitle);
+      // console.log("length of moviesAdded now: ", moviesAdded.length)
+      // if(moviesAdded.length == rankedFileMovieList.length){
+      //   callback();
+      // }
     });
-    console.log("=======");
-    console.log("before sort: ",currentMovies);
-
-
-    //TODO sisnce this isn't waiting the the fetches to finish, we don't actually have an array, we have undefined, so can't run operations on it
-        //so we need to force this is be synchronous so we actually have the information we need before we start working
-
-    console.log("length of currmovie: ", currentMovies.length);
-    // while(currentMovies.length != rankedFileMovieList.length){
-    //   console.log(currentMovies.length);
+    // console.log("=======");
+    // // console.log("before sort: ",currentMovies);
+    // //TODO sisnce this isn't waiting the the fetches to finish, we don't actually have an array, we have undefined, so can't run operations on it
+    //     //so we need to force this is be synchronous so we actually have the information we need before we start working
+    // console.log(moviesAdded);
+    // // console.log("length of currmovie: ", currentMovies.length);
+    // // while(currentMovies.length != rankedFileMovieList.length){
+    // //   console.log(currentMovies.length);
+    // // }
+    // function callback (){
+    //   console.log('all done');
+    //   console.log("movies added when we are supposed to be done", moviesAdded);
+    //   // console.log("movies added [0]: ", moviesAdded[0].movieTitle);
     // }
-
-
-    for(var k in currentMovies) {
-      console.log(k, currentMovies[k]);
-    }
-
-    // console.log("0 ", JSON.stringify(currentMovies));
-    // console.log("1 ", JSON.stringify(currentMovies));
-    // currentMovies = currentMovies.sort(function(a, b) {
-    //   console.log("movie a", a, " and movie b: ", b);
-    //   return parseFloat(a.personalRating) - parseFloat(b.personalRating);
-    // });
-
-    console.log("after sort", currentMovies);
-    console.log("=======");
+    //
+    // //TODO ID ONT NEED TO SORT, THEY WILL COME IN SORTED YOU MORON
+    // // for(var k in currentMovies) {
+    // //   console.log(k, currentMovies[k]);
+    // // }
+    //
+    // // console.log("0 ", JSON.stringify(currentMovies));
+    // // console.log("1 ", JSON.stringify(currentMovies));
+    // // currentMovies = currentMovies.sort(function(a, b) {
+    // //   console.log("movie a", a, " and movie b: ", b);
+    // //   return parseFloat(a.personalRating) - parseFloat(b.personalRating);
+    // // });
+    //
+    // // console.log("after sort", currentMovies);
+    // console.log("=======");
 
     // currentMovies.forEach(function(movie, idx){
     //   console.log("in the foreach");
