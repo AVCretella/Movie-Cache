@@ -35,7 +35,7 @@ app.on('ready', () => {
   createWindow();
 
   infoWindow = new BrowserWindow({
-    width: 400,
+    width: 600,
     height: 300,
     transparent: true,
     show: false,

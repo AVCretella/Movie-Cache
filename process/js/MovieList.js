@@ -163,7 +163,7 @@ var MovieList = React.createClass({
     } else {
       let hoursRanked = this.calculateHoursRanked(movieList);
       timeWatching =  <span className="pull-right">
-                        <span>Time Spent Watching Favorite Movies: {hoursRanked}</span>
+                        <span>Hours Spent Watching Favorite Movies: {hoursRanked}</span>
                       </span>;
       // importButton =  <span className="pull-right"/>;
       importButton =  <span className="pull-right import">
