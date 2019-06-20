@@ -10,11 +10,6 @@ var bootstrap = require('bootstrap');
 var _ = require('lodash');
 var dialog = eRequire('electron').remote;
 var fs = eRequire('fs');//eRequire to show that we are working with node now
-
-var watchlistMovieData = JSON.parse(fs.readFileSync(watchlistDataLocation));//Will go to the dataLocation defined in index.html and create a proper data file from the file there
-var rankedMovieData = JSON.parse(fs.readFileSync(rankedDataLocation));//Will go to the dataLocation defined in index.html and create a proper data file from the file there
-// var watchlistMovieData = require('../../data/watchlist_data.json');
-// var rankedMovieData = JSON.parse(fs.readFileSync(watchlistDataLocation));
 var electron = eRequire('electron');
 var ipc = electron.ipcRenderer;
 
@@ -28,12 +23,17 @@ var Toolbar = require('./Toolbar');
 var HeaderNav = require('./HeaderNav');
 var MovieList = require('./MovieList');
 var ImportedReportModal = require('./ImportedReportModal');
-// const Sidebar = require('./Sidebar.js');
+
+//Will go to the dataLocation defined in index.html and create a proper data file from the file there
+var watchlistMovieData = JSON.parse(fs.readFileSync(watchlistDataLocation));//Will go to the dataLocation defined in index.html and create a proper data file from the file there
+var rankedMovieData = JSON.parse(fs.readFileSync(rankedDataLocation));
+
 
 /*==============================================================================
                                 Main Interface
 ==============================================================================*/
 //These are the fields that will populate the search bar when a specific list is being displayed
+//TODO setting global variables is dumb, but so am i so who cares
 let rankedSortFields = [
   { field: "movieName", displayName: "Movie Name" },
   { field: "releaseDate", displayName: "Release Date" },
@@ -552,6 +552,15 @@ var MainInterface = React.createClass({
     });
   },
 
+  changeMovieTimesSeen: function(passedName, newTimesSeen) {
+    var allMovies = this.state.myMovies;
+    let movieIndex = allMovies.findIndex(movie => movie.movieName === passedName); //TODO issue with the same name, worth bothering with?
+    allMovies[movieIndex].viewCount = newTimesSeen;
+    this.setState({
+      myMovies: allMovies
+    });
+  },
+
   /*
     TODO the only issue is that we are basically doing a special delete and add now because of how we stored the ranked list.
       but it's either that or make the add and delete function sort the ranked data on every single addition and deletion.
@@ -758,6 +767,7 @@ var MainInterface = React.createClass({
               deleteMovie = {this.deleteMovieObject}
               changeRank = {this.changeMovieRank}
               changePersonalRating = {this.changeMoviePersonalRating}
+              changeTimesSeen = {this.changeMovieTimesSeen}
               moveToFavorites = {this.moveMovieToFavorites}
               showTrailer = {this.showTrailerWindow}
               createMovieListFile = {this.writeMovieListToFile}

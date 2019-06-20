@@ -6,7 +6,8 @@ var RankedMovies = React.createClass({
   getInitialState: function(){
     return{
       rankChangeVisible: false,
-      personalRatingChangeVisible: false
+      personalRatingChangeVisible: false,
+      timesSeenChangeVisible: false
     }
   },
 
@@ -48,6 +49,22 @@ var RankedMovies = React.createClass({
     this.changeRankFormRef.reset();
   },
 
+  toggleChangeTimesSeenDisplay: function() {
+    var tempVisibility = !this.state.timesSeenChangeVisible;
+    this.setState({
+      timesSeenChangeVisible: tempVisibility
+    }); //setState
+    this.changeTimesSeenFormRef.reset();
+  },
+
+  handleChangeTimesSeen: function(submitEvent){
+    submitEvent.preventDefault(); //this is to prevent the page from reloading, we will handle manually with React
+    let newTimesSeen = parseFloat(this.inputMovieViewCount.value);
+    this.props.onChangeTimesSeen(this.props.singleItem.movieName, newTimesSeen);
+    this.toggleChangeTimesSeenDisplay();
+    this.changeTimesSeenFormRef.reset();
+  },
+
   rankUp: function() {
     let oldRank = this.props.singleItem.rank;
     let newRank = this.props.singleItem.rank - 1;
@@ -86,6 +103,20 @@ var RankedMovies = React.createClass({
     } else {
       classNamePersonal = "modal fade";
       stylePersonal = {
+        display: "none"
+      };
+    }
+
+    let styleTimesSeen, classNameTimesSeen;
+    if (this.state.timesSeenChangeVisible) {
+      classNameTimesSeen = "modal fade in";
+      styleTimesSeen = {
+        display: "block",
+        paddingLeft: "0px"
+      };
+    } else {
+      classNameTimesSeen = "modal fade";
+      styleTimesSeen = {
         display: "none"
       };
     }
@@ -173,7 +204,36 @@ var RankedMovies = React.createClass({
           </div>
         </div>
 
-        <div> </div> {/* here so that the child:2n will show correctly */}
+        {/* Modal for the changeTimesSeen functionality */}
+        <div className={classNameTimesSeen} id="changeTimesSeen" tabIndex="-1" role="dialog" style = {styleTimesSeen}>
+          <div className="modal-dialog" role="document">
+            <div className="modal-content">
+              <div className="modal-header">
+                <button type="submit" className="close" onClick={this.toggleChangeTimesSeenDisplay} aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 className="modal-title">Changing The Number of Times You Have Seen {this.props.singleItem.movieName}</h4>
+              </div>
+
+              <form className="modal-body add-movie form-horizontal" ref={(ref) => this.changeTimesSeenFormRef = ref} onSubmit={this.handleChangeTimesSeen}>
+                <div className="form-group">
+                  <label className="col-sm-5 control-label" htmlFor="rank">New Number of Times Seen For This Movie:</label>
+                  <div className="col-sm-7">
+                    <input type="number" step="0.1" min="0" max="10" className="form-control" placeholder={this.props.singleItem.viewCount}
+                      id="timesSeen" ref={(ref) => this.inputMovieViewCount = ref}/>
+                  </div>
+                </div>
+
+                <div className="form-group">
+                  <div className="col-sm-offset-3 col-sm-9">
+                    <div className="pull-right">
+                      <button type="submit" className="btn btn-success">Change Number of Times Seen</button>
+                    </div>
+                  </div>
+                </div>
+              </form>
+
+            </div>
+          </div>
+        </div>
 
         <li className="item-list movie-item media">
           {moveButtons}
@@ -217,7 +277,7 @@ var RankedMovies = React.createClass({
                 <span className="label-item">Release Year:</span>{this.props.singleItem.releaseDate}
 
                 <span className="pull-right">{this.props.singleItem.viewCount}</span>
-                <span className="label-item pull-right">Times Seen:</span>
+                <span className="label-item pull-right" onClick={this.toggleChangeTimesSeenDisplay}><a href="#">Times Seen:</a></span>
               </div>
 
               <div className="personal-rating">

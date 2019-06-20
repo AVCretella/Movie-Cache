@@ -173,6 +173,18 @@ var AddMovieForm = React.createClass({
       rank = <div></div>;
     }
 
+    //Attempting to change the text area into a display for the poster once data is retrieved
+    if (this.inputMoviePoster != undefined) {
+      posterDisplay = <div className="form-group">
+                        <label className="col-sm-3 control-label" htmlFor="poster">Poster:</label>
+                          <div className="col-sm-9">
+                            <img src={this.inputMoviePoster} style={{width: '100%', height: '100%'}} alt="[ Movie Poster Unavailable ]"></img>;
+                          </div>
+                        </div>;
+    } else {
+      posterDisplay = <div></div>;
+    }
+
     /*
     TODO want a first modal that asks for the movie name, so the user has to
       search and there is no ambiguity involved, then bring them to full modal
@@ -260,10 +272,12 @@ var AddMovieForm = React.createClass({
               <div className="form-group">
                 <label className="col-sm-3 control-label" htmlFor="poster">Poster URL:</label>
                 <div className="col-sm-9">
-                  <input type="text" className="form-control"
-                    id="posterURL" ref={(ref) => this.inputMoviePoster = ref} placeholder={this.state.defaultPoster} />
+                  <input type="img" className="form-control"
+                    id="posterURL" ref={(ref) => this.inputMoviePoster = ref} placeholder={this.state.defaultPoster}/>
                 </div>
               </div>
+
+              {posterDisplay}
 
               <div className="form-group">
                 <div className="col-sm-offset-3 col-sm-9">

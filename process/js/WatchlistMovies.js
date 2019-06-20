@@ -64,6 +64,20 @@ var WatchlistMovies = React.createClass({
       };
     }
 
+    if(this.props.singleItem.posterURL != 'N/A'){
+      moviePoster = <div className="col-sm-2">
+                      <div className="movie-poster">
+                        <img src={this.props.singleItem.posterURL} style={{width: '100%', height: '100%'}} alt="[ Movie Poster Unavailable ]"></img>
+                      </div>
+                    </div>
+    } else {
+      moviePoster = <div className="col-sm-2">
+                      <div className="movie-poster">
+                        <img src={this.props.singleItem.posterURL} style={{width: '100%', height: '100%'}} alt="[ Movie Poster Unavailable ]"></img>
+                      </div>
+                    </div>
+    }
+
     return(
       <div>
         {/* Modal for the changerank functionality */}
@@ -118,11 +132,12 @@ var WatchlistMovies = React.createClass({
         <li className="movie-item media">
 
           {/*where the poster will be displayed*/}
-          <div className="col-sm-2">
+          {moviePoster}
+          {/*<div className="col-sm-2">
             <div className="movie-poster">
               <img src={this.props.singleItem.posterURL} style={{width: '100%', height: '100%'}} alt="[ Movie Poster Unavailable ]"></img>
             </div>
-          </div>
+          </div>*/}
 
           {/*where the movie information will be displayed*/}
           <div className="col-sm-10">
