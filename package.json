@@ -11,7 +11,7 @@
   "main": "app/main.js",
   "devDependencies": {
     "electron": "^3.0.3",
-    "electron-packager": "12.1.0",
+    "electron-packager": "16.0.0",
     "gulp": "^3.8.8",
     "gulp-browserify": "^0.5.1",
     "gulp-concat-css": "^2.3.0",
