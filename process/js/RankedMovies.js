@@ -49,19 +49,19 @@ var RankedMovies = React.createClass({
     this.changeRankFormRef.reset();
   },
 
-  toggleChangeTimesSeenDisplay: function() {
-    var tempVisibility = !this.state.timesSeenChangeVisible;
-    this.setState({
-      timesSeenChangeVisible: tempVisibility
-    }); //setState
-    this.changeTimesSeenFormRef.reset();
-  },
-
   handleChangeTimesSeen: function(submitEvent){
     submitEvent.preventDefault(); //this is to prevent the page from reloading, we will handle manually with React
     let newTimesSeen = parseFloat(this.inputMovieViewCount.value);
     this.props.onChangeTimesSeen(this.props.singleItem.movieName, newTimesSeen);
     this.toggleChangeTimesSeenDisplay();
+    this.changeTimesSeenFormRef.reset();
+  },
+
+  toggleChangeTimesSeenDisplay: function() {
+    var tempVisibility = !this.state.timesSeenChangeVisible;
+    this.setState({
+      timesSeenChangeVisible: tempVisibility
+    }); //setState
     this.changeTimesSeenFormRef.reset();
   },
 
@@ -82,43 +82,28 @@ var RankedMovies = React.createClass({
     let styleRank, classNameRank;
     if (this.state.rankChangeVisible) {
       classNameRank = "modal fade in";
-      styleRank = {
-        display: "block",
-        paddingLeft: "0px"
-      };
+      styleRank = { display: "block", paddingLeft: "0px" };
     } else {
       classNameRank = "modal fade";
-      styleRank = {
-        display: "none"
-      };
+      styleRank = { display: "none" };
     }
 
     let stylePersonal, classNamePersonal;
     if (this.state.personalRatingChangeVisible) {
       classNamePersonal = "modal fade in";
-      stylePersonal = {
-        display: "block",
-        paddingLeft: "0px"
-      };
+      stylePersonal = { display: "block", paddingLeft: "0px" };
     } else {
       classNamePersonal = "modal fade";
-      stylePersonal = {
-        display: "none"
-      };
+      stylePersonal = { display: "none" };
     }
 
     let styleTimesSeen, classNameTimesSeen;
     if (this.state.timesSeenChangeVisible) {
       classNameTimesSeen = "modal fade in";
-      styleTimesSeen = {
-        display: "block",
-        paddingLeft: "0px"
-      };
+      styleTimesSeen = { display: "block", paddingLeft: "0px" };
     } else {
       classNameTimesSeen = "modal fade";
-      styleTimesSeen = {
-        display: "none"
-      };
+      styleTimesSeen = { display: "none" };
     }
 
     if (this.props.sortField == 'rank') {

@@ -35,7 +35,7 @@ var AddMovieForm = React.createClass({
   sendTitleToAPI: function(){
     var searchTitle = this.inputMovieName.value;
     var baseQuery = 'http://www.omdbapi.com/?t=';
-    var APIkey = '&apikey=2d5be971';
+    var APIkey = '&apikey=2d5be971'; //God bless this key still working
     var longPlot = '&plot=full'; //TODO let this be dynamically short or long, maybe user inputs this?
     var year = '';
     if (this.inputMovieReleaseDate.value != undefined) { //including the year will make the query more accurate
@@ -114,12 +114,15 @@ var AddMovieForm = React.createClass({
         // rottenTomatoes: this.inputMovieRottenTomatoes.value,
       }
     } else { //if just a wishlist movie, need don't need personalRating, rank, or viewCount
+      var interestLevelFloat = (this.inputMovieInterestLevel.value) ? parseFloat(this.inputMovieInterestLevel.value) : 0;
+
       tempItem = {
         movieName: this.inputMovieName.value,
         posterURL: this.inputMoviePoster.value,
         directorName: this.inputMovieDirector.value,
         actors: formattedActors,
         genres:  formattedGenres,
+        interestLevel: interestLevelFloat,
         releaseDate: releaseDateInt,
         Summary: this.inputMovieSummary.value,
         duration: durationMinutes
@@ -145,7 +148,8 @@ var AddMovieForm = React.createClass({
       style = { display: "none" };
     }
 
-    if (this.props.isDisplayingRanked) { //if we are displaying the ranked list, include rank and timesSeen in the form
+    if (this.props.isDisplayingRanked) { //if we are displaying the ranked list, include rank, timesSeen, and personalRating in the form
+      interestLevel = <div></div>; //TODO get rid of this when dumped from ranked movies
       personalRating =  <div className="form-group">
                 <label className="col-sm-3 control-label personalRatingInput" htmlFor="personalRating">Your Rating:</label>
                 <div className="col-sm-9">
@@ -167,23 +171,30 @@ var AddMovieForm = React.createClass({
                           id="position" ref={(ref) => this.inputMovieRank = ref} required/>
                       </div>
                     </div>;
-    } else { //otherwise leave them empty
+    } else { //if we're viewing a watchlist movie, show us the interest level
+      interestLevel = <div className="form-group">
+                <label className="col-sm-3 control-label interestLevelInput" htmlFor="interestLevel">Interest:</label>
+                <div className="col-sm-9">
+                  <input type="number" step=".01" min="0" max="10" className="form-control" placeholder={this.state.defaultInterestLevel}
+                    id="interestLevel" ref={(ref) => this.inputMovieInterestLevel = ref} required/>
+                </div>
+              </div>;
       personalRating = <div></div>;
       times_seen = <div></div>;
       rank = <div></div>;
     }
 
-    //Attempting to change the text area into a display for the poster once data is retrieved
-    if (this.inputMoviePoster != undefined) {
-      posterDisplay = <div className="form-group">
-                        <label className="col-sm-3 control-label" htmlFor="poster">Poster:</label>
-                          <div className="col-sm-9">
-                            <img src={this.inputMoviePoster} style={{width: '100%', height: '100%'}} alt="[ Movie Poster Unavailable ]"></img>;
-                          </div>
-                        </div>;
-    } else {
-      posterDisplay = <div></div>;
-    }
+    // //Attempting to change the text area into a display for the poster once data is retrieved
+    // if (this.inputMoviePoster != undefined) {
+    //   posterDisplay = <div className="form-group">
+    //                     <label className="col-sm-3 control-label" htmlFor="poster">Poster:</label>
+    //                       <div className="col-sm-9">
+    //                         <img src={this.inputMoviePoster} style={{width: '100%', height: '100%'}} alt="[ Movie Poster Unavailable ]"></img>;
+    //                       </div>
+    //                     </div>;
+    // } else {
+    //   posterDisplay = <div></div>;
+    // }
 
     /*
     TODO want a first modal that asks for the movie name, so the user has to
@@ -212,6 +223,8 @@ var AddMovieForm = React.createClass({
                   <button type="button" className="btn btn-success" onClick={this.sendTitleToAPI}>Search</button>
                 </div>
               </div>
+
+              {interestLevel}
 
               {rank}
 
@@ -277,7 +290,7 @@ var AddMovieForm = React.createClass({
                 </div>
               </div>
 
-              {posterDisplay}
+              {/* {posterDisplay} */}
 
               <div className="form-group">
                 <div className="col-sm-offset-3 col-sm-9">

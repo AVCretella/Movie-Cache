@@ -8287,10 +8287,17 @@ button.close {
 
 /*# sourceMappingURL=bootstrap.css.map */
 
+/* The CSS in this file will replace whatever was pre-existing in the app file */
+
 *,
 *:before,
 *:after {
   box-sizing: inherit;
+}
+
+.btn:focus {
+  outline: none !important;
+  outline-offset: none !important;
 }
 
 html {
@@ -8304,6 +8311,7 @@ h4,
 h5,
 h6 {
   margin: 0;
+  display: inline-block;
 }
 
 .navbar {
@@ -8331,8 +8339,12 @@ h6 {
   padding-left: 60px;
 }
 
-.navbar-default { /*This is the color for the headerNav*/
+.navbar-default {
+  /*This is the color for the headerNav*/
   background-color: #008BFF;
+  /* background: linear-gradient( 120deg,
+    rgba(57, 216, 234, 0.75),
+    rgba(81, 39, 165, 0.95)); */
   border: none;
 }
 
@@ -8362,8 +8374,27 @@ h6 {
   border-color: #286D64;
 }
 
-.main {
-  background: white;
+.slidecontainer {
+  width: 40%;
+  /* Width of the outside container */
+}
+
+.slider {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 15px;
+  /* border-radius: 5px;   */
+  background: #d3d3d3;
+  outline: none;
+  opacity: 0.7;
+  -webkit-transition: .2s;
+  transition: opacity .2s;
+}
+
+body {
+  background: linear-gradient( 120deg,
+    rgba(57, 216, 234, 0.75),
+    rgba(81, 39, 165, 0.95));
 }
 
 /** Toolbar **/
@@ -8371,9 +8402,13 @@ h6 {
 .interface {
   display: flex;
   background: #D8F2F0;
+  /* background: linear-gradient( 120deg,
+    rgba(57, 216, 234, 0.75),
+    rgba(81, 39, 165, 0.95)); */
 }
 
-.toolbar { /*This is the background color for the sidebar toolbar */
+.toolbar {
+  /*This is the background color for the sidebar toolbar */
   background-color: #18C1EF;
   min-width: 200px;
   color: white;
@@ -8397,7 +8432,7 @@ h6 {
   user-select: none;
 }
 
-.toolbar-item:hover { /* When you hover over a toolbar item*/
+.toolbar-item:hover {
   background-color: #006FCC;
 }
 
@@ -8428,10 +8463,26 @@ h6 {
   margin-top: 15px;
 }
 
-.movies .movies-headline { /*The color of the name of the list*/
+.movies .movies-headline {
+  /*The color of the name of the list*/
   margin-bottom: 10px;
   color: #296B73;
 }
+
+.col-sm-12 {
+  display: inline-block;
+  float: none;
+}
+
+/* TODO want calculated hours to be centered */
+
+/* .col-sm-2, .col-sm-9, .col-sm-10 {
+  vertical-align: middle;
+} */
+
+/* ____________________Movie Tiles__________________ */
+
+/* _________________________________________________ */
 
 .item-list {
   margin: 0;
@@ -8442,7 +8493,7 @@ h6 {
 }
 
 .item-list .media {
-  margin-top: 0;
+  margin-top: 5px;
 }
 
 .item-list .movie-item {
@@ -8450,76 +8501,149 @@ h6 {
 }
 
 .item-list .movie-item:nth-child(2n) {
-  background: rgba(255,255,255,.5);
+  background: rgba(255,255,255,.6);
   border-radius: 5px;
 }
+
+/* TODO
+          need to figure out how to have the correct formatting for ranked list
+          The change rank div and li of movie information is wrapped in one div, so
+          the current formatting will take the second child of that div (which is the movie's information div)
+          and considering it to be the one that needs to be formatted, so every movie, rather than every other
+          has the formatting that we Want
+*/
 
 .item-list .movie-item:last-child {
   border-bottom: none;
 }
 
 .item-list .movie-item .movie-delete {
-  display: none;
-  opacity: 0;
-  transition: all 1s;
-}
-
-.item-list  .movie-item:hover .movie-delete {
+  margin-left: .7em;
   display: block;
-  opacity: 1;
 }
 
-.item-list .movie-name { /*The color of the Title of the movie*/
+/*The color of the Title of the movie*/
+
+.item-list .movie-name {
   font-weight: bold;
   color: #296B73;
-  font-size: 1.3em;
+  font-size: 1.5em;
 }
 
 .item-list .movie-notes {
   font-style: italic;
 }
 
-.item-list .label-item { /*The color of the labels for movie information in the list*/
+/*The color of the labels for movie information in the list*/
+
+.item-list .label-item {
   font-weight: bold;
   color: #4CAEFF;
   padding-right: 10px;
+}
+
+.personal-rating .interest-level a {
+  cursor: pointer;
 }
 
 .item-list .movie-release {
   font-style: italic;
 }
 
+/* These will center all movie info */
+
+.col-sm-1,
+.col-sm-2,
+.col-sm-9,
+.col-sm-10 {
+  display: inline-block;
+  float: none;
+}
+
+.col-sm-2,
+.col-sm-9,
+.col-sm-10 {
+  vertical-align: middle;
+}
+
+.col-sm-1 .btn-up {
+  background-color: #18C1EF;
+}
+
+.col-sm-1 .btn .btn-down {
+  background-color: #ff3399;
+}
+
+/* _________________________________________________ */
+
+/* ________________Modal Formatting_________________ */
+
+/* _________________________________________________ */
+
+.rankInput,
+.viewInput,
+.personalRatingInput,
+.interestLevelInput {
+  /* Highlight rank and viewCount to show user they need to fill them out */
+  color: #0bcbdf;
+}
+
+.form-control:focus {
+  /* Highlight the box you're currently typing in */
+  border-color: #0bcbdf;
+}
+
+.btn-reset {
+  background-color: orange;
+}
+
+/* _________________________________________________ */
+
+/* _______________Info Window Styling_______________ */
+
+/* _________________________________________________ */
+
 #page-info {
   background: transparent;
   color: white;
+  border-radius: 20px;
   display: flex;
   flex-flow: row wrap;
   flex-direction: column;
   justify-content: center;
-  height: 100vh;
+  height: 100%;
   -webkit-app-region: drag;
-  cursor: pointer;
+  /* -webkit-animation: mymove 5s infinite; /* Safari 4.0 - 8.0 */
+  /* animation: mymove 5s infinite; */
+  /* cursor: pointer; */
 }
 
 #page-info a:link {
   color: #EEC856;
 }
 
+/* HOLY SHIT DOES THAT GRADIENT LOOK GOOD SHIT I WANT TO USE IT FOR EVERYTHING */
+
 #page-info .info-content {
-  background: linear-gradient( 180deg,
-    rgba(234, 192, 59, .75),
-    rgba(24, 101, 85, .95));
-  width: 90%;
+  background: linear-gradient( 120deg,
+    rgba(57, 216, 234, 0.75),
+    rgba(81, 39, 165, 0.95));
+  width: 100%;
   padding: 20px;
   border-radius: 20px;
-  text-align: center;
+  text-align: left;
   align-self: center;
-  border: 2px solid rgba(24, 101, 85, .95);
-  box-shadow: 5px 5px 20px rgba(0, 0, 0, .4);
+  /* border: 2px solid rgba(24, 101, 85, .95); */
+  /* box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.19); */
 }
 
 #page-info .page-headline {
   font-size: 1.8em;
+  color: #EEC856;
+}
+
+#page-info .section-header {
+  font-size: 1em;
   color: #EEC856;
 }
 
@@ -8546,3 +8670,5 @@ h6 {
   width: 100px;
   opacity: .8;
 }
+
+/* _________________________________________________ */

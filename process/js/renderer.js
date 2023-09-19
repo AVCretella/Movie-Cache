@@ -44,7 +44,9 @@ let rankedSortFields = [
 let watchlistSortFields = [
   { field: "movieName", displayName: "Movie Name" },
   { field: "releaseDate", displayName: "Release Date" },
-  { field: "duration", displayName: "Duration" }
+  { field: "duration", displayName: "Duration" },
+  { field: "orderAdded", displayName: "Order Added"},
+  { field: "interestLevel", displayName: "Interest Level"}
 ];
 
 //Define all of the genres that we can choose from. Got them from IMDB list
@@ -70,7 +72,22 @@ var MainInterface = React.createClass({
       sortFields: rankedSortFields,
       fileLocation: rankedDataLocation,
       errorMovies: []
-    } //return
+    }
+
+    // //While working on watchlist
+    // return {
+    //   movieFormVisible: false,
+    //   orderBy: 'interestLevel',
+    //   orderDir: 'asc',
+    //   genre: 'All',
+    //   queryText: '',
+    //   myMovies: watchlistMovieData,
+    //   MovieListItem: WatchlistMovies,
+    //   movieListTitle: watchlistTitle,
+    //   sortFields: watchlistSortFields,
+    //   fileLocation: watchlistDataLocation,
+    //   errorMovies: []
+    // } //return
   },
 
   //componentDidMount and componentWillUnmount handle all of the menu operations that we define in main.js
@@ -96,6 +113,7 @@ var MainInterface = React.createClass({
 
   writeMovieListToFile: function(whichList) {
     var exportMovies = [];
+    exportMovies.push(["Rank", "Title", "Year Released", "Times Seen"]); //Need a header for the columns for viewing
 
     if (whichList == rankedListTitle){  //we want to get the movie title, the personal rank, and the times seen, just save those
       rankedMovieData.forEach(function(movie, idx, rankedMovieData){
@@ -108,8 +126,9 @@ var MainInterface = React.createClass({
           indexToReplace = name.indexOf(","); //get the index of the comma
           name = name.substr(0, indexToReplace) + "-" + name.substr(indexToReplace + 1, name.length);
         }
-        movieObject.push(name);
         movieObject.push(movie.rank);
+        movieObject.push(name);
+        movieObject.push(movie.releaseDate);
         movieObject.push(movie.viewCount);
         exportMovies.push(movieObject);
       });
@@ -220,47 +239,7 @@ var MainInterface = React.createClass({
         console.log("found duplicate in addToRankedFromFile: ", movieTitle);
         console.log("mathced movies now: ", matchedMovies);
       }
-      // console.log("processed:", movieTitle);
-      // console.log("length of moviesAdded now: ", moviesAdded.length)
-      // if(moviesAdded.length == rankedFileMovieList.length){
-      //   callback();
-      // }
     });
-    // console.log("=======");
-    // // console.log("before sort: ",currentMovies);
-    // //TODO sisnce this isn't waiting the the fetches to finish, we don't actually have an array, we have undefined, so can't run operations on it
-    //     //so we need to force this is be synchronous so we actually have the information we need before we start working
-    // console.log(moviesAdded);
-    // // console.log("length of currmovie: ", currentMovies.length);
-    // // while(currentMovies.length != rankedFileMovieList.length){
-    // //   console.log(currentMovies.length);
-    // // }
-    // function callback (){
-    //   console.log('all done');
-    //   console.log("movies added when we are supposed to be done", moviesAdded);
-    //   // console.log("movies added [0]: ", moviesAdded[0].movieTitle);
-    // }
-    //
-    // //TODO ID ONT NEED TO SORT, THEY WILL COME IN SORTED YOU MORON
-    // // for(var k in currentMovies) {
-    // //   console.log(k, currentMovies[k]);
-    // // }
-    //
-    // // console.log("0 ", JSON.stringify(currentMovies));
-    // // console.log("1 ", JSON.stringify(currentMovies));
-    // // currentMovies = currentMovies.sort(function(a, b) {
-    // //   console.log("movie a", a, " and movie b: ", b);
-    // //   return parseFloat(a.personalRating) - parseFloat(b.personalRating);
-    // // });
-    //
-    // // console.log("after sort", currentMovies);
-    // console.log("=======");
-
-    // currentMovies.forEach(function(movie, idx){
-    //   console.log("in the foreach");
-    //   movie.rank = idx + 1;
-    //   boundAddMovieObject(movie);
-    // });
   },
 
   //TODO still need to write this one and convert the old format for austen
@@ -344,6 +323,8 @@ var MainInterface = React.createClass({
     */
   },
 
+
+//TODO if i start including interest level, this one will need to be modified
   addToWatchlistFromFile: function(fileMovieList) {
     // console.log("now we are adding to watchlist from file and we have these movies: ", fileMovieList);
     let moviesNotFound = []; //TODO movies that weren't formatted correctly, return to user so they can try manually
@@ -463,6 +444,7 @@ var MainInterface = React.createClass({
   },
 
   //This needs to accomodate the moving function
+  //TODO probably need to strip the interest level
   addRankedObject: function(tempItem) {
     let tempMovies = this.state.myMovies;
     // let rankedListLength = (JSON.parse(fs.readFileSync(rankedDataLocation))).length; //turns into a perfectly healthy json object array
@@ -543,6 +525,16 @@ var MainInterface = React.createClass({
     }
   },
 
+  //Used only for the watchlist so I can easily determine movies I care / dont care about
+  changeMovieInterestLevel: function(passedName, newInterest) {
+    var allMovies = this.state.myMovies;
+    let movieIndex = allMovies.findIndex(movie => movie.movieName === passedName); //TODO issue with the same name, worth bothering with?
+    allMovies[movieIndex].interestLevel = newInterest;
+    this.setState({
+      myMovies: allMovies
+    });
+  },
+
   changeMoviePersonalRating: function(passedName, newPersonal) {
     var allMovies = this.state.myMovies;
     let movieIndex = allMovies.findIndex(movie => movie.movieName === passedName); //TODO issue with the same name, worth bothering with?
@@ -609,12 +601,13 @@ var MainInterface = React.createClass({
     });
   },
 
-  //Given an item with ranked format (all movie info + rank and timesSeen), write it directly to rankedDataLocation and then delete
-  //the item from the watchlist
+  /*
+  Given an item with ranked format (all movie info + rank and timesSeen),
+  write it directly to rankedDataLocation and
+  then delete the item from the watchlist
 
-  //Needs to behave a little differently than just adding a ranked movie object because we cannot access the state because we are on the wrong list
-    //We need to directly access the ranked data to modify correctly
-  //TODO holy shit this needs a rework, need to add to rankedDataLocation correctly, like in order, fuck
+  Needs to behave a little differently than just adding a ranked movie object because we cannot access the state because we are on the wrong list
+    We need to directly access the ranked data to modify correctly */
   moveMovieToFavorites: function(item){
 
     let rankedMovies = JSON.parse(fs.readFileSync(rankedDataLocation));
@@ -690,7 +683,8 @@ var MainInterface = React.createClass({
       MovieListItem: WatchlistMovies,
       movieListTitle: watchlistTitle,
       sortFields: watchlistSortFields,
-      orderBy: orderBy,
+      orderBy: 'interestLevel',
+      orderDir: 'asc',
       genre:'All', //reset genre
       fileLocation: watchlistDataLocation
     });
@@ -723,7 +717,21 @@ var MainInterface = React.createClass({
 
   showHelp: function() { //we want to display the show about on the toolbar
     console.log('we got an event call, we should now display!');
+    // this.randomMovie()
     ipc.sendSync('openInfoWindow'); //sends event notification to main process
+  },
+
+  //Choose a random movie for me to watchlist
+  //TODO hook this up to an actual button, maybe a popup window that will show the movie info
+  randomMovie: function(){
+    console.log('in rand func')
+    let watchlistMovies = JSON.parse(fs.readFileSync(watchlistDataLocation));
+    console.log("parsed")
+    let wlLength = watchlistMovies.length;
+    const randMovie = Math.floor(Math.random() * wlLength);
+    console.log(watchlistMovies[randMovie]);
+    ipc.sendSync('randomMovie'); //sends event notification to main process //TODO can i pass the movie obj here?
+    console.log('sent the sync')
   },
 
   render: function() {
@@ -765,6 +773,7 @@ var MainInterface = React.createClass({
               genre = {this.state.genre}
               MovieListItem = {this.state.MovieListItem}
               deleteMovie = {this.deleteMovieObject}
+              changeInterestLevel = {this.changeMovieInterestLevel}
               changeRank = {this.changeMovieRank}
               changePersonalRating = {this.changeMoviePersonalRating}
               changeTimesSeen = {this.changeMovieTimesSeen}

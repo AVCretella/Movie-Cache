@@ -38,13 +38,13 @@ var MovieList = React.createClass({
     //movies are being tossed around by other filtering and whatever. This will only care about the rank a person gave
   */
   sortMovies: function(movieList, orderBy, orderDir) {
-    let newMovies = _.orderBy(movieList, item => item[orderBy], orderDir);
-    // console.log("this is genre rn: ", this.props.genre);
-    if (this.props.genre != 'All') {
-      newMovies = newMovies.filter((movie) =>
-        movie.genres.includes(this.props.genre)
-      );
-    }
+      let newMovies = _.orderBy(movieList, item => item[orderBy], orderDir);
+      // console.log("this is genre rn: ", this.props.genre);
+      if (this.props.genre != 'All') {
+        newMovies = newMovies.filter((movie) =>
+          movie.genres.includes(this.props.genre)
+        );
+      }
     //TODO need to map a different number to a new field for every movie
     //TODO need to worry about this when adding and removing movies too, maybe need another function
     // var newerMovies = _.map(newMovies, function(element) {
@@ -130,7 +130,8 @@ var MovieList = React.createClass({
     return (totalHours / 60).toFixed(2);
   },
 
-  renderListItems: function(movieList, orderBy, deleteMovie, changeRank, changePersonalRating, changeTimesSeen, moveToFavorites, showTrailer, MovieListItem) {
+  //Pulls from the renderer.js files passed down props
+  renderListItems: function(movieList, orderBy, deleteMovie, changeInterestLevel, changeRank, changePersonalRating, changeTimesSeen, moveToFavorites, showTrailer, MovieListItem) {
     return movieList.map(function(item, index){ //send this data to MovieList to create a series of those tags
       return(
         <MovieListItem
@@ -138,6 +139,7 @@ var MovieList = React.createClass({
           singleItem = {item} //each item at that index
           sortField = {orderBy}
           onDelete = {this.adjustRanksAndDelete} //calls the deleteMovie function in renderer.js
+          onChangeInterestLevel = {changeInterestLevel}
           onChangeRank = {changeRank} //calls the changeRank function in renderer.js
           onChangePersonalRating = {changePersonalRating}
           onChangeTimesSeen = {changeTimesSeen}
@@ -150,7 +152,9 @@ var MovieList = React.createClass({
   },
 
   render: function() {
-    let {movieListTitle, movieList, queryText, orderBy, orderDir, deleteMovie, changeRank, changePersonalRating, changeTimesSeen, moveToFavorites, showTrailer, MovieListItem} = this.props;
+    let {movieListTitle, movieList, queryText, orderBy, orderDir, deleteMovie,
+        changeInterestLevel, changeRank, changePersonalRating, changeTimesSeen,
+        moveToFavorites, showTrailer, MovieListItem} = this.props;
 
     if (movieListTitle == "Watchlist") {
       let hoursWatchlist = this.calculateHoursWatchlist(movieList);
@@ -175,7 +179,9 @@ var MovieList = React.createClass({
 
     movieList = this.filterMovies(movieList, queryText);
     movieList = this.sortMovies(movieList, orderBy, orderDir);
-    movieList = this.renderListItems(movieList, orderBy, deleteMovie, changeRank, changePersonalRating, changeTimesSeen, moveToFavorites, showTrailer, MovieListItem);
+    movieList = this.renderListItems(movieList, orderBy, deleteMovie, changeInterestLevel,
+                                    changeRank, changePersonalRating, changeTimesSeen,
+                                    moveToFavorites, showTrailer, MovieListItem);
 
     return (
       <div className="row">

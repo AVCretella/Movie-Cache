@@ -5,6 +5,12 @@
 *, *:before, *:after {
   box-sizing: inherit;
 }
+
+.btn:focus {
+  outline: none !important;
+  outline-offset: none !important;
+}
+
 html {
   box-sizing: border-box;
 }
@@ -70,6 +76,22 @@ h1, h2, h3, h4, h5, h6 {
 .navbar-form .btn-info.focus {
   background-color: #2B746B;
   border-color: #286D64;
+}
+
+.slidecontainer {
+  width: 40%; /* Width of the outside container */
+}
+
+.slider {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 15px;
+  /* border-radius: 5px;   */
+  background: #d3d3d3;
+  outline: none;
+  opacity: 0.7;
+  -webkit-transition: .2s;
+  transition: opacity .2s;
 }
 
 body {
@@ -216,7 +238,7 @@ body {
   padding-right: 10px;
 }
 
-.personal-rating a{
+.personal-rating .interest-level a{
   cursor: pointer;
 }
 
@@ -239,7 +261,7 @@ body {
 }
 
 .col-sm-1 .btn .btn-down {
-  background-color: ##ff3399;
+  background-color: #ff3399;
 }
 /* _________________________________________________ */
 
@@ -247,7 +269,7 @@ body {
 
 /* ________________Modal Formatting_________________ */
 /* _________________________________________________ */
-.rankInput, .viewInput, .personalRatingInput{ /* Highlight rank and viewCount to show user they need to fill them out */
+.rankInput, .viewInput, .personalRatingInput, .interestLevelInput{ /* Highlight rank and viewCount to show user they need to fill them out */
   color: #0bcbdf;
 }
 

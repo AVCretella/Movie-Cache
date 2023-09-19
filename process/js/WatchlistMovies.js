@@ -5,7 +5,8 @@ var React = require('react');
 var WatchlistMovies = React.createClass({
   getInitialState: function(){
     return{
-      moveModalVisible: false
+      moveModalVisible: false,
+      interestLevelChangeVisible: false
     }
   },
 
@@ -16,6 +17,28 @@ var WatchlistMovies = React.createClass({
   removeFromList: function(){
     this.props.onDelete(this.props.singleItem); //lets the function know which movie has been selected for deletion
   },
+
+  //When the user wants to change the interest level
+  //TODO may need to append 0 to all movies in order to see this field displayed
+  handleChangeInterestLevel: function(interestLevel){
+    console.log("button ", interestLevel, " pressed, lets set the interetlevel");
+    console.log("items current interest level: ", this.props.singleItem.interestLevel);
+    // submitEvent.preventDefault(); //this is to prevent the page from reloading, we will handle manually with React
+    // let newInterestLevel = (parseFloat(this.inputMovieInterestLevel.value)) ? parseFloat(this.inputMovieInterestLevel.value) : 0; //TODO this may come back as 0
+    let newInterestLevel = interestLevel;
+    this.props.onChangeInterestLevel(this.props.singleItem.movieName, newInterestLevel);
+    // this.toggleChangeInterestLevelDisplay();
+    // this.changeInterestLevelFormRef.reset();
+  },
+
+  // //When we want to show the interest level form
+  // toggleChangeInterestLevelDisplay: function() {
+  //   var tempVisibility = !this.state.interestLevelChangeVisible;
+  //   this.setState({
+  //     interestLevelChangeVisible: tempVisibility
+  //   }); //setState
+  //   this.changeInterestLevelFormRef.reset();
+  // },
 
   //Open the 'move to favorites' modal if not open already, close if it is
   toggleMoveMovieDisplay: function(){
@@ -50,18 +73,26 @@ var WatchlistMovies = React.createClass({
 
   render: function(){
 
+    //These control the dynamic nature of the modals - very basic - not correcct
     let style, className;
     if (this.state.moveModalVisible) {
-      className = "modal fade in";
-      style = {
+      moveClass = "modal fade in";
+      moveStyle = {
+        display: "block",
+        paddingLeft: "0px"
+      };
+    } else if (this.state.interestLevelChangeVisible) {
+      interestClass = "modal fade in";
+      interestStyle = {
         display: "block",
         paddingLeft: "0px"
       };
     } else {
-      className = "modal fade";
-      style = {
-        display: "none"
-      };
+      moveClass= "modal fade";
+      moveStyle = { display: "none" };
+
+      interestClass= "modal fade";
+      interestStyle = { display: "none" };
     }
 
     if(this.props.singleItem.posterURL != 'N/A'){
@@ -80,8 +111,8 @@ var WatchlistMovies = React.createClass({
 
     return(
       <div>
-        {/* Modal for the changerank functionality */}
-        <div className={className} id="changeRank" tabIndex="-1" role="dialog" style = {style}>
+        {/* Modal for the moveToFavorites functionality */}
+        <div className={moveClass} id="moveToFaves" tabIndex="-1" role="dialog" style = {moveStyle}>
           <div className="modal-dialog" role="document">
             <div className="modal-content">
               <div className="modal-header">
@@ -91,7 +122,7 @@ var WatchlistMovies = React.createClass({
 
               <form className="modal-body add-movie form-horizontal" ref={(ref) => this.moveMovieFormRef = ref} onSubmit={this.moveToFavorites}>
                 <div className="form-group">
-                  <label className="col-sm-10 control-label" htmlFor="rank">Your Rating for &quot;{this.props.singleItem.movieName}&quot;</label>
+                  <label className="col-sm-10 control-label" htmlFor="rating">Your Rating for &quot;{this.props.singleItem.movieName}&quot;</label>
                   <div className="col-sm-2">
                     <input type="number" min="0" step=".1" className="form-control" placeholder="9.4"
                       id="personal-rating" ref={(ref) => this.inputMoviePersonalRating = ref}/>
@@ -127,6 +158,37 @@ var WatchlistMovies = React.createClass({
             </div>
           </div>
         </div>
+
+        {/* Modal for the changeInterestLevel functionality */}
+        {/* <div className={interestClass} id="changeInterestLevel" tabIndex="-1" role="dialog" style = {interestStyle}>
+          <div className="modal-dialog" role="document">
+            <div className="modal-content">
+              <div className="modal-header">
+                <button type="submit" className="close" onClick={this.toggleChangeInterestLevelDisplay} aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 className="modal-title">Changing Your Interest Level in {this.props.singleItem.movieName}</h4>
+              </div>
+
+              <form className="modal-body add-movie form-horizontal" ref={(ref) => this.changeInterestLevelFormRef = ref} onSubmit={this.handleChangeInterestLevel}>
+                <div className="form-group">
+                  <label className="col-sm-5 control-label" htmlFor="interestLevel">New Interest Level For This Movie:</label>
+                  <div className="col-sm-7">
+                    <input type="number" step="0.1" min="0" max="10" className="form-control" placeholder={this.props.singleItem.interestLevel}
+                      id="interestLevel" ref={(ref) => this.inputMovieInterestLevel = ref}/>
+                  </div>
+                </div>
+
+                <div className="form-group">
+                  <div className="col-sm-offset-3 col-sm-9">
+                    <div className="pull-right">
+                      <button type="submit" className="btn btn-success">Change Interest Level</button>
+                    </div>
+                  </div>
+                </div>
+              </form>
+
+            </div>
+          </div>
+        </div> */}
 
 
         <li className="movie-item media">
@@ -173,15 +235,37 @@ var WatchlistMovies = React.createClass({
                 <span className="label-item">Genre:</span>{this.props.singleItem.genres.join(", ")}
               </div>
 
-              <div>
+              <div className="description">
                 <span className="label-item">Summary:</span>
                 <span className="movie-notes">{this.props.singleItem.Summary}</span>
               </div>
 
               <div className="release-date" >
                 <span className="label-item">Release Year:</span>{this.props.singleItem.releaseDate}
+              </div>
+
+              <div className="interest-duration" >
+                <button
+                  className={`btn btn-xs ${this.props.singleItem.interestLevel === 0 ? 'btn-danger' : null}`}
+                  onClick={() => this.handleChangeInterestLevel(0)}>
+                    <span className="glyphicon glyphicon-remove-sign"></span>
+                  </button>
+                <button
+                  className={`btn btn-xs ${this.props.singleItem.interestLevel === 1 ? 'btn-warning' : null}`}
+                  onClick={() => this.handleChangeInterestLevel(1)}>
+                    <span className="glyphicon glyphicon-minus-sign"></span>
+                </button>
+                <button
+                  className={`btn btn-xs ${this.props.singleItem.interestLevel === 2 ? 'btn-success' : null}`}
+                  onClick={() => this.handleChangeInterestLevel(2)}>
+                    <span className="glyphicon glyphicon-ok-sign"></span>
+                </button>
+                {/* <span class="slidecontainer" style={{width: '40%'}}>
+                  <input type="range" min="0" max="2" value={this.props.singleItem.interestLevel} class="slider" id="myRange"></input>
+                </span> */}
                 <span className="pull-right">{this.props.singleItem.duration} minutes</span>
                 <span className="label-item pull-right">Duration:</span>
+
               </div>
               {/*<div className="reviews">
                 <span className="label-item">Rotten Tomatoes: </span>{this.props.singleItem.rottenTomatoes}
