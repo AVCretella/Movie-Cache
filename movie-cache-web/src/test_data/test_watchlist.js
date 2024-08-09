@@ -8,7 +8,8 @@ const watchlist = [
         "genres":["Action","Crime","Drama","Thriller"],
         "releaseDate":2016,
         "Summary":"As a math savant uncooks the books for a new client, the Treasury Department closes in on his activities, and the body count starts to rise.",
-        "duration":128
+        "duration":128,
+        "interestLevel":2
     },
     {
         "id": "2",
@@ -19,7 +20,8 @@ const watchlist = [
         "genres":["Biography", "Drama", "History"],
         "releaseDate":2018,
         "Summary":"A look at the life of the astronaut, Neil Armstrong, and the legendary space mission that led him to become the first man to walk on the Moon on July 20, 1969.",
-        "duration":141
+        "duration":141,
+        "interestLevel":2
     },
     {
         "id": "3",
@@ -30,7 +32,8 @@ const watchlist = [
         "genres":["Biography", "Drama", "History"],
         "releaseDate":2016,
         "Summary":"The story of a team of female African-American mathematicians who served a vital role in NASA during the early years of the U.S. space program.",
-        "duration":127
+        "duration":127,
+        "interestLevel":2
     },
     {
         "id": "4",
@@ -41,7 +44,8 @@ const watchlist = [
         "genres":["Animation", "Drama", "Family", "Musical", "Romance"],
         "releaseDate":1996,
         "Summary":"A deformed bell-ringer must assert his independence from a vicious government minister in order to help his friend, a gypsy dancer.",
-        "duration":91
+        "duration":91,
+        "interestLevel":2
     },
     {
         "id": "5",
@@ -52,7 +56,8 @@ const watchlist = [
         "genres":["Biography", "Drama", "History"],
         "releaseDate":2015,
         "Summary":"In 1912 London, a young working mother is galvanized into radical political activism supporting the right for women to vote, and is willing to meet violence with violence to achieve this end.",
-        "duration":106
+        "duration":106,
+        "interestLevel":1
     }
 ]
 

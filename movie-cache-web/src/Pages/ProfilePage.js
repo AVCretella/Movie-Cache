@@ -2,10 +2,13 @@ import { useParams } from "react-router-dom";
 import tempProfiles from "../test_data/test_profiles"
 import { useState, useEffect } from 'react'
 import axios from 'axios'
+import useUser from "../hooks/useUser";
 
 const ProfilePage = () => {
     const [profileInfo, setProfileInfo] = useState({userName: "bing", userId: ""})
     const {profileId } = useParams();
+
+    const { user, isLoading } = useUser();
 
     useEffect(async () => {
         const loadProfileInfo = async () => {

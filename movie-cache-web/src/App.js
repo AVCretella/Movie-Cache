@@ -11,6 +11,10 @@ import TrendingPage from './Pages/Trending';
 import UsersPage from './Pages/Users';
 import MoviePage from './Pages/MoviePage';
 import NotFoundPage from './Pages/NotFoundPage';
+import CreateAccountPage from './Pages/CreateAccountPage.js';
+import LoginPage from './Pages/LoginPage.js';
+
+
 
 function App() {
   return (
@@ -22,6 +26,8 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/about" element={<AboutPage />} />
+        <Route path="/createAccount" element={<CreateAccountPage />} />
+        <Route path="/login" element={<LoginPage />} />
         <Route path="/movie:/:movieId" element={<MoviePage />} />
         <Route path="/profile/:profileId" element={<ProfilePage />} />
         <Route path="/trending" element={<TrendingPage />} />
