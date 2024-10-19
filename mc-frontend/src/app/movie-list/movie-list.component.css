@@ -1,0 +1,14 @@
+mat-button {
+    display: inline-block;
+}
+.movie-list-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* centers horizontally */
+    align-items: center; /* centers vertically */
+}
+
+.movie-cards {
+    width: 50%;
+    padding: 10px;
+}

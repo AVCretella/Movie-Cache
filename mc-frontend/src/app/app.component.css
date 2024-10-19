@@ -1,0 +1,36 @@
+.content-container {
+    /* overflow: auto; */
+    height: 95%;
+    width: 100%;
+}
+
+.content {
+    background-color: #85afee;
+    width:85%;
+    height: 100%;
+    float:left;
+}
+
+.header {
+    height: 4%;
+}
+
+.side-by-side {
+    height: 100%;
+    width:100%;
+    display: inline-block
+}
+
+.sidenav {
+    background-color: #d0fff9;
+    /* border-right: 1px solid #000000; */
+    width: 15%;
+    height: 100%;
+    float:left;
+}
+
+
+/* removes scrollbar but might be janky */
+/* ::-webkit-scrollbar { 
+    display: none; 
+} */

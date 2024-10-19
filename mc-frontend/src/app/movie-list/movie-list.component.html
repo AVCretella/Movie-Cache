@@ -1,0 +1,18 @@
+<p>this is where you'll see all your movies</p>
+
+<div class="listActions">
+    <button mat-button>Sort By</button>
+    <button mat-button>Search</button>
+    <button mat-button>Add Movie</button>
+</div>
+
+<div>
+    <h1>{{pageTitle}}</h1>
+</div>
+
+    <img style="max-width:400px" src="assets/top border goose transparent.png.png"/>
+<div class="movie-list-container">
+    <div class="movie-cards" *ngFor="let movie of movieList" >
+        <app-movie-card [movieInfo]="movie"></app-movie-card>
+    </div>
+</div>

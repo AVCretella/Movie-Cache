@@ -1,0 +1,27 @@
+mat-toolbar {
+    background: linear-gradient(120deg, rgba(2,0,36,1) 0%, rgba(86,221,162,1) 75%, rgba(0,212,255,1) 100%);
+    opacity: 90%;
+    font-weight: 200;
+    color: rgb(240, 255, 236);
+    width:100%;
+    /* justify-content: right; */
+}
+
+.header-icon {
+    float: right;
+    cursor: pointer;
+    padding-left: 2px;
+    padding-right: 2px;
+    border-radius: 20%;
+}
+
+.header-icon:hover {
+    cursor: pointer;
+    background-color: rgb(203, 255, 231);
+    color: rgb(65, 65, 65);
+}
+
+.main-header {
+    height: 100%;
+    width: 100%;
+}
