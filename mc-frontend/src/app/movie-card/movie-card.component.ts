@@ -8,7 +8,7 @@ import { MatCardModule } from '@angular/material/card';
     MatCardModule
   ],
   templateUrl: './movie-card.component.html',
-  styleUrl: './movie-card.component.css'
+  styleUrls: ['./movie-card.component.css', '../app.component.css']
 })
 export class MovieCardComponent {
   @Input() listType: String | null = "favoritesList";
