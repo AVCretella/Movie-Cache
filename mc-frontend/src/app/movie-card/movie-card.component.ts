@@ -1,17 +1,25 @@
 import { Component, Input, Output } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-movie-card',
   standalone: true,
   imports: [
-    MatCardModule
+    CommonModule,
+    MatCardModule,
+    MatButtonModule,
+    MatIconModule,
+    MatTooltipModule
   ],
   templateUrl: './movie-card.component.html',
   styleUrls: ['./movie-card.component.css', '../app.component.css']
 })
 export class MovieCardComponent {
-  @Input() listType: String | null = "favoritesList";
+  @Input() listType: String | null = "favorites";
   @Input() movieInfo: any = {};
   @Output() rankChange = 0; //A number that will correlate to the # of places a movie will move up or down on the ranked list
   

@@ -17,14 +17,19 @@ export const routes: Routes = [
         title: 'Friends List'
     },
     {
-        path: 'movies/favorites',
+        path: 'lists/favorites',
         component: MovieListComponent,
         title: 'Favorite Moviess'
     },
     {
-        path:'movies/watchlist',
+        path:'lists/watchlist',
         component: MovieListComponent,
         title: 'Watchlist'
+    },
+    {
+        path:'lists/*',
+        component: MovieListComponent,
+        title: 'a different list'
     },
     {
         path: '**',

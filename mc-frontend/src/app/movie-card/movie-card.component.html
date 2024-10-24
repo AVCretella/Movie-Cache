@@ -1,55 +1,67 @@
 <mat-card>
-    <!-- TODO put the buttons that you want, for ranked stuff the ones that you change rank and move movies
-        for watchlist, the trailers and the ability to move to faves -->
-    <div className="col-sm-2">
+    <div class="movie-card">
+        <!-- TODO put the buttons that you want, for ranked stuff the ones that you change rank and move movies
+            for watchlist, the trailers and the ability to move to faves -->
+        <div class="col-sm-3">
             <img src="{{movieInfo.posterURL}}" alt="{{movieInfo.movieName}} Poster Unavailable">
-    </div>
+        </div>
 
-    <div className="col-sm-8">
-        <div className="movie-info media-body">
-            <div className="movie-head">
-                <span className="movie-name">{{movieInfo.movieName}}</span>
-                <span className="pull-right">
-                    <button className="movie-delete btn btn-sm btn-danger" title="Delete this movie from the list" onclick=removeFromList()>
-                    <span className="glyphicon glyphicon-remove"></span></button>
-                </span>
-                <button className="btn btn-primary btn-sm pull-right" onclick=toggleChangeRankDisplay()>
-                    <span className="rank">{{movieInfo.rank}}</span>
-                </button>
-            </div>
+        <div class="col-sm-8">
+            <div class="movie-info media-body">
+                <div class="movie-head">
+                    <span class="movie-name">{{movieInfo.movieName}}</span>
+                    <span class="pull-right">
+                        <button matTooltip="Remove From List" mat-raised-button color="warn" onclick=removeFromList()>
+                            <mat-icon >delete</mat-icon>
+                        </button>
+                    </span>
+                    <button mat-raised-button class="btn btn-primary btn-sm pull-right" onclick=toggleChangeRankDisplay()>
+                        <span class="rank">{{movieInfo.rank}}</span>
+                    </button>
+                </div>
 
-            <div className="director-name">
-                <span className="label-item">Directed By: </span>{{movieInfo.directorName}}
-            </div>
+                <div class="director-name">
+                    <span class="label-item">Directed By: </span>{{movieInfo.directorName}}
+                </div>
 
-            <div className="cast">
-                <span className="label-item">Actors: </span>{{movieInfo.actors}}
-            </div>
+                <div class="cast">
+                    <span class="label-item">Actors: </span>{{movieInfo.actors}}
+                </div>
 
-            <div className="genres">
-                <span className="label-item">Genre: </span>{{movieInfo.genres}}
-            </div>
+                <div class="genres">
+                    <span class="label-item">Genre: </span>{{movieInfo.genres}}
+                </div>
 
-            <div>
-                <span className="label-item">Summary:</span>
-                <span className="movie-notes">{{movieInfo.Summary}}</span>
-            </div>
+                <div>
+                    <span class="label-item">Summary:</span>
+                    <span class="movie-notes">{{movieInfo.Summary}}</span>
+                </div>
 
-            <div className="release-date">
-                <span className="label-item">Release Year:</span>{{movieInfo.releaseDate}}
+                <div class="release-date">
+                    <span class="label-item">Release Year:</span>{{movieInfo.releaseDate}}
 
-                <span className="pull-right">{{movieInfo.viewCount}}</span>
-                <span className="label-item pull-right" onclick=toggleChangeTimesSeenDisplay()><a href="#">Times Seen:</a></span>
-            </div>
+                    <span class="pull-right">{{movieInfo.viewCount}}</span>
+                    <span class="label-item pull-right" onclick=toggleChangeTimesSeenDisplay()><a href="#">Times Seen:</a></span>
+                </div>
 
-            <div className="personal-rating">
-                <span className="label-item">Duration:</span>
-                <span>{{movieInfo.duration}} minutes</span>
+                <div class="personal-rating">
+                    <span class="label-item">Duration:</span>
+                    <span>{{movieInfo.duration}} minutes</span>
 
-                <span className="pull-right">{{movieInfo.personalRating}}</span>
-                <span className="label-item personal-rating pull-right" onclick=this.toggleChangePersonalRatingDisplay()><a href="#">Your Rating:</a></span>
-            </div>
+                    <span
+                        class="pull-right">
+                        {{movieInfo.personalRating}}
+                    </span>
+                    <span 
+                        *ngIf="listType === 'favorites'"
+                        class="label-item personal-rating pull-right"
+                        onclick=this.toggleChangePersonalRatingDisplay()>
+                        <a href="#">Your Rating:</a>
+                    </span>
+                </div>
 
-        </div>  
+
+            </div>  
+        </div>
     </div>
 </mat-card>
