@@ -3,6 +3,233 @@ mat-card {
 }
 
 img {
-    max-width: 20%;
-    max-height: 20%;
+    width: 100%;
+    height: 100%
+    /* max-width: 20%;
+    max-height: 20%; */
 }
+
+
+
+.label-item {
+    font-weight: bold;
+    color: #4CAEFF;
+    padding-right: 10px;
+}
+
+.media {
+    margin-top: 5px;
+}
+
+.movie-card {
+    display: flex;
+    align-items: center; /* Vertically align items (optional) */
+}
+
+.movie-card .movie-item .movie-delete {
+    margin-left: .7em;
+    display: block;
+}
+
+.movie-name {
+    font-weight: bold;
+    color: #296B73;
+    font-size: 1.5em;
+}
+
+.movie-notes {
+    font-style: italic;
+}
+
+.personal-rating, .interest-level a{
+    cursor: pointer;
+}
+
+.col-sm-1,
+.col-sm-2,
+.col-sm-9,
+.col-sm-10 {
+  display: inline-block;
+  float: none;
+}
+
+.col-sm-2,
+.col-sm-9,
+.col-sm-10 {
+  vertical-align: middle;
+}
+
+.col-sm-1 .btn-up {
+  background-color: #18C1EF;
+}
+
+.col-sm-1 .btn .btn-down {
+  background-color: #ff3399;
+}
+
+
+
+
+
+
+  .item-list {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+    font-size: 1.5rem;
+    line-height: 120%;
+  }
+  
+  .item-list .media {
+    margin-top: 5px;
+  }
+  
+  .item-list .movie-item {
+    padding: 10px;
+  }
+  
+  .item-list .movie-item:nth-child(2n) {
+      background: rgba(255,255,255,.6);
+      border-radius: 5px;
+  }
+  
+  /* TODO
+            need to figure out how to have the correct formatting for ranked list
+            The change rank div and li of movie information is wrapped in one div, so
+            the current formatting will take the second child of that div (which is the movie's information div)
+            and considering it to be the one that needs to be formatted, so every movie, rather than every other
+            has the formatting that we Want
+  */
+  
+  .item-list .movie-item:last-child {
+    border-bottom: none;
+  }
+  
+  .item-list .movie-item .movie-delete {
+    margin-left: .7em;
+    display: block;
+  }
+  
+  /*The color of the Title of the movie*/
+  .item-list .movie-name {
+    font-weight: bold;
+    color: #296B73;
+    font-size: 1.5em;
+  }
+  
+  .item-list .movie-notes {
+    font-style: italic;
+  }
+  
+  /*The color of the labels for movie information in the list*/
+  .item-list .label-item {
+    font-weight: bold;
+    color: #4CAEFF;
+    padding-right: 10px;
+  }
+  
+  .personal-rating .interest-level a{
+    cursor: pointer;
+  }
+  
+  .item-list .movie-release {
+    font-style: italic;
+  }
+  
+  /* These will center all movie info */
+  .col-sm-1, .col-sm-2, .col-sm-9, .col-sm-10 {
+    display: inline-block;
+    float: none;
+  }
+  
+  .col-sm-2, .col-sm-9, .col-sm-10 {
+    vertical-align: middle;
+  }
+  
+  .col-sm-1 .btn-up {
+    background-color: #18C1EF;
+  }
+  
+  .col-sm-1 .btn .btn-down {
+    background-color: #ff3399;
+  }.item-list {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+    font-size: 1.5rem;
+    line-height: 120%;
+  }
+  
+  .item-list .media {
+    margin-top: 5px;
+  }
+  
+  .item-list .movie-item {
+    padding: 10px;
+  }
+  
+  .item-list .movie-item:nth-child(2n) {
+      background: rgba(255,255,255,.6);
+      border-radius: 5px;
+  }
+  
+  /* TODO
+            need to figure out how to have the correct formatting for ranked list
+            The change rank div and li of movie information is wrapped in one div, so
+            the current formatting will take the second child of that div (which is the movie's information div)
+            and considering it to be the one that needs to be formatted, so every movie, rather than every other
+            has the formatting that we Want
+  */
+  
+  .item-list .movie-item:last-child {
+    border-bottom: none;
+  }
+  
+ .movie-item, .movie-delete {
+    margin-left: .7em;
+    display: block;
+  }
+  
+  /*The color of the Title of the movie*/
+  .item-list .movie-name {
+    font-weight: bold;
+    color: #296B73;
+    font-size: 1.5em;
+  }
+  
+  .item-list .movie-notes {
+    font-style: italic;
+  }
+  
+  /*The color of the labels for movie information in the list*/
+  .item-list .label-item {
+    font-weight: bold;
+    color: #4CAEFF;
+    padding-right: 10px;
+  }
+  
+  .personal-rating .interest-level a{
+    cursor: pointer;
+  }
+  
+  .item-list .movie-release {
+    font-style: italic;
+  }
+  
+  /* These will center all movie info */
+  .col-sm-1, .col-sm-2, .col-sm-9, .col-sm-10 {
+    display: inline-block;
+    float: none;
+  }
+  
+  .col-sm-2, .col-sm-9, .col-sm-10 {
+    vertical-align: middle;
+  }
+  
+  .col-sm-1 .btn-up {
+    background-color: #18C1EF;
+  }
+  
+  .col-sm-1 .btn .btn-down {
+    background-color: #ff3399;
+  }
