@@ -24,7 +24,7 @@ export class MovieCardComponent {
   @Output() rankChange = 0; //A number that will correlate to the # of places a movie will move up or down on the ranked list
   
   ngOnInit() {
-    console.log("movie info passed: ", this.movieInfo)
+    // console.log("movie info passed: ", this.movieInfo)
   }
   
   

@@ -1,32 +1,44 @@
-import express from 'express';
-// import { MongoClient } from 'mongodb'
-// import { routeNames, validateRequestBody } from './validation.js';
 
-const { MongoClient, ServerApiVersion } = require('mongodb');
-const uri = "mongodb+srv://movieTest:testingMovieCache11@movie-cache.ugxb4.mongodb.net/?retryWrites=true&w=majority&appName=Movie-Cache";
+import 'dotenv/config';
+import express from 'express';
+import { MongoClient, ServerApiVersion } from 'mongodb';
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
+const uri = "mongodb+srv://" + process.env.MONGO_USERNAME + ":" + process.env.MONGO_PASSWORD + "@movie-cache.ugxb4.mongodb.net/?retryWrites=true&w=majority&appName=Movie-Cache";
 const client = new MongoClient(uri, {
-    serverApi: {
-        version: ServerApiVersion.v1,
-        strict: true,
-        deprecationErrors: true,
-    }
+  serverApi: {
+    version: ServerApiVersion.v1,
+    strict: true,
+    deprecationErrors: true,
+  }
 });
 
+const app = express()
+const port = process.env.PORT || 4200;
+app.use(express.json());
+let db = {}
+
+
 async function run() {
-    try {
-      // Connect the client to the server	(optional starting in v4.7)
-      await client.connect();
-      // Send a ping to confirm a successful connection
-      await client.db("admin").command({ ping: 1 });
-      console.log("Pinged your deployment. You successfully connected to MongoDB!");
-    } finally {
-      // Ensures that the client will close when you finish/error
-      await client.close();
-    }
+  try {
+    // Connect the client to the server	(optional starting in v4.7)
+    await client.connect();
+    // Send a ping to confirm a successful connection
+    db = client.db("movie-cache");
+    await client.db("movie-cache").command({ ping: 1 });
+    console.log("Pinged your deployment. You successfully connected to MongoDB!");
+  } finally {
+    // Ensures that the client will close when you finish/error
+    await client.close();
   }
-  run().catch(console.dir);
+}
+run().catch(console.dir);
+
+app.get('/movies', async(req, res) => {
+  const movies = await db.collection("movies").find().toArray();
+  console.log(movies)
+  res.json(movies)
+})
 
 // let ratings = [
 //     {
@@ -97,15 +109,62 @@ async function run() {
 //     }
 // }) 
 
-// app.get('/hello', (req, res) => {
-//     res.send(("hello you did it"))
-// })
+app.get('/hello', (req, res) => {
+    res.send(("hello you did it"))
+})
 
-// app.post('/basicReq', (req, res) => {
-//     console.log(req.body)
-//     let resMessage = "we  got your req " + req.body.name
-//     res.send(resMessage)
-// })
+app.post('/basicReq', (req, res) => {
+    console.log(req.body)
+    let resMessage = "we  got your req " + req.body.name
+    res.send(resMessage)
+})
+
+app.post('/omdbSearch', (req, res) => {
+  console.log("going to hit omdb for a moive: ", req.body);
+})
+/*sendTitleToAPI: function(){
+  var searchTitle = this.inputMovieName.value;
+  var baseQuery = 'http://www.omdbapi.com/?t=';
+  var APIkey = '&apikey=2d5be971'; //God bless this key still working
+  var longPlot = '&plot=full'; //TODO let this be dynamically short or long, maybe user inputs this?
+  var year = '';
+  if (this.inputMovieReleaseDate.value != undefined) { //including the year will make the query more accurate
+    year = '&y=' + this.inputMovieReleaseDate.value;
+  }
+  console.log(searchTitle);
+  if(searchTitle != ""){
+    var fullQuery = baseQuery + searchTitle + year + APIkey;
+    console.log("fullquery: ", fullQuery);
+    fetch(baseQuery + searchTitle + year + APIkey) //send the query to OMDB for searching
+    .then(response => response.json())
+    .then(json =>{
+      console.log(JSON.stringify(json));
+
+      //Finally set all of the retrieved data to the respective spot in the AddMovie Form
+      if(json.Response != "False"){ //if we don't get an error from the API
+        this.inputMovieName.value = json.Title;
+        this.inputMoviePoster.value = json.Poster;
+        this.inputMovieDirector.value = json.Director;
+        this.inputMovieActors.value = json.Actors;
+        this.inputMovieGenre.value = json.Genre;
+        this.inputMovieReleaseDate.value = json.Year;
+        this.inputMovieSummary.value = json.Plot;
+        this.inputMovieDuration.value = json.Runtime;
+
+        //TODO Run through the ratings array and find "Rotten Tomatoes"
+        // for (i in json.Ratings){
+        //   if(json.Ratings[i].Source == "Rotten Tomatoes"){
+        //     // this.inputMovieRottenTomatoes.value = json.Ratings[i].Value; TODO need to save this in movie object
+        //     break;
+        //   }
+        //   console.log("ratings ", json.Ratings[i]);
+        // }
+      } else {
+        this.inputMovieName.value = this.state.defaultNameNotFound;
+      }
+    });
+  }
+},*/
 
 // // //same as above, except no object was sent, we just parsed the url that was sent
 // // //can add as many  :'s as you want, each will be a param

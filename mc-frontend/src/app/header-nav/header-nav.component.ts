@@ -14,7 +14,7 @@ import { RouterLink } from '@angular/router';
     MatToolbarModule,
     MatCardModule,
     MatTooltipModule
-    ],
+  ],
   templateUrl: './header-nav.component.html',
   styleUrl: './header-nav.component.css'
 })

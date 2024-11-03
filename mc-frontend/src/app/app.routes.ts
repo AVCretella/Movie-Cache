@@ -16,20 +16,20 @@ export const routes: Routes = [
         component: FriendsListComponent,
         title: 'Friends List'
     },
+    // {
+    //     path: 'lists/favorites',
+    //     component: MovieListComponent,
+    //     title: 'Favorite Moviess'
+    // },
+    // {
+    //     path:'lists/watchlist',
+    //     component: MovieListComponent,
+    //     title: 'Watchlist'
+    // },
     {
-        path: 'lists/favorites',
+        path:'lists/:listType',
         component: MovieListComponent,
-        title: 'Favorite Moviess'
-    },
-    {
-        path:'lists/watchlist',
-        component: MovieListComponent,
-        title: 'Watchlist'
-    },
-    {
-        path:'lists/*',
-        component: MovieListComponent,
-        title: 'a different list'
+        // Title will be set dynamically
     },
     {
         path: '**',

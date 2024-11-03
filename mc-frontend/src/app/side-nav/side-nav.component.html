@@ -1,3 +1,34 @@
-<div *ngFor="let tab of tabNames">
-    <button mat-button>{{tab}}</button>
+<div>
+    <button mat-button>Favorites</button>
+</div>
+
+<div>
+    <mat-icon matTooltip="Watchlist" routerLink="/lists/watchlist" class="header-icon">visibility</mat-icon>
+</div>
+
+<div>
+    <button 
+        *ngIf="userInfo.otherListIDs"
+        mat-button>
+        Other Lists
+    </button>
+    <button
+        *ngIf="!userInfo.otherListIDs"
+        mat-button>
+        Create a New List
+    </button>
+</div>
+
+
+
+
+<div class="bottomSideNavTODO">
+    <div>
+        <button mat-button>Info</button>
+    </div>
+
+    <div>
+        <button mat-button>Contact Us</button>
+    </div>
+    
 </div>

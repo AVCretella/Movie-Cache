@@ -26,7 +26,7 @@ import { MovieListComponent } from './movie-list/movie-list.component';
 export class AppComponent {
   displayMessage = 'Movie-Cache';
   displayedListTitle = "watchlist";
-  movieTypes = ["FAVORITES", "WATCHLIST", "GENERIC"];
-  sidenavTabs = ["Favorites", "Watchlist", "Other Lists", "Explore"]
-  typeOfMovieList = this.movieTypes[1];
+  // movieTypes = ["FAVORITES", "WATCHLIST", "GENERIC"];
+  sidenavTabs = ["Favorites", "Watchlist", "Other Lists", "Info", "Contact Us"]
+  // typeOfMovieList = this.movieTypes[1];
 }
