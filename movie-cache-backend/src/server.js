@@ -40,6 +40,12 @@ app.get('/movies', async(req, res) => {
   res.json(movies)
 })
 
+app.post('/createUser', async(req, res) => {
+  console.log(req.body);
+  // await db.collection("users").insert(req.body)
+  res.send("User Added Successfully")
+})
+
 // let ratings = [
 //     {
 //         movieId: "1",
@@ -125,7 +131,7 @@ app.post('/omdbSearch', (req, res) => {
 /*sendTitleToAPI: function(){
   var searchTitle = this.inputMovieName.value;
   var baseQuery = 'http://www.omdbapi.com/?t=';
-  var APIkey = '&apikey=2d5be971'; //God bless this key still working
+  var APIkey = '&apikey='; //God bless this key still working
   var longPlot = '&plot=full'; //TODO let this be dynamically short or long, maybe user inputs this?
   var year = '';
   if (this.inputMovieReleaseDate.value != undefined) { //including the year will make the query more accurate

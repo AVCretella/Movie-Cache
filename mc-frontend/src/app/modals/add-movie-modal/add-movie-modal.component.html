@@ -1,0 +1,19 @@
+<div>
+    <form [formGroup]="addMovieForm" class="addMovieModal" (ngSubmit)="retrieveMovie()">
+        <mat-card>
+            <div>
+                <mat-form-field>
+                    <mat-label>Movie Title</mat-label>
+                    <span matInput formControlName="movieName"></span>
+                </mat-form-field>
+            </div>
+        </mat-card>
+
+        <button
+            mat-button
+            type="submit">
+            <span>Search</span>
+        </button>
+            
+    </form>
+</div>

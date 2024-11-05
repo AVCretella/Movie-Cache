@@ -6,10 +6,14 @@ import { MovieCardComponent } from '../movie-card/movie-card.component';
 import { MoviesService } from '../services/movies.service';
 import { Title } from '@angular/platform-browser';
 
+import { AddMovieModalComponent } from '../modals/add-movie-modal/add-movie-modal.component';
+import { MatDialog } from '@angular/material/dialog';
+
 @Component({
   selector: 'app-movie-list',
   standalone: true,
   imports: [
+    MatDialog,
     CommonModule,
     MatButtonModule,
     MovieCardComponent
@@ -22,7 +26,8 @@ export class MovieListComponent {
   constructor(
     private route: ActivatedRoute,
     private movieService: MoviesService,
-    private titleService: Title
+    private titleService: Title,
+    private dialog: MatDialog
   ) { }
 
   listType: string | null = null;
@@ -51,6 +56,12 @@ export class MovieListComponent {
       }
       this.titleService.setTitle(this.pageTitle);
     });
+  }
+
+  addMovie() {
+    this.dialog.open(AddMovieModalComponent, {
+
+    })
   }
 
   async getAllMovies() {   
