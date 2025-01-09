@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Inject, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { ActivatedRoute } from '@angular/router';
@@ -7,13 +7,12 @@ import { MoviesService } from '../services/movies.service';
 import { Title } from '@angular/platform-browser';
 
 import { AddMovieModalComponent } from '../modals/add-movie-modal/add-movie-modal.component';
-import { MatDialog } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-movie-list',
   standalone: true,
   imports: [
-    MatDialog,
     CommonModule,
     MatButtonModule,
     MovieCardComponent
@@ -59,6 +58,7 @@ export class MovieListComponent {
   }
 
   addMovie() {
+    console.log("Opened the add movie dialog")
     this.dialog.open(AddMovieModalComponent, {
 
     })

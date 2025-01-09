@@ -12,7 +12,7 @@ export class MoviesService {
   ) { }
 
   getAllMovies(): Observable<any> {
-    return this.http.get("http://localhost:4200/movies");
+    return this.http.get("http://localhost:3000/movies");
   }
 
   // getAllMovies() {
@@ -24,6 +24,10 @@ export class MoviesService {
 
   getFavoritesList() {
     return this.testFavoritesList;
+  }
+
+  searchForMovie(title: any, year?: any): Observable<any> {
+    return this.http.post("http://localhost:3000/searchForMovie", {movieTitle: title, movieReleaseYear: year});
   }
 
   testWatchlistData = [

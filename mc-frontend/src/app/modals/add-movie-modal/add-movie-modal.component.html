@@ -1,19 +1,36 @@
-<div>
+<div
+    *ngIf="!movieFound"    
+    id="addMovieDialogContainer">
     <form [formGroup]="addMovieForm" class="addMovieModal" (ngSubmit)="retrieveMovie()">
         <mat-card>
             <div>
                 <mat-form-field>
                     <mat-label>Movie Title</mat-label>
-                    <span matInput formControlName="movieName"></span>
+                    <input matInput formControlName="movieName"/>
+                </mat-form-field>
+
+                
+            </div>
+            <div>
+                <mat-form-field>
+                    <mat-label>Release Date</mat-label>
+                    <input matInput formControlName="movieReleaseDate"/>
                 </mat-form-field>
             </div>
-        </mat-card>
-
-        <button
-            mat-button
-            type="submit">
-            <span>Search</span>
-        </button>
             
+            <div>
+                <button
+                    mat-button
+                    type="submit">
+                    <span>Search</span>
+                    <!-- TODO make this not highlight until at least the name is in -->
+                </button>
+            </div>
+           
+        </mat-card>
     </form>
+</div>
+
+<div *ngIf="movieFound">
+    complete
 </div>

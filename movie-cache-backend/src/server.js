@@ -2,6 +2,7 @@
 import 'dotenv/config';
 import express from 'express';
 import { MongoClient, ServerApiVersion } from 'mongodb';
+import cors from 'cors'
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const uri = "mongodb+srv://" + process.env.MONGO_USERNAME + ":" + process.env.MONGO_PASSWORD + "@movie-cache.ugxb4.mongodb.net/?retryWrites=true&w=majority&appName=Movie-Cache";
@@ -14,8 +15,12 @@ const client = new MongoClient(uri, {
 });
 
 const app = express()
+
 const port = process.env.PORT || 4200;
-app.use(express.json());
+app.use(express.json(), cors({origin: 'https://localhost:3000'}));
+app.listen(port, () => {
+      console.log('server lsitening on port: ', port)
+  })
 let db = {}
 
 
@@ -29,15 +34,46 @@ async function run() {
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
   } finally {
     // Ensures that the client will close when you finish/error
-    await client.close();
+    // await client.close();
   }
 }
 run().catch(console.dir);
 
+//When searching for a single movie
+app.post('/searchForMovie', async(req, res) => {
+  console.log(req.body)
+  let title = req.body.movieTitle //required so will always come
+  let longPlot = '&plot=full'
+
+  let year = ''
+  if (req.body.movieReleaseYear) {
+    year = '&y=' + req.body.year
+  }
+
+  let finalURL = process.env['BASE_OMDB_URL'] + title + year + '&apikey=' + process.env['OMDB_API_KEY']
+  console.log(finalURL)
+  let movieResp = await fetch(finalURL)
+  .then(resp => {
+    return resp.json()
+  })
+  // .then((response) => { console.log(response) })
+  // .then((body) => { console.log(body) })
+
+  console.log(movieResp)
+  res.json(movieResp)
+})
+
 app.get('/movies', async(req, res) => {
-  const movies = await db.collection("movies").find().toArray();
-  console.log(movies)
-  res.json(movies)
+  try {
+    console.log("hit the all movies API, returning all")
+    console.log({db})
+    const movies = await db.collection("movies").find().toArray();
+    console.log(movies)
+    res.json(movies)
+  } catch (error) {
+    console.error("Error fetching movies:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 })
 
 app.post('/createUser', async(req, res) => {
@@ -113,21 +149,7 @@ app.post('/createUser', async(req, res) => {
 //     } else {
 //         res.sendStatus(404)
 //     }
-// }) 
-
-app.get('/hello', (req, res) => {
-    res.send(("hello you did it"))
-})
-
-app.post('/basicReq', (req, res) => {
-    console.log(req.body)
-    let resMessage = "we  got your req " + req.body.name
-    res.send(resMessage)
-})
-
-app.post('/omdbSearch', (req, res) => {
-  console.log("going to hit omdb for a moive: ", req.body);
-})
+// })
 /*sendTitleToAPI: function(){
   var searchTitle = this.inputMovieName.value;
   var baseQuery = 'http://www.omdbapi.com/?t=';

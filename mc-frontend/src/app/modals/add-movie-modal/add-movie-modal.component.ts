@@ -1,16 +1,24 @@
-import { Component } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Component, Inject } from '@angular/core';
+import { FormControl, ReactiveFormsModule, FormGroup, Validators } from '@angular/forms';
 import { MoviesService } from '../../services/movies.service';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCardModule } from '@angular/material/card';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-add-movie-modal',
   standalone: true,
-  imports: [],
+  imports: [
+    ReactiveFormsModule,
+    MatButtonModule,
+    MatInputModule,
+    MatFormFieldModule,
+    MatCardModule,
+    CommonModule
+  ],
   templateUrl: './add-movie-modal.component.html',
   styleUrl: './add-movie-modal.component.css'
 })
@@ -21,6 +29,9 @@ export class AddMovieModalComponent {
     private dialogRef: MatDialogRef<AddMovieModalComponent>
   ) {}
 
+  @Inject(MAT_DIALOG_DATA) public data: any;
+
+  movieFound = false
   retrievedMovie = {};
   retrievedMoviePosterUrl: string | null = null; //This will be used to display the retrieved poster to the user
 
@@ -46,12 +57,20 @@ export class AddMovieModalComponent {
 
   //Consume the form, and make an ombd request
   retrieveMovie() {
-    this.movieService.getAllMovies().subscribe((res) => {
-      if (res.data) {
-        console.log("this is the response for all movies: ", res)
-      }
-    })
-    return this.retrievedMovie
+    if (this.addMovieForm.valid) {
+        
+      this.movieService.searchForMovie(this.addMovieForm.value.movieName, this.addMovieForm.value.movieReleaseDate).subscribe((res) => {
+        if (res) {
+          console.log("this is the movie we tried to get: ", res)
+          this.movieFound = true
+        }
+      })
+      return this.retrievedMovie
+    } else {
+      console.log("Fill in all required fields")
+      this.addMovieForm.markAllAsTouched();
+    }
+    return
   }
 
   onNoClick(): void {
