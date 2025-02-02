@@ -1,8 +1,19 @@
 
 import 'dotenv/config';
 import express from 'express';
+import admin from 'firebase-admin'
+import credentials from '../credentials.json' assert { type: 'json' };
 import { MongoClient, ServerApiVersion } from 'mongodb';
 import cors from 'cors'
+
+// Initialize Firebase Admin SDK
+credentials.private_key = credentials.private_key.replace(/\\n/g, '\n');
+console.log(admin)
+// console.log(admin.default.credential)
+// console.log(admin['credential'])
+admin.initializeApp({
+  credential: admin.credential.cert(credentials),
+});
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const uri = "mongodb+srv://" + process.env.MONGO_USERNAME + ":" + process.env.MONGO_PASSWORD + "@movie-cache.ugxb4.mongodb.net/?retryWrites=true&w=majority&appName=Movie-Cache";

@@ -7,6 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCardModule } from '@angular/material/card';
 import { CommonModule } from '@angular/common';
+import { Movie } from '../../models/movie';
 
 @Component({
   selector: 'app-add-movie-modal',
@@ -32,7 +33,7 @@ export class AddMovieModalComponent {
   @Inject(MAT_DIALOG_DATA) public data: any;
 
   movieFound = false
-  retrievedMovie = {};
+  retrievedMovie:Movie = new Movie(""); //TODO initialize with empty movie
   retrievedMoviePosterUrl: string | null = null; //This will be used to display the retrieved poster to the user
 
   addMovieForm = new FormGroup({
@@ -63,6 +64,7 @@ export class AddMovieModalComponent {
         if (res) {
           console.log("this is the movie we tried to get: ", res)
           this.movieFound = true
+          this.retrievedMovie.Title = res.Title
         }
       })
       return this.retrievedMovie

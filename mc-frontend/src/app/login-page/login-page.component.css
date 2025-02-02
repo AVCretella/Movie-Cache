@@ -1,0 +1,10 @@
+/* Style the sign-in form */
+.sign-in-form {
+    max-width: 300px;
+    margin: 0 auto;
+  }
+  
+  .error-message {
+    color: red;
+    font-size: 12px;
+  }

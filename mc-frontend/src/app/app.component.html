@@ -2,7 +2,7 @@
   <app-header-nav [headerMessage]="displayMessage"></app-header-nav>
 </div>
 
-<div class="content-container">
+<div *ngIf="user" class="content-container">
   <div class="side-by-side">
 
     <div class="sidenav">
@@ -19,6 +19,11 @@
     </div>
     
   </div>
+</div>
+
+<div *ngIf="!user">
+  <span>what up boy</span>
+  <app-login-page></app-login-page>
 </div>
 
 
