@@ -2,7 +2,7 @@
   <app-header-nav [headerMessage]="displayMessage"></app-header-nav>
 </div>
 
-<div *ngIf="user" class="content-container">
+<div *ngIf="authService.currentUserSignal() as user" class="content-container">
   <div class="side-by-side">
 
     <div class="sidenav">
@@ -19,10 +19,11 @@
     </div>
     
   </div>
+  <div (click)="logout()">would you like to logout?</div>
 </div>
 
-<div *ngIf="!user">
-  <span>what up boy</span>
+<div *ngIf="user == null">
+  <span>No User Logged In</span>
   <app-login-page></app-login-page>
 </div>
 
