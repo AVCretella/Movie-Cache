@@ -8,6 +8,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatError, MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { Router } from '@angular/router';
+import { UserService } from '../services/user.service';
 import { from, Observable } from 'rxjs';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 
@@ -35,8 +36,6 @@ import { signInWithEmailAndPassword } from 'firebase/auth';
   styleUrl: './login-page.component.css'
 })
 export class LoginPageComponent {
-  nonForm_email: string = '';
-  nonForm_password: string = '';
 
   loginForm = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
@@ -54,6 +53,7 @@ export class LoginPageComponent {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
+    private userService: UserService,
     private router: Router
   ) {}
 
@@ -75,17 +75,8 @@ export class LoginPageComponent {
   emailSignIn(): void {
     let rawEmailSignin = this.loginForm.value as { email: string, password: string };
     console.log("Attempting to sign in with email and password: ", rawEmailSignin.email, rawEmailSignin.password)
-    // console.log(this.nonForm_email, this.nonForm_password)
-    
-    // this.authService.emailSignIn('newemail@gmail.com', 'newemail').subscribe({
-    //   next: () => console.log('hard-coded signin success'),
-    //   error: err => console.error('hard-coded signin error', err)
-    // });
-        
-    
-    
+
     this.authService.emailSignIn(rawEmailSignin.email, rawEmailSignin.password)
-      // .emailSignIn(this.nonForm_email, this.nonForm_password)
       .subscribe({
         next: () => {
           console.log("User signed in successfully");
@@ -108,6 +99,20 @@ export class LoginPageComponent {
       next: () => {
         console.log("User registered successfully");
         console.log("trying to auto-login")
+
+        //TODO create a new user object in the firestore db
+        this.userService.createNewUser(rawEmailReg.email, rawEmailReg.username)
+        .subscribe({
+          next:() => {
+            console.log('New User Record Created!');
+          },
+          error: (error) => {
+            console.error('Failed to create a new user:', error);
+            this.errorMessage = 'Registration successful, but user creation failed: ' + error.message;
+          }
+        })
+        
+
         this.authService.emailSignIn(rawEmailReg.email, rawEmailReg.password)
         .subscribe({
           next: () => {
@@ -129,17 +134,17 @@ export class LoginPageComponent {
   }
 
   //Allow the user to sign in with Google
-  googleSignIn() {
-    this.authService.googleSignIn().then(res => {
-      console.log("holy shit signed in with google", res);
-    }).catch(error => {
-      this.errorMessage = error.message;
-    });
-  }
+  // googleSignIn() {
+  //   this.authService.googleSignIn().then(res => {
+  //     console.log("holy shit signed in with google", res);
+  //   }).catch(error => {
+  //     this.errorMessage = error.message;
+  //   });
+  // }
 
-  googleRegister() {
+  // googleRegister() {
 
-  }
+  // }
 
 
 }
