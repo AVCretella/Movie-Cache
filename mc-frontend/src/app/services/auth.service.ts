@@ -41,10 +41,10 @@ export class AuthService {
     if (!email || !password) {
       return throwError(() => new Error('Email and password are required'));
     }
-    console.log('All Options:', this.firebaseAuth.app.options);
-    console.log('Auth API key:', this.firebaseAuth.app.options.apiKey);
-    console.log('Sign in attempt:', { email, passwordLength: password.length });
-    console.log('online?', navigator.onLine, email);
+    // console.log('All Options:', this.firebaseAuth.app.options);
+    // console.log('Auth API key:', this.firebaseAuth.app.options.apiKey);
+    // console.log('Sign in attempt:', { email, passwordLength: password.length });
+    // console.log('online?', navigator.onLine, email);
     console.log("Attempting to sign in with email and password:" + email + " " + password);
     
     return from(signInWithEmailAndPassword(this.firebaseAuth, email, password)).pipe(
@@ -84,19 +84,19 @@ export class AuthService {
     return this.firebaseAuth.currentUser;
   }
 
-  googleSignIn() {
-    const provider = new GoogleAuthProvider();  // Create a Google Auth provider
-    return signInWithPopup(this.firebaseAuth, provider)
-    .then((res)=> {
-      console.log("User signed in with Google:", res.user);
-      this.currentUserSignal.set({
-        email: res.user.email!,
-        username: res.user.displayName!
-      });
-      this.router.navigateByUrl('/');
-      return res.user
-    });  // Trigger Google sign-in popup
-  }
+  // googleSignIn() {
+  //   const provider = new GoogleAuthProvider();  // Create a Google Auth provider
+  //   return signInWithPopup(this.firebaseAuth, provider)
+  //   .then((res)=> {
+  //     console.log("User signed in with Google:", res.user);
+  //     this.currentUserSignal.set({
+  //       email: res.user.email!,
+  //       username: res.user.displayName!
+  //     });
+  //     this.router.navigateByUrl('/');
+  //     return res.user
+  //   });  // Trigger Google sign-in popup
+  // }
 
   signOut() {
     return this.firebaseAuth.signOut().then(() => {
