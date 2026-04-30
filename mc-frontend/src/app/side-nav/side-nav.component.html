@@ -1,34 +1,48 @@
-<div>
-    <button mat-button>Favorites</button>
-</div>
+<div class="side-nav-container">
+    <div class="side-nav-content">
+        <div class="side-nav-icon" routerLink="/lists/favorites">
+            <mat-icon matTooltip="Favorites" class="header-icon">favorite</mat-icon>
+            Favorites
+        </div>
 
-<div routerLink="/lists/watchlist">
-    <mat-icon matTooltip="Watchlist" routerLink="/lists/watchlist" class="header-icon">visibility</mat-icon>
-</div>
+        <div class="side-nav-icon" routerLink="/lists/watchlist">
+            <mat-icon matTooltip="Watchlist" class="header-icon">visibility</mat-icon>
+            Watchlist
+        </div>
 
-<div>
-    <button 
-        *ngIf="userInfo.otherListIDs"
-        mat-button>
-        Other Lists
-    </button>
-    <button
-        *ngIf="!userInfo.otherListIDs"
-        mat-button>
-        Create a New List
-    </button>
-</div>
+        <div class="side-nav-icon" routerLink="/lists/saved">
+            <mat-icon matTooltip="Saved Lists" class="header-icon">save</mat-icon>
+            Saved Lists
+        </div>
 
+        <div class="side-nav-icon" routerLink="/lists/created">
+            <mat-icon matTooltip="Created Lists" class="header-icon">build</mat-icon>
+            Created Lists
+        </div>
 
+        <div class="side-nav-icon" routerLink="/lists/dnf">
+            <mat-icon matTooltip="DNF List" class="header-icon">visibility_off</mat-icon>
+            DNF List
+        </div>
 
+        <div class="side-nav-icon" routerLink="/friends">
+            <mat-icon matTooltip="Friends" class="header-icon">group</mat-icon>
+            Friends
+        </div>
 
-<div class="bottomSideNavTODO">
-    <div>
-        <button mat-button>Info</button>
+        <div class="side-nav-icon" routerLink="/recommendations">
+            <mat-icon matTooltip="Recommendations" class="header-icon">share</mat-icon>
+            Shared
+        </div>
     </div>
 
-    <div>
-        <button mat-button>Contact Us</button>
+    <div class="bottomSideNav">
+        <div>
+            <button mat-button>Info</button>
+        </div>
+
+        <div>
+            <button mat-button>Contact Us</button>
+        </div>
     </div>
-    
 </div>

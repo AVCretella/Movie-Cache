@@ -1,80 +1,55 @@
-<h3>Login Page</h3>
-<div *ngIf="errorMessage">
-    <p class="error-message">{{ errorMessage }}</p>
+<div class="login-page">
+  <mat-card class="login-card">
+    <div class="login-header">
+      <h3>Movie Cache</h3>
+      <p>When your friend asks 'hey bud, got a movie suggestion?' and you've watched 300 movies that you'd<br>love to suggest but can only remember Monster's Inc, this app will have your back</p>
+    </div>
+
+    <div *ngIf="errorMessage" class="error-banner">
+      <p class="error-message">{{ errorMessage }}</p>
+    </div>
+
+    <div class="login-forms">
+      <section class="auth-section register-box">
+        <h4>Create account</h4>
+        <p class="section-copy">Don't have an account? Nobody's perfect.</p>
+        <form [formGroup]="registrationForm" (ngSubmit)="emailRegister()" autocomplete="off">
+          <mat-form-field appearance="outline">
+            <mat-label>Email</mat-label>
+            <input matInput formControlName="email" autocomplete="off" required />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Username</mat-label>
+            <input matInput formControlName="username" autocomplete="off" required />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Password</mat-label>
+            <input matInput type="password" formControlName="password" autocomplete="new-password" required />
+          </mat-form-field>
+
+          <button mat-raised-button color="primary" type="submit" [disabled]="registrationForm.invalid">Register</button>
+        </form>
+      </section>
+
+      <section class="auth-section login-box">
+        <h4>Sign in</h4>
+        <p class="section-copy">Already have an account? Damn right.</p>
+        <form [formGroup]="loginForm" (ngSubmit)="emailSignIn()">
+          <mat-form-field appearance="outline">
+            <mat-label>Email</mat-label>
+            <input matInput formControlName="email" required />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Password</mat-label>
+            <input matInput type="password" formControlName="password" required />
+          </mat-form-field>
+
+          <button mat-raised-button color="primary" type="submit" [disabled]="loginForm.invalid">Login</button>
+        </form>
+      </section>
+    </div>
+  </mat-card>
 </div>
-
-<br>
-<br>
-<br>
-<br>
-
-<!-- REGISTRATION -->
-<h4>Register with Email/Pass</h4>
-<form [formGroup]="registrationForm" (ngSubmit)="emailRegister()">
-    <mat-form-field>
-        <input matInput placeholder="Email" formControlName="email" required>
-        <!-- <mat-error *ngIf="registrationForm.get('email').hasError('required')">Email is required</mat-error>
-        <mat-error *ngIf="registrationForm.get('email').hasError('email')">Invalid email format</mat-error> -->
-    </mat-form-field>
-
-    <mat-form-field>
-        <input matInput placeholder="Username" formControlName="username" required>
-        <!-- <mat-error *ngIf="registrationForm.get('username').hasError('required')">Username is required</mat-error> -->
-    </mat-form-field>
-
-    <mat-form-field>
-        <input matInput type="password" placeholder="Password" formControlName="password" required>
-        <!-- <mat-error *ngIf="registrationForm.get('password').hasError('required')">Password is required</mat-error> -->
-    </mat-form-field>
-
-    <button mat-raised-button color="primary" type="submit" [disabled]="registrationForm.invalid">Register</button>
-</form>
-
-
-
-
-<!-- <button mat-raised-button color="accent" (click)="googleRegister()">Register with Google</button> -->
-
-
-<!-- LOGIN -->
-<!-- <button mat-raised-button color="accent" (click)="googleSignIn()">Sign In with Google</button> -->
-
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-
-<h4>Sign in with Email/Pass</h4>
-<form [formGroup]="loginForm" (ngSubmit)="emailSignIn()">
-    <mat-form-field>
-        <input matInput placeholder="Email" formControlName="email" required>
-        <!-- <mat-error *ngIf="loginForm.get('email').hasError('required')">Email is required</mat-error>
-        <mat-error *ngIf="loginForm.get('email').hasError('email')">Invalid email format</mat-error> -->
-    </mat-form-field>
-
-    <mat-form-field>
-        <input matInput type="password" placeholder="Password" formControlName="password" required>
-        <!-- <mat-error *ngIf="loginForm.get('password').hasError('required')">Password is required</mat-error> -->
-    </mat-form-field>
-
-    <button mat-raised-button color="primary" type="submit" [disabled]="loginForm.invalid">Login</button>
-</form>
-<!-- <button type="button" mat-raised-button color="accent" (click)="emailSignIn()">Sign In with Email/Pass</button> -->
-
-
-<!-- <h1>Sign in with Email/Pass without the form</h1>
-<div>
-    <div>
-        <input matInput placeholder="Email" [(ngModel)]="nonForm_email" required>
-    </div>
-
-    <div>
-        <input matInput placeholder="Password" [(ngModel)]="nonForm_password" required>
-    </div>
-
-    <button mat-raised-button color="primary" (click)="emailSignIn()">Login</button>
-</div> -->

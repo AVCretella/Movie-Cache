@@ -1,18 +1,33 @@
 <mat-toolbar class="main-header">
     <!-- <mat-card class="main-header"> -->
-        <div>{{headerMessage}}</div>
+        <div matTooltip="Home" class="home-route" routerLink="/home-feed">{{headerMessage}}</div>
         <div>
-            <mat-icon matTooltip="Profile" routerLink="/your-profile" class="header-icon">person</mat-icon>
-            <mat-icon matTooltip="Friends" routerLink="/friends" class="header-icon">people_alt</mat-icon>
-            <mat-icon matTooltip="Settings" routerLink="/settings" class="header-icon">settings</mat-icon>
             <mat-icon matTooltip="Home" routerLink="/home-feed" class="header-icon">home</mat-icon>
 
             <!-- TODO turn this one into a burger menu with links that are the other list titles -->
+             <!-- Your Other Lists -->
             <mat-icon matTooltip="Other Lists" routerLink="/lists/otherLists" class="header-icon">list</mat-icon>
 
             <!-- TODO remove the watchlist and favorites from here, theyre moving to the sidenav -->
+             <!-- Watch List -->
             <mat-icon matTooltip="Watchlist" routerLink="/lists/watchlist" class="header-icon">visibility</mat-icon>
+
+            <!-- Favorites List -->
             <mat-icon matTooltip="Favorites" routerLink="/lists/favorites" class="header-icon">favorite</mat-icon>
+
+            <!-- Friends List -->
+            <mat-icon matTooltip="Friends" routerLink="/friends" class="header-icon">people_alt</mat-icon>
+
+            <!-- User Profile -->
+            <mat-icon matTooltip="Profile" routerLink="/your-profile" class="header-icon">person</mat-icon>
+
+            <!-- User Settings -->
+            <mat-icon matTooltip="Settings" routerLink="/settings" class="header-icon">settings</mat-icon>
+
+            <!-- Logout -->
+            <ng-container *ngIf="authService.getCurrentUser()">
+              <mat-icon matTooltip="Logout" class="header-icon" (click)="logout()">logout</mat-icon>
+            </ng-container>
         </div>
     <!-- </mat-card> -->
 </mat-toolbar>

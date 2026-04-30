@@ -4,11 +4,12 @@ mat-toolbar {
     font-weight: 200;
     color: rgb(240, 255, 236);
     width:100%;
-    /* justify-content: right; */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .header-icon {
-    float: right;
     cursor: pointer;
     padding-left: 2px;
     padding-right: 2px;
@@ -21,6 +22,9 @@ mat-toolbar {
     color: rgb(65, 65, 65);
 }
 
+.home-route {
+    cursor: pointer;
+}
 .main-header {
     height: 100%;
     width: 100%;

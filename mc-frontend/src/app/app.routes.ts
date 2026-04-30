@@ -12,6 +12,11 @@ export const routes: Routes = [
         title: 'Home Page'
     },
     {
+        path: 'home',
+        component: HomeFeedComponent,
+        title: 'Home Page'
+    },
+    {
         path: 'friends',
         component: FriendsListComponent,
         title: 'Friends List'
