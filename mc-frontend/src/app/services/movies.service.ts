@@ -1,6 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, from, of } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
+import { Firestore, collection, query, where, getDocs } from '@angular/fire/firestore';
+import { environment } from '../../environments/environment';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -8,16 +12,15 @@ import { HttpClient } from '@angular/common/http';
 export class MoviesService {
 
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
+    private authService: AuthService,
+    private firestore: Firestore
   ) { }
 
   getAllMovies(): Observable<any> {
     return this.http.get("http://localhost:3000/movies");
   }
 
-  // getAllMovies() {
-  //   console.log("here you go clown")
-  // }
   getWatchlistMovies() {
     return this.testWatchlistData;
   }
@@ -26,9 +29,76 @@ export class MoviesService {
     return this.testFavoritesList;
   }
 
-  searchForMovie(title: any, year?: any): Observable<any> {
-    return this.http.post("http://localhost:3000/searchForMovie", {movieTitle: title, movieReleaseYear: year});
+  //TODO This will initially search our firestore, and if it isn't there it'll hit the omdb api
+  searchForMovie(title: any, year?: Number): Observable<any> {
+    const movieTitle = (title || '').toString().trim();
+    if (!movieTitle) {
+      console.log("NO MOVIE TITLE PROVIDED")
+      return of(null);
+    }
+
+    try {
+      console.log("apparently not authed", this.authService.getCurrentUser())
+      const moviesCol = collection(this.firestore, 'Movie');
+      let q = null;
+
+      if (year && Number.isInteger(year)) { //If user provides the year, include it in the query
+        q = query(moviesCol, where('Title', '==', movieTitle), where('Year', '==', year));
+      } else {
+        q = query(moviesCol, where('Title', '==', movieTitle));
+      }
+
+      // getDocs returns a Promise, convert to Observable and map to either
+      // the first Firestore hit or the backend OMDB call.
+      return from(getDocs(q)).pipe(
+        switchMap((snapshot: any) => {
+          if (snapshot && !snapshot.empty && snapshot.docs.length > 0) {
+            const doc = snapshot.docs[0];
+            const data = doc.data();
+            console.log("Found in Firestore!: ", data)
+            const mapped = this.mapFirestoreMovieToOmdb(data);
+            return of(mapped);
+          }
+
+          console.log("had to go to omdb for: ", { title, year })
+          // No Firestore hit: query OMDB directly from frontend
+          return this.callOmdb(title, year);
+        })
+      );
+    } catch (err) {
+      // If any runtime error occurs, fallback to OMDB
+      return this.callOmdb(title, year);
+    }
   }
+
+  private mapFirestoreMovieToOmdb(data: any) {
+    if (!data) { return null; }
+
+    // Try to map common local fields to OMDB-like response fields used elsewhere
+    return {
+      Title: data.Title || data.movieName || data.MovieName || '',
+      Year: data.Year || data.releaseDate || data.ReleaseDate || '',
+      Poster: data.Poster || data.posterURL || data.posterUrl || null,
+      Director: data.Director || data.directorName || '',
+      Actors: data.Actors || data.actors || '',
+      Genre: (Array.isArray(data.genres) ? data.genres.join(', ') : (data.Genre || data.genres || '')),
+      Plot: data.Plot || data.Summary || data.summary || '',
+      Runtime: data.Runtime || (data.duration ? `${data.duration} min` : ''),
+      // include the raw firestore doc for callers that may need more
+      _raw: data
+    };
+  }
+
+  private callOmdb(title: any, year?: Number): Observable<any> {
+    const apiKey = (environment as any).OMDB_API_KEY || '';
+    const base = (environment as any).BASE_OMDB_URL || 'https://www.omdbapi.com/?t=';
+    const encoded = encodeURIComponent(title || '');
+    const yearParam = year ? `&y=${year}` : '';
+    const url = `${base}${encoded}${yearParam}&apikey=${apiKey}`;
+    return this.http.get(url);
+  }
+
+  //TODO will need a refresh button maybe for admins to update the movie in our db with the omdb version
 
   testWatchlistData = [
     {
