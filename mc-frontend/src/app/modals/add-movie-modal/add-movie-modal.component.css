@@ -1,3 +1,211 @@
 #addMovieDialogContainer {
-    padding: 25px
+    padding: 25px;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.listTypeSelector {
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: center;
+}
+
+.movieDetailsCard {
+    padding: 20px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.movieInfoDisplay {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #e0e0e0;
+    flex-shrink: 0;
+}
+
+.moviePoster {
+    flex-shrink: 0; /* Poster will never shrink */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.moviePoster img {
+    max-width: 150px;
+    height: auto;
+    border-radius: 4px;
+}
+
+.ratingsContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+}
+
+.ratingItem {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    justify-content: center;
+}
+
+.movieInfo {
+    flex: 1;
+}
+
+.movieInfo h2 {
+    margin: 0 0 15px 0;
+    font-size: 25px;
+    line-height: 1.1;
+}
+
+.movieInfo p {
+    margin: 3px 0;
+    line-height: 1.3;
+}
+
+.detailsForm {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.detailsForm h4 {
+    align-self: center;
+    color: #5db861;
+}
+
+.detailsForm div {
+    display: flex;
+    flex-direction: column;
+}
+
+
+/* Trying to get highlightable stars for rating input */
+.starRatingContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-bottom: 10px
+}
+
+.starRatingContainer label {
+    font-weight: 500;
+    color: #666;
+}
+
+.starRating {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    cursor: pointer;
+    align-items: center;
+    gap: 5px;
+}
+
+.detailsForm .starRating {
+    display: flex !important;
+    flex-direction: row !important;
+}
+
+.starRating svg,
+.starRating .starIcon {
+    display: inline-flex !important;
+    flex: 0 0 auto;
+    width: 28px;
+    height: 28px;
+    vertical-align: middle;
+}
+
+/* .starIcon {
+    width: 28px;
+    height: 28px;
+    cursor: pointer;
+    fill: #ddd;
+    color: #ddd;
+    transition: color 0.2s;
+    flex-shrink: 0;
+} */
+
+.starIcon:hover,
+.starIcon.filled {
+    transition: color 0.2s;
+    fill: #ffee07;
+    color: #948f59;
+}
+
+.ratingValue {
+    font-size: 0.9rem;
+    color: #666;
+    margin-top: 5px;
+    padding-bottom: 5px;
+}
+/*****************************************************/
+
+
+.topPrioritySection {
+    padding: 10px 0;
+}
+
+
+.checkboxRow {
+    display: flex;
+    gap: 8px;
+}
+
+.formActions {
+    gap: 10px;
+    margin-top: 20px;
+    justify-content: center;
+    padding-top: 10px;
+    border-top: 1px solid #e0e0e0;
+}
+
+mat-form-field {
+    width: 100%;
+}
+
+.company_rating_logo {
+    width: 16px;
+    height: 16px;
+}
+
+/* this one needs to be a little bigger to be visible */
+.imdb_logo {
+    width: 20px;
+    height: 20px;
+}
+
+
+
+/* Makes the form scrollabe - TODO hide the scrollbar */
+.formScrollContainer {
+    flex: 1;
+    overflow-y: auto;
+    padding-right: 8px;
+}
+
+.formScrollContainer::-webkit-scrollbar {
+    width: 6px;
+}
+
+.formScrollContainer::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.formScrollContainer::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 3px;
+}
+
+.formScrollContainer::-webkit-scrollbar-thumb:hover {
+    background: #999;
 }

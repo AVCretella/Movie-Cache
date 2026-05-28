@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Observable, from, of } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { switchMap, map } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
-import { Firestore, collection, query, where, getDocs } from '@angular/fire/firestore';
+import { Firestore, collection, query, where, getDocs, doc, addDoc, setDoc } from '@angular/fire/firestore';
 import { environment } from '../../environments/environment';
 import { AuthService } from './auth.service';
 
@@ -31,21 +31,20 @@ export class MoviesService {
 
   //TODO This will initially search our firestore, and if it isn't there it'll hit the omdb api
   searchForMovie(title: any, year?: Number): Observable<any> {
-    const movieTitle = (title || '').toString().trim();
+    const movieTitle = (title || '').toString().toLowerCase().trim();
     if (!movieTitle) {
       console.log("NO MOVIE TITLE PROVIDED")
       return of(null);
     }
 
     try {
-      console.log("apparently not authed", this.authService.getCurrentUser())
       const moviesCol = collection(this.firestore, 'Movie');
       let q = null;
 
       if (year && Number.isInteger(year)) { //If user provides the year, include it in the query
-        q = query(moviesCol, where('Title', '==', movieTitle), where('Year', '==', year));
+        q = query(moviesCol, where('TitleLower', '==', movieTitle), where('Year', '==', year));
       } else {
-        q = query(moviesCol, where('Title', '==', movieTitle));
+        q = query(moviesCol, where('TitleLower', '==', movieTitle));
       }
 
       // getDocs returns a Promise, convert to Observable and map to either
@@ -56,13 +55,24 @@ export class MoviesService {
             const doc = snapshot.docs[0];
             const data = doc.data();
             console.log("Found in Firestore!: ", data)
-            const mapped = this.mapFirestoreMovieToOmdb(data);
+            const mapped = this.mapMovieData(data);
             return of(mapped);
           }
 
-          console.log("had to go to omdb for: ", { title, year })
-          // No Firestore hit: query OMDB directly from frontend
-          return this.callOmdb(title, year);
+          //If we have to go to OMDB for this movie and it comes back with something, store it in the db regardless
+          console.log("had to go to omdb for: ", { title, year });
+          return this.callOmdb(title, year).pipe(
+            switchMap((omdbRes: any) => {
+              if (omdbRes && omdbRes.Response === "True") {
+                const mappedRes = this.mapMovieData(omdbRes) //Make sure it fits our format before we put it in the db
+                console.log("got this back from omdb: ", omdbRes);
+                return from(setDoc(doc(moviesCol, omdbRes.imdbID), mappedRes)).pipe(
+                  map(() => mappedRes)
+                );
+              }
+              return of(omdbRes);
+            })
+          );
         })
       );
     } catch (err) {
@@ -71,23 +81,39 @@ export class MoviesService {
     }
   }
 
-  private mapFirestoreMovieToOmdb(data: any) {
+  //Will take a firestore or OMDB object and convert it
+  private mapMovieData(data: any) {
     if (!data) { return null; }
 
-    // Try to map common local fields to OMDB-like response fields used elsewhere
     return {
-      Title: data.Title || data.movieName || data.MovieName || '',
-      Year: data.Year || data.releaseDate || data.ReleaseDate || '',
-      Poster: data.Poster || data.posterURL || data.posterUrl || null,
-      Director: data.Director || data.directorName || '',
-      Actors: data.Actors || data.actors || '',
-      Genre: (Array.isArray(data.genres) ? data.genres.join(', ') : (data.Genre || data.genres || '')),
-      Plot: data.Plot || data.Summary || data.summary || '',
-      Runtime: data.Runtime || (data.duration ? `${data.duration} min` : ''),
-      // include the raw firestore doc for callers that may need more
-      _raw: data
+      "Actors": data.Actors,
+      "Awards": data.Awards,
+      "BoxOffice": data.BoxOffice,
+      "Country": data.Country,
+      "DVD": data.DVD,
+      "Director": data.Director,
+      "Genre": data.Genre,
+      "Language": data.Language,
+      "Metascore": data.Metascore,
+      "Plot": data.Plot,
+      "Poster": data.Poster,
+      "Production": data.Production,
+      "Rated": data.Rated,
+      "Ratings": data.Ratings,
+      "Released": data.Released,
+      "Response": data.Response,
+      "Runtime": data.Runtime,
+      "Title": data.Title,
+      "TitleLower": data.Title ? data.Title.toString().toLowerCase().trim() : '', //Need this since Firestore searches are case sensitive - could move to elasticsearch if i really care
+      "Type": data.Type,
+      "Website": data.Website,
+      "Writer": data.Writer,
+      "Year": data.Year,
+      "imdbID": data.imdbID,
+      "imdbRating": data.imdbRating,
+      "imdbVotes": data.imdbVotes
     };
-  }
+  };
 
   private callOmdb(title: any, year?: Number): Observable<any> {
     const apiKey = (environment as any).OMDB_API_KEY || '';

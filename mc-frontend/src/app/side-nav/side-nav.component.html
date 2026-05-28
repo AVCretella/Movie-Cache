@@ -1,44 +1,45 @@
 <div class="side-nav-container">
     <div class="side-nav-content">
         <div class="side-nav-icon" (click)="addMovie()">
-            <mat-icon matTooltip="Add Movie" class="header-icon">add</mat-icon>
+            <svg lucidePlus title="Add Movie"></svg>
             Add Movie
         </div>
 
 
         <div class="side-nav-icon" routerLink="/lists/favorites">
-            <mat-icon matTooltip="Favorites" class="header-icon">favorite</mat-icon>
+            <svg lucideHeart title="Favorites"></svg>
             Favorites
         </div>
 
         <div class="side-nav-icon" routerLink="/lists/watchlist">
-            <mat-icon matTooltip="Watchlist" class="header-icon">visibility</mat-icon>
+            <svg lucideEye title="Watchlist"></svg>
             Watchlist
         </div>
 
         <div class="side-nav-icon" routerLink="/lists/saved">
-            <mat-icon matTooltip="Saved Lists" class="header-icon">save</mat-icon>
+            <svg lucideBookmark title="Saved Lists"></svg>
             Saved Lists
         </div>
 
         <div class="side-nav-icon" routerLink="/lists/created">
-            <mat-icon matTooltip="Created Lists" class="header-icon">build</mat-icon>
+            <svg lucideWrench title="Created Lists"></svg>
             Created Lists
         </div>
 
         <div class="side-nav-icon" routerLink="/lists/dnf">
-            <mat-icon matTooltip="DNF List" class="header-icon">visibility_off</mat-icon>
+            <svg lucideEyeOff title="DNF List"></svg>
             DNF List
         </div>
 
         <div class="side-nav-icon" routerLink="/friends">
-            <mat-icon matTooltip="Friends" class="header-icon">group</mat-icon>
+            
+            <svg lucideUsers title="Friends"></svg>
             Friends
         </div>
 
         <div class="side-nav-icon" routerLink="/recommendations">
-            <mat-icon matTooltip="Recommendations" class="header-icon">share</mat-icon>
-            Shared
+            <svg lucideHandshake title="Recommendations"></svg>
+            Reccs
         </div>
     </div>
 
@@ -52,3 +53,5 @@
         </div>
     </div>
 </div>
+
+<!-- other icons of interest: asteroid -->

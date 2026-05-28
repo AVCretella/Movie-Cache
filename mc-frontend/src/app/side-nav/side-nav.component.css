@@ -50,3 +50,9 @@
     display: flex;
     justify-content: center;
 }
+
+.lucide {
+  stroke-width: 2px;
+  color:rgb(52, 190, 52);
+  size:px;
+}

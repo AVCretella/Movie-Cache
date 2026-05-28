@@ -1,38 +1,181 @@
-<div
-    *ngIf="!movieFound"    
-    id="addMovieDialogContainer">
-    <form [formGroup]="addMovieForm" class="addMovieModal" (ngSubmit)="retrieveMovie()">
-        <mat-card>
-            <div>
-                <mat-form-field>
-                    <mat-label>Movie Title</mat-label>
-                    <input matInput formControlName="movieName"/>
-                </mat-form-field>
+<div id="addMovieDialogContainer">
 
+    <!-- Search Form -->
+    <div *ngIf="!movieFound">
+        <form [formGroup]="searchForm" class="addMovieModal" (ngSubmit)="retrieveMovie()">
+            <mat-card>
+                <div>
+                    <mat-form-field>
+                        <mat-label>Movie Title</mat-label>
+                        <input matInput formControlName="movieName"/>
+                    </mat-form-field>
+                </div>
+
+                <!-- Must be a 4 digit year -->
+                <div>
+                    <mat-form-field>
+                        <mat-label>Release Date</mat-label>
+                        <input matInput formControlName="movieReleaseDate" placeholder="ex. 2012"/>
+                    </mat-form-field>
+                </div>
                 
-            </div>
+                <div>
+                    <button mat-button type="submit">
+                        <span>Search</span>
+                    </button>
+                </div>
+            </mat-card>
+        </form>
+    </div>
 
-            <!-- Must be an 4 digit year -->
-            <div>
-                <mat-form-field>
-                    <mat-label>Release Date</mat-label>
-                    <input matInput formControlName="movieReleaseDate"/>
-                </mat-form-field>
-            </div>
+    <!-- Movie Details & List-Specific Form -->
+    <div *ngIf="movieFound">
+
+        <!-- List Type Selector -->
+        <div class="listTypeSelector">
+            <mat-button-toggle-group [(value)]="listType" (change)="changeListType(listType)">
+                <mat-button-toggle value="favorites">Favorites</mat-button-toggle>
+                <mat-button-toggle value="watchlist">Watchlist</mat-button-toggle>
+            </mat-button-toggle-group>
+        </div>
+        
+        <mat-card class="movieDetailsCard">
             
-            <div>
-                <button
-                    mat-button
-                    type="submit">
-                    <span>Search</span>
-                    <!-- TODO make this not highlight until at least the name is in -->
-                </button>
-            </div>
-           
-        </mat-card>
-    </form>
-</div>
+            <div class="movieInfoDisplay" *ngIf="retrievedMovieData">
+                <div *ngIf="retrievedMovieData.Poster" class="moviePoster">
+                    <img [src]="retrievedMovieData.Poster" alt="Movie Poster"/>
+                    <div class="ratingsContainer" *ngIf="retrievedMovieData.Ratings">
+                        <!-- 3 Ratings fields for IMDB, Rotten Tomatoes and Metacritic if they exist -->
+                        <div *ngFor="let r of retrievedMovieData.Ratings" class="ratingItem">
+                            <img *ngIf="r.Source === 'Internet Movie Database'" class="imdb_logo" src="/assets/imdb_logo.svg"/>
+                            <img *ngIf="r.Source === 'Rotten Tomatoes'" class="company_rating_logo" src="/assets/Rotten_Tomatoes.svg.png"/>
+                            <img *ngIf="r.Source === 'Metacritic'" class="company_rating_logo" src="/assets/Metacritic_logo.png"/>
+                            <span class="ratingValue">{{ r.Value }}</span>
+                        </div>
+                    </div>
+                </div>
 
-<div *ngIf="movieFound">
-    complete
+                <div class="movieInfo">
+                    <h2>{{ retrievedMovieData.Title }}</h2>
+                    <p><strong>Year:</strong> {{ retrievedMovieData.Year }}</p>
+                    <p><strong>Director:</strong> {{ retrievedMovieData.Director }}</p>
+                    <p><strong>Actors:</strong> {{ retrievedMovieData.Actors }}</p>
+                    <p><strong>Genre:</strong> {{ retrievedMovieData.Genre }}</p>
+                    <p><strong>Runtime:</strong> {{ retrievedMovieData.Runtime }}</p>
+
+                    <p><strong>Plot:</strong> {{ retrievedMovieData.Plot }}</p>
+                    <p><strong>TODO trailer here with youtube logo</strong></p>
+                </div>
+            </div>
+
+            <!-- Scrollable Details Form -->
+            <div class="formScrollContainer">
+                <form [formGroup]="favoritesForm" *ngIf="listType === 'favorites'" class="detailsForm" (ngSubmit)="submitMovie()">
+                    <!-- FAVORITES FORM -->
+                    <div *ngIf="listType === 'favorites'" class="favoritesForm">
+                        <h4>Add to Favorites</h4>
+                        
+                        <!-- Trying to get these stars to work is a pain in my ass -->
+                        <div class="starRatingContainer">
+                            <label>Rating</label>
+                            <div class="starRating" (mouseleave)="hoverRating = 0">
+                                <svg lucideStar *ngFor="let star of getStars()"
+                                    class="starIcon"
+                                    [class.filled]="star <= (favoritesForm.get('rating')?.value || hoverRating)"
+                                    (mouseenter)="hoverRating = star"
+                                    (click)="setRating(star)">
+                                </svg>
+                            </div>
+                            <span class="ratingValue" *ngIf="favoritesForm.get('rating')?.value">
+                                {{ favoritesForm.get('rating')?.value }}/10
+                            </span>
+                        </div>
+
+                        <div>
+                            <mat-form-field>
+                                <mat-label>Rank</mat-label>
+                                <input matInput type="number" formControlName="rank" min="1" placeholder="What # is this in your top movies?"/>
+                            </mat-form-field>
+                        </div>
+
+                        <div>
+                            <mat-form-field>
+                                <mat-label>Review</mat-label>
+                                <textarea matInput formControlName="review" rows="4"></textarea>
+                            </mat-form-field>
+                        </div>
+
+                        <div>
+                            <mat-form-field>
+                                <mat-label>Your Notes</mat-label>
+                                <textarea matInput formControlName="userNotes" rows="3"></textarea>
+                            </mat-form-field>
+                        </div>
+
+                        <div>
+                            <mat-form-field>
+                                <mat-label>Times Seen</mat-label>
+                                <input matInput type="number" formControlName="timesSeen" min="0"/>
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="formActions">
+                        <button mat-button type="submit">Add to {{ listType }}</button>
+                        <button mat-button type="button" (click)="onNoClick()">Cancel</button>
+                    </div>
+                </form>
+
+                <form [formGroup]="watchlistForm" *ngIf="listType === 'watchlist'" class="detailsForm" (ngSubmit)="submitMovie()">
+                    <!-- WATCHLIST FORM -->
+                    <div *ngIf="listType === 'watchlist'" class="watchlistForm">
+                        <h4>Add to Watchlist</h4>
+                        
+                        <div>
+                            <mat-form-field>
+                                <mat-label>Interest Level</mat-label>
+                                <mat-select formControlName="interestLevel">
+                                    <mat-option value="1">Low (1)</mat-option>
+                                    <mat-option value="2">Medium (2)</mat-option>
+                                    <mat-option value="3">High (3)</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+
+                        <div>
+                            <mat-form-field>
+                                <mat-label>Group Status</mat-label>
+                                <mat-select formControlName="groupStatus">
+                                    <mat-option value="alone">Alone</mat-option>
+                                    <mat-option value="withOthers">With Others</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+
+                        <div>
+                            <mat-form-field>
+                                <mat-label>Your Notes</mat-label>
+                                <textarea matInput formControlName="userNotes" rows="3"></textarea>
+                            </mat-form-field>
+                        </div>
+
+                        <div class="topPrioritySection">
+                            <p><strong>Top Priority:</strong></p>
+                            <div class="checkboxRow">
+                                <mat-checkbox formControlName="overallTopPriority">Overall</mat-checkbox>
+                                <mat-checkbox formControlName="genreTopPriority">Genre</mat-checkbox>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="formActions">
+                        <button mat-button type="submit">Add to {{ listType }}</button>
+                        <button mat-button type="button" (click)="onNoClick()">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </mat-card>
+    </div>
 </div>

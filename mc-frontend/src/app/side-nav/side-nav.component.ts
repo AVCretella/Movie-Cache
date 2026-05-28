@@ -1,9 +1,13 @@
 import { Component, Input } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
+// import { LucideAngularModule } from 'lucide-angular';
+import { LucideHeart, LucidePlus, LucideEye,
+  LucideWrench, LucideBookmark, LucideEyeOff, LucideShare2, LucideUsers, 
+  LucideHandshake} from '@lucide/angular';
 
 import { UserService } from '../services/user.service';
 import { User } from '../models/user'
@@ -21,7 +25,10 @@ import { AuthService } from '../services/auth.service';
     MatTooltipModule,
     RouterLink,
     MatDialogModule,
-    AddMovieModalComponent
+    AddMovieModalComponent,
+    LucideHeart, LucidePlus, LucideEye, LucideWrench,
+    LucideBookmark, LucideEyeOff, LucideShare2, LucideUsers, LucideHandshake
+    // LucideAngularModule
   ],
   templateUrl: './side-nav.component.html',
   styleUrl: './side-nav.component.css'
@@ -43,6 +50,10 @@ export class SideNavComponent {
   }
 
   addMovie() {
-    this.dialog.open(AddMovieModalComponent);
+    this.dialog.open(AddMovieModalComponent, {
+      data: {
+        listType: 'favorites'
+      }
+    });
   }
 }
