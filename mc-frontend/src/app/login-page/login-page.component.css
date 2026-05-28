@@ -1,3 +1,45 @@
+a {
+  cursor: pointer;
+  color: #1e88e5;
+  text-decoration: none;
+} 
+
+.a:hover {
+  text-decoration: underline;
+}
+
+.auth-section {
+  border: 1px solid #e8edf7;
+  border-radius: 18px;
+  padding: 24px;
+  background: #f8fbff;
+}
+
+.auth-section h4 {
+  margin: 0 0 10px;
+  font-size: 20px;
+}
+
+.error-banner {
+  margin-bottom: 20px;
+  padding: 14px 18px;
+  border-radius: 14px;
+  background: rgba(244, 67, 54, 0.08);
+  border: 1px solid rgba(244, 67, 54, 0.18);
+}
+
+.error-message {
+  margin: 0;
+  color: #d32f2f;
+  font-size: 14px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
 .login-page {
   display: flex;
   align-items: center;
@@ -7,8 +49,8 @@
 }
 
 .login-card {
-  width: 100%;
-  max-width: 920px;
+  width: 60%;
+  max-width: 460px;
   padding: 28px;
   border-radius: 24px;
   box-shadow: 0 24px 60px rgba(20, 50, 90, 0.08);
@@ -32,47 +74,15 @@
   font-size: 14px;
 }
 
-.error-banner {
-  margin-bottom: 20px;
-  padding: 14px 18px;
-  border-radius: 14px;
-  background: rgba(244, 67, 54, 0.08);
-  border: 1px solid rgba(244, 67, 54, 0.18);
-}
-
-.error-message {
-  margin: 0;
-  color: #d32f2f;
-  font-size: 14px;
-}
-
-.login-forms {
+/* .login-forms {
   display: grid;
   gap: 24px;
-}
-
-.auth-section {
-  border: 1px solid #e8edf7;
-  border-radius: 18px;
-  padding: 24px;
-  background: #f8fbff;
-}
-
-.auth-section h4 {
-  margin: 0 0 10px;
-  font-size: 20px;
-}
+} */
 
 .section-copy {
   margin: 0 0 20px;
   color: #6b7280;
   line-height: 1.6;
-}
-
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
 }
 
 mat-form-field {

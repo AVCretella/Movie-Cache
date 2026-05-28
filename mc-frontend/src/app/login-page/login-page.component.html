@@ -10,7 +10,7 @@
     </div>
 
     <div class="login-forms">
-      <section class="auth-section register-box">
+      <div *ngIf="newAccount" class="auth-section register-box">
         <h4>Create account</h4>
         <p class="section-copy">Don't have an account? Nobody's perfect.</p>
         <form [formGroup]="registrationForm" (ngSubmit)="emailRegister()" autocomplete="off">
@@ -30,10 +30,11 @@
           </mat-form-field>
 
           <button mat-raised-button color="primary" type="submit" [disabled]="registrationForm.invalid">Register</button>
+          <a (click)="toggleAccountView()">Already have an account? Damn right.</a>
         </form>
-      </section>
+      </div>
 
-      <section class="auth-section login-box">
+      <div *ngIf="!newAccount" class="auth-section login-box">
         <h4>Sign in</h4>
         <p class="section-copy">Already have an account? Damn right.</p>
         <form [formGroup]="loginForm" (ngSubmit)="emailSignIn()">
@@ -48,8 +49,9 @@
           </mat-form-field>
 
           <button mat-raised-button color="primary" type="submit" [disabled]="loginForm.invalid">Login</button>
+          <a (click)="toggleAccountView()">Don't have an account? Nobody's perfect.</a>
         </form>
-      </section>
+      </div>
     </div>
   </mat-card>
 </div>

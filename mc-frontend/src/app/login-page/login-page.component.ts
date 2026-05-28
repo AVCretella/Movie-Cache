@@ -36,6 +36,7 @@ import { signInWithEmailAndPassword } from 'firebase/auth';
   styleUrl: './login-page.component.css'
 })
 export class LoginPageComponent {
+  newAccount = false; //This will toggle between the login and registration forms, default to login
 
   loginForm = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
@@ -131,6 +132,10 @@ export class LoginPageComponent {
         this.errorMessage = error.message;
       }
     });
+  }
+
+  toggleAccountView() {
+    this.newAccount = !this.newAccount;
   }
 
   //Allow the user to sign in with Google
